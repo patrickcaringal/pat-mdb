@@ -1,37 +1,50 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-// import logo from './logo.svg';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+
 import './App.css';
 import Home from './pages/Home';
 
-// const foo = (bar: string, baz: any) => {};
+function ElevationScroll({ children }: { children: React.ReactElement }) {
+    const trigger = useScrollTrigger({
+        disableHysteresis: true,
+        threshold: 0
+    });
+
+    return React.cloneElement(children, {
+        elevation: trigger ? 4 : 0
+    });
+}
 
 function App() {
     return (
-        <Switch>
-            <Route path="/1" component={() => <Home />} />
-            <Route path="/2" component={() => <h1>Test2</h1>} />
-            <Route path="/not-found" component={() => <h1>NotFound</h1>} />
+        <React.Fragment>
+            <CssBaseline />
+            <ElevationScroll>
+                <AppBar>
+                    <Toolbar>
+                        <Typography variant="h6">PAT MDb</Typography>
+                    </Toolbar>
+                </AppBar>
+            </ElevationScroll>
+            <Toolbar />
+            <Container disableGutters maxWidth={false}>
+                <Switch>
+                    <Route path="/1" component={() => <Home />} />
+                    <Route path="/2" component={() => <h1>Test2</h1>} />
+                    <Route path="/not-found" component={() => <h1>NotFound</h1>} />
 
-            <Redirect from="/" exact to="/1" />
-            <Redirect to="/not-found" />
-        </Switch>
-        // <div className="App">
-        //     <header className="App-header">
-        //         <img src={logo} className="App-logo" alt="logo" />
-        //         <p>
-        //             Edit <code>src/App.tsx</code> and save to reload.
-        //         </p>
-        //         <a
-        //             className="App-link"
-        //             href="https://reactjs.org"
-        //             target="_blank"
-        //             rel="noopener noreferrer"
-        //         >
-        //             Learn React
-        //         </a>
-        //     </header>
-        // </div>
+                    <Redirect from="/" exact to="/1" />
+                    <Redirect to="/not-found" />
+                </Switch>
+            </Container>
+        </React.Fragment>
     );
 }
 
