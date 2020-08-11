@@ -8,6 +8,9 @@ import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
+import FilledInput from '@material-ui/core/FilledInput';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import Typography from '@material-ui/core/Typography';
 
@@ -25,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Home: React.FC = (props) => {
     const classes = useStyles();
-    // spacing={3}
+
     return (
         <React.Fragment>
             <Grid container>
@@ -33,112 +36,81 @@ const Home: React.FC = (props) => {
                     item
                     xs={12}
                     style={{
-                        background: 'salmon',
                         minHeight: '300px',
                         height: 'calc(100vh / 2.5)',
                         maxHeight: '360px'
                     }}
                 >
                     <Box
-                        style={{
-                            height: '100%'
-                        }}
+                        height="100%"
                         display="flex"
+                        flexDirection="column"
                         alignItems="center"
+                        justifyContent="center"
+                        // bgcolor="primary.main"
                     >
-                        Discover millions of movies and TV series and Keep track of your favorite
-                        shows.
+                        <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
+                            <Typography variant="h3" component="h1">
+                                Discover lots of movies and TV series.
+                            </Typography>
+                            <Typography variant="h4">Keep track of your favorite shows.</Typography>
+                        </Box>
+                        {/*  bgcolor="primary.main" */}
+                        <Box display="flex" width="70%">
+                            <FormControl variant="filled" fullWidth>
+                                <InputLabel style={{ paddingLeft: '20px' }}>
+                                    Search for a movie, tv show series, person
+                                </InputLabel>
+                                <FilledInput
+                                    value=""
+                                    disableUnderline
+                                    // onChange={handleChange}
+                                    style={{
+                                        background: 'white',
+                                        borderRadius: '30px',
+                                        paddingLeft: '16px'
+                                    }}
+                                />
+                            </FormControl>
+                        </Box>
                     </Box>
                 </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    style={{
-                        minHeight: '300px' // temp
-                        // height: 'calc(100vh / 2.5)',
-                        // maxHeight: '360px'
-                    }}
-                >
-                    <Box
-                        style={{
-                            height: '100%'
-                        }}
-                        display="flex"
-                        p={3}
-                    >
+                <Grid item xs={12}>
+                    <Box display="flex" p={3}>
                         <Container disableGutters maxWidth="lg">
-                            <Typography variant="h5" gutterBottom>
-                                Popular
-                            </Typography>
-                            <Box display="flex">
-                                <Card
-                                    style={{
-                                        minWidth: '150px',
-                                        height: '300px',
-                                        background: 'transparent',
-                                        marginRight: '20px'
-                                    }}
-                                    elevation={0}
-                                    square
-                                >
-                                    <CardMedia
-                                        style={{
-                                            height: '225px'
-                                        }}
-                                        image="https://via.placeholder.com/150x225"
-                                        title="Twice"
-                                    />
-                                    <CardContent style={{ padding: '8px 0 0' }}>
-                                        <Typography>Red Velvet</Typography>
-                                        <Typography variant="caption">Action, Thriller</Typography>
-                                    </CardContent>
-                                </Card>
+                            {/* bgcolor="primary.main" */}
+                            <Box display="flex" py={1}>
+                                <Typography variant="h5">Popular</Typography>
+                            </Box>
 
-                                <Card
-                                    style={{
-                                        minWidth: '150px',
-                                        height: '300px',
-                                        background: 'transparent',
-                                        marginRight: '20px'
-                                    }}
-                                    elevation={0}
-                                    square
-                                >
-                                    <CardMedia
+                            {/* bgcolor="secondary.main" */}
+                            <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={3}>
+                                {[...new Array(10)].map((i) => (
+                                    <Card
                                         style={{
-                                            height: '225px'
+                                            minWidth: '150px',
+                                            // height: '300px',
+                                            background: 'transparent',
+                                            marginRight: '20px'
                                         }}
-                                        image="https://via.placeholder.com/150x225"
-                                        title="Twice"
-                                    />
-                                    <CardContent style={{ padding: '8px 0 0' }}>
-                                        <Typography>Twice</Typography>
-                                        <Typography variant="caption">Action, Thriller</Typography>
-                                    </CardContent>
-                                </Card>
-
-                                <Card
-                                    style={{
-                                        minWidth: '150px',
-                                        height: '300px',
-                                        background: 'transparent',
-                                        marginRight: '20px'
-                                    }}
-                                    elevation={0}
-                                    square
-                                >
-                                    <CardMedia
-                                        style={{
-                                            height: '225px'
-                                        }}
-                                        image="https://via.placeholder.com/150x225"
-                                        title="Twice"
-                                    />
-                                    <CardContent style={{ padding: '8px 0 0' }}>
-                                        <Typography>Blackpink</Typography>
-                                        <Typography variant="caption">Action, Thriller</Typography>
-                                    </CardContent>
-                                </Card>
+                                        elevation={0}
+                                        square
+                                    >
+                                        <CardMedia
+                                            style={{
+                                                height: '225px'
+                                            }}
+                                            image="https://via.placeholder.com/150x225"
+                                            title="Twice"
+                                        />
+                                        <CardContent style={{ padding: '8px 0 0' }}>
+                                            <Typography>Item</Typography>
+                                            <Typography variant="caption">
+                                                Action, Thriller
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                ))}
                             </Box>
                         </Container>
                     </Box>
