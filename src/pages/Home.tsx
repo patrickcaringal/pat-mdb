@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -11,6 +11,8 @@ import CardContent from '@material-ui/core/CardContent';
 import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+
+import useIntersect from '../customhooks/intersectobserver';
 
 import Typography from '@material-ui/core/Typography';
 
@@ -29,8 +31,71 @@ const useStyles = makeStyles((theme) => ({
 const Home: React.FC = (props) => {
     const classes = useStyles();
 
+    const parentEl = useRef<Element | null>(null);
+
+    // const [ref, entry] = useIntersect(
+    //     {
+    //         root: parentEl.current,
+    //         threshold: 1
+    //         // rootMargin: '0px 150px 100px 0px'
+    //     },
+    //     (isIntersecting: boolean) => {
+    //         console.log(isIntersecting);
+    //     }
+    // );
+
+    const CheckIntersect = ({ i }: { i: Number }) => {
+        // let isX = false;
+        const [isShown, setIsShown] = useState(false);
+
+        const [ref, entry] = useIntersect(
+            {
+                root: parentEl.current,
+                threshold: 1
+                // rootMargin: '0px 150px 100px 0px'
+            },
+            (isIntersecting: boolean) => {
+                console.log(isIntersecting);
+                setIsShown(isIntersecting);
+            }
+        );
+
+        return (
+            <Card
+                style={{
+                    minWidth: '150px',
+                    background: 'transparent',
+                    marginRight: '20px'
+                }}
+                elevation={0}
+                square
+                {...({ ref: ref } as any)}
+            >
+                <CardMedia
+                    style={{
+                        height: '225px'
+                    }}
+                    image={
+                        isShown
+                            ? 'https://via.placeholder.com/150x225/767c77/fabea7'
+                            : 'https://via.placeholder.com/150x225'
+                    }
+                    title="Twice"
+                />
+                <CardContent style={{ padding: '8px 0 0' }}>
+                    <Typography>
+                        {/* Item {i} {`${isShown}`} */}
+                        {isShown ? 'Loaded' : 'Not Loaded'}
+                    </Typography>
+                    {/* <Typography variant="caption">Action, Thriller</Typography> */}
+                </CardContent>
+            </Card>
+        );
+    };
+
     return (
         <React.Fragment>
+            {/* style={{ background: 'khaki' }} */}
             <Grid container>
                 <Grid
                     item
@@ -75,60 +140,37 @@ const Home: React.FC = (props) => {
                         </Box>
                     </Box>
                 </Grid>
+                {/* style={{ background: 'salmon' }} */}
                 <Grid item xs={12}>
                     <Box display="flex" p={3}>
                         <Container disableGutters maxWidth="lg">
                             {/* bgcolor="primary.main" */}
                             <Box display="flex" py={1}>
-                                <Typography variant="h5">Popular</Typography>
+                                {/* <Typography variant="h5">Popular</Typography> */}
                             </Box>
 
                             {/* bgcolor="secondary.main" */}
-                            <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={3}>
-                                {[...new Array(10)].map((i) => (
-                                    <Card
-                                        style={{
-                                            minWidth: '150px',
-                                            // height: '300px',
-                                            background: 'transparent',
-                                            marginRight: '20px'
-                                        }}
-                                        elevation={0}
-                                        square
-                                    >
-                                        <CardMedia
-                                            style={{
-                                                height: '225px'
-                                            }}
-                                            image="https://via.placeholder.com/150x225"
-                                            title="Twice"
-                                        />
-                                        <CardContent style={{ padding: '8px 0 0' }}>
-                                            <Typography>Item</Typography>
-                                            <Typography variant="caption">
-                                                Action, Thriller
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
+                            <Box
+                                display="flex"
+                                style={{ overflow: 'auto' }}
+                                pt={1}
+                                pb={3}
+                                {...({ ref: parentEl } as any)}
+                            >
+                                {[...new Array(20)].map((i: Number, index: number) => (
+                                    <CheckIntersect i={index} />
                                 ))}
                             </Box>
                         </Container>
                     </Box>
                 </Grid>
+                <Grid item xs={12}>
+                    <Box display="flex" mt={50} p={3} bgcolor="primary.main">
+                        Load
+                    </Box>
+                </Grid>
                 {/* <Grid item xs={6}>
                     <Paper className={classes.paper}>xs=6</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>xs=3</Paper>
                 </Grid> */}
             </Grid>
             {/* <Box>
