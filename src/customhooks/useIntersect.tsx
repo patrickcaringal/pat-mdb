@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 interface IIntersectionObserver {
     root?: Element | null;
     rootMargin?: string;
-    threshold: number | number[];
+    threshold?: number | number[];
 }
 
-export default (
+const useIntersect = (
     { root = null, rootMargin, threshold = 0 }: IIntersectionObserver,
     onIntersect: (isIntersecting: boolean) => void
 ) => {
@@ -42,3 +42,5 @@ export default (
 
     return [setNode, entry];
 };
+
+export default useIntersect;
