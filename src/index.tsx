@@ -4,10 +4,19 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+    typography: {
+        fontFamily: "'Source Sans Pro', sans-serif"
+    }
+});
 
 ReactDOM.render(
     <BrowserRouter>
-        <App />
+        <MuiThemeProvider theme={theme}>
+            <App />
+        </MuiThemeProvider>
     </BrowserRouter>,
     document.getElementById('root')
 );

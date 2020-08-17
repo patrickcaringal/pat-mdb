@@ -17,7 +17,7 @@ const Card: React.FC<ICard> = ({ image, title, subtitle }) => {
     const [isShown, setIsShown] = useState(false);
 
     const IOOptions = { rootMargin: '0px 300px 0px 0px' };
-    const [ref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
+    const [IOref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
 
     return (
         <MUICard
@@ -28,7 +28,7 @@ const Card: React.FC<ICard> = ({ image, title, subtitle }) => {
             }}
             elevation={0}
             square
-            {...({ ref: ref } as any)}
+            {...({ ref: IOref } as any)}
         >
             {isShown ? (
                 <CardMedia
@@ -51,7 +51,6 @@ const Card: React.FC<ICard> = ({ image, title, subtitle }) => {
                 />
             )}
 
-            {/* style={{overflow: "hidden", textOverflow: "ellipsis", width: '11rem'}} */}
             <CardContent
                 style={{
                     padding: '8px 0 0',
@@ -59,8 +58,12 @@ const Card: React.FC<ICard> = ({ image, title, subtitle }) => {
                     textOverflow: 'ellipsis'
                 }}
             >
-                <Typography noWrap>{title}</Typography>
-                <Typography variant="caption">{subtitle}</Typography>
+                <Typography noWrap style={{ fontWeight: 600 }}>
+                    {title}
+                </Typography>
+                <Typography variant="body2" style={{ color: '#696969' }}>
+                    {subtitle}
+                </Typography>
             </CardContent>
         </MUICard>
     );
