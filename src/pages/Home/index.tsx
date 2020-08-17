@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Card from './Card';
 import { Popular as PopularMovies, Genres } from './mockData';
+import landingImg from '../../asset/img/landing-bg.jpg';
 // import useIntersect from '../../customhooks/useIntersect';
 
 // const useStyles = makeStyles((theme) => ({
@@ -40,7 +41,10 @@ const Home: React.FC = (props) => {
                     style={{
                         minHeight: '300px',
                         height: 'calc(100vh / 2.5)',
-                        maxHeight: '360px'
+                        maxHeight: '360px',
+                        background: `url(${landingImg}) repeat`,
+                        backgroundSize: 'contain',
+                        backgroundPosition: 'center'
                     }}
                 >
                     <Box
@@ -49,6 +53,9 @@ const Home: React.FC = (props) => {
                         flexDirection="column"
                         alignItems="center"
                         justifyContent="center"
+                        style={{
+                            backgroundColor: 'rgba(200, 200, 200, 0.75)'
+                        }}
                     >
                         <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
                             <Typography variant="h3" component="h1">
@@ -92,7 +99,6 @@ const Home: React.FC = (props) => {
                                     const genre = m.genre_ids
                                         .map((g) => Genres.find((i) => i.id === g)?.name)
                                         .join(', ');
-                                    // "Action, Adventure, Science Fiction, Action, Adventure, Science Fiction"
 
                                     return (
                                         <Card
