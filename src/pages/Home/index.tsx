@@ -42,7 +42,7 @@ const Home: React.FC = (props) => {
                         minHeight: '300px',
                         height: 'calc(100vh / 2.5)',
                         maxHeight: '360px',
-                        background: `url(${landingImg}) repeat`,
+                        background: `linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.75)), url(${landingImg}) repeat`,
                         backgroundSize: 'contain',
                         backgroundPosition: 'center'
                     }}
@@ -53,15 +53,20 @@ const Home: React.FC = (props) => {
                         flexDirection="column"
                         alignItems="center"
                         justifyContent="center"
-                        style={{
-                            backgroundColor: 'rgba(200, 200, 200, 0.75)'
-                        }}
                     >
-                        <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
-                            <Typography variant="h3" component="h1">
+                        <Box
+                            display="flex"
+                            flexDirection="column"
+                            alignItems="center"
+                            mb={3}
+                            style={{ color: '#fff' }}
+                        >
+                            <Typography variant="h3" component="h1" style={{ fontWeight: 700 }}>
                                 Discover lots of movies and TV series.
                             </Typography>
-                            <Typography variant="h4">Keep track of your favorite shows.</Typography>
+                            <Typography variant="h4" style={{ fontWeight: 600 }}>
+                                Keep track of your favorite shows.
+                            </Typography>
                         </Box>
                         <Box display="flex" width="70%">
                             <FormControl variant="filled" fullWidth>

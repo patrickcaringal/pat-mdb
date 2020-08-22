@@ -9,6 +9,23 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 const theme = createMuiTheme({
     typography: {
         fontFamily: "'Source Sans Pro', sans-serif"
+    },
+    overrides: {
+        MuiCssBaseline: {
+            '@global': {
+                '*::-webkit-scrollbar': {
+                    width: '12px',
+                    height: '12px'
+                },
+                '*::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#dedede',
+                    borderRadius: '10px'
+                },
+                '*::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#B1B1B1'
+                }
+            }
+        }
     }
 });
 
