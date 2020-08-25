@@ -9,6 +9,7 @@ import Container from '@material-ui/core/Container';
 
 import './App.css';
 import Home from './pages/Home';
+import SearchPage from './pages/Search';
 
 function ElevationScroll({ children }: { children: React.ReactElement }) {
     const trigger = useScrollTrigger({
@@ -36,7 +37,7 @@ function App() {
             <Container disableGutters maxWidth={false}>
                 <Switch>
                     <Route path="/1" component={() => <Home />} />
-                    <Route path="/2" component={() => <h1>Test2</h1>} />
+                    <Route path="/search" component={() => <SearchPage />} />
                     <Route path="/not-found" component={() => <h1>NotFound</h1>} />
 
                     <Redirect from="/" exact to="/1" />

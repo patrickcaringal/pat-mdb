@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -31,9 +33,18 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Home: React.FC = (props) => {
+interface HomeProps extends RouteComponentProps {}
+
+const Home: React.FC<HomeProps> = (props) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const onSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
+        props.history.push({
+            pathname: '/search',
+            search: `?query=${searchQuery}`
+        });
+    };
 
     return (
         <Grid container>
@@ -82,7 +93,11 @@ const Home: React.FC = (props) => {
                                 style={{ background: 'none' }}
                             />
                         </FormControl>
-                        <IconButton className={classes.seachBtn} aria-label="search">
+                        <IconButton
+                            className={classes.seachBtn}
+                            aria-label="search"
+                            onClick={onSearch}
+                        >
                             <SearchIcon />
                         </IconButton>
                     </Paper>
@@ -229,4 +244,4 @@ const Home: React.FC = (props) => {
     );
 };
 
-export default Home;
+export default withRouter(Home);
