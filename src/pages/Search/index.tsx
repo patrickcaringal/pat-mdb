@@ -14,18 +14,30 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        maxWidth: 752
-    },
     demo: {
         backgroundColor: theme.palette.background.paper
         // backgroundColor: 'red'
     },
-    title: {
-        margin: theme.spacing(4, 0, 2)
+    root: {
+        display: 'flex'
+    },
+    cover: {
+        width: 151,
+        height: '225px'
+    },
+    content: {
+        display: 'flex',
+        flexDirection: 'column',
+        flex: '1',
+        background: 'khaki',
+        justifyContent: 'space-between'
+
+        // alignItems: 'center',
     }
 }));
 
@@ -42,10 +54,20 @@ const SearchPage: React.FC<SearchProps> = (props) => {
             <Container disableGutters maxWidth="lg">
                 <Grid container>
                     <Grid item xs={2}>
-                        <div className={classes.demo}>
-                            <Typography variant="h5" className={classes.title}>
-                                Search result
-                            </Typography>
+                        <Box
+                            display="flex"
+                            flexDirection="column"
+                            style={{
+                                background: '#fff',
+                                border: '1px solid rgba(0, 0, 0, 0.12)',
+                                borderRadius: '8px'
+                            }}
+                        >
+                            {/*  style={{ background: 'salmon' }} */}
+                            <Box style={{ padding: '8px 16px' }}>
+                                <Typography variant="h6">Search result</Typography>
+                            </Box>
+                            {/* style={{ background: 'khaki' }} */}
                             <List disablePadding>
                                 <ListItem>
                                     <ListItemText primary="Movies" />
@@ -66,9 +88,32 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                                     </ListItemSecondaryAction>
                                 </ListItem>
                             </List>
-                        </div>
+                        </Box>
                     </Grid>
-                    <Grid item xs={9}></Grid>
+
+                    {/* results */}
+                    <Grid item xs={9}>
+                        <Box
+                            display="flex"
+                            flexDirection="column"
+                            ml={3}
+                            style={{ border: '1px solid gray' }}
+                        >
+                            <Card className={classes.root}>
+                                <CardMedia
+                                    className={classes.cover}
+                                    image="https://via.placeholder.com/150x225/767c77/fabea7"
+                                    title="Live from space album cover"
+                                />
+                                <CardContent className={classes.content}>
+                                    <Typography variant="h5">Live From Space</Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        Mac Miller
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Box>
+                    </Grid>
                 </Grid>
             </Container>
         </Box>
