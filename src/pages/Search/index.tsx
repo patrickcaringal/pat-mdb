@@ -21,23 +21,20 @@ import CardContent from '@material-ui/core/CardContent';
 const useStyles = makeStyles((theme) => ({
     demo: {
         backgroundColor: theme.palette.background.paper
-        // backgroundColor: 'red'
     },
     root: {
-        display: 'flex'
+        display: 'flex',
+        marginBottom: '18px'
     },
     cover: {
-        width: 151,
-        height: '225px'
+        width: 94,
+        height: 141
     },
     content: {
         display: 'flex',
         flexDirection: 'column',
         flex: '1',
-        background: 'khaki',
         justifyContent: 'space-between'
-
-        // alignItems: 'center',
     }
 }));
 
@@ -60,14 +57,12 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                             style={{
                                 background: '#fff',
                                 border: '1px solid rgba(0, 0, 0, 0.12)',
-                                borderRadius: '8px'
+                                borderRadius: '4px'
                             }}
                         >
-                            {/*  style={{ background: 'salmon' }} */}
                             <Box style={{ padding: '8px 16px' }}>
                                 <Typography variant="h6">Search result</Typography>
                             </Box>
-                            {/* style={{ background: 'khaki' }} */}
                             <List disablePadding>
                                 <ListItem>
                                     <ListItemText primary="Movies" />
@@ -93,25 +88,43 @@ const SearchPage: React.FC<SearchProps> = (props) => {
 
                     {/* results */}
                     <Grid item xs={9}>
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            ml={3}
-                            style={{ border: '1px solid gray' }}
-                        >
-                            <Card className={classes.root}>
-                                <CardMedia
-                                    className={classes.cover}
-                                    image="https://via.placeholder.com/150x225/767c77/fabea7"
-                                    title="Live from space album cover"
-                                />
-                                <CardContent className={classes.content}>
-                                    <Typography variant="h5">Live From Space</Typography>
-                                    <Typography variant="subtitle1" color="textSecondary">
-                                        Mac Miller
-                                    </Typography>
-                                </CardContent>
-                            </Card>
+                        <Box display="flex" flexDirection="column" ml={3}>
+                            {[...new Array(10)].map(() => (
+                                <Card className={classes.root}>
+                                    <CardMedia
+                                        className={classes.cover}
+                                        image="https://via.placeholder.com/94x141/767c77/fabea7"
+                                        title="Live from space album cover"
+                                    />
+                                    <CardContent
+                                        className={classes.content}
+                                        style={{ paddingBottom: 10, paddingTop: 10 }}
+                                    >
+                                        <Box>
+                                            <Typography variant="h6" style={{ fontWeight: 600 }}>
+                                                Movie title
+                                            </Typography>
+                                            <Typography color="textSecondary">
+                                                July 10, 2020
+                                            </Typography>
+                                        </Box>
+                                        <Typography
+                                            style={{
+                                                display: 'box',
+                                                lineClamp: 1,
+                                                boxOrient: 'vertical',
+                                                textOverflow: 'ellipsis'
+                                            }}
+                                            className="line-clamp"
+                                        >
+                                            Lorem ipsum, dolor sit amet consectetur adipisicing
+                                            elit. Amet quae quibusdam nam veniam laborum iusto
+                                            magnam inventore voluptate officia voluptatibus! Sit,
+                                            vel omnis enim ex sunt dolores officiis velit molestiae.
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            ))}
                         </Box>
                     </Grid>
                 </Grid>
