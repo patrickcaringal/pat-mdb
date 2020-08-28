@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { parse as QSParse } from 'query-string';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,6 +17,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
+
+import FilledInput from '@material-ui/core/FilledInput';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
     demo: {
@@ -43,24 +49,42 @@ interface SearchProps extends RouteComponentProps {}
 const SearchPage: React.FC<SearchProps> = (props) => {
     const classes = useStyles();
 
-    // console.log(QSParse(props.location.search));
-    // return <h1>{QSParse(props.location.search).query}</h1>;
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    useEffect(() => {
+        const searchTxt: string = QSParse(props.location.search).query as string;
+        setSearchQuery(searchTxt);
+    }, []);
 
     return (
         <Box display="flex" p={3}>
             <Container disableGutters maxWidth="lg">
                 <Grid container>
                     <Grid item xs={2}>
+                        <Box mb={3} display="flex" bgcolor="#fff" boxShadow={1} borderRadius={4}>
+                            <FormControl variant="filled" fullWidth>
+                                <InputLabel>Search</InputLabel>
+                                <FilledInput
+                                    value={searchQuery}
+                                    disableUnderline
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    style={{ background: 'none' }}
+                                />
+                            </FormControl>
+                            <IconButton type="submit" aria-label="search">
+                                <SearchIcon />
+                            </IconButton>
+                        </Box>
+
                         <Box
                             display="flex"
                             flexDirection="column"
-                            style={{
-                                background: '#fff',
-                                border: '1px solid rgba(0, 0, 0, 0.12)',
-                                borderRadius: '4px'
-                            }}
+                            bgcolor="#fff"
+                            boxShadow={1}
+                            borderRadius={4}
+                            border="1px solid rgba(0, 0, 0, 0.12)"
                         >
-                            <Box style={{ padding: '8px 16px' }}>
+                            <Box px={2} py={1}>
                                 <Typography variant="h6">Search result</Typography>
                             </Box>
                             <List disablePadding>
@@ -108,15 +132,7 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                                                 July 10, 2020
                                             </Typography>
                                         </Box>
-                                        <Typography
-                                            style={{
-                                                display: 'box',
-                                                lineClamp: 1,
-                                                boxOrient: 'vertical',
-                                                textOverflow: 'ellipsis'
-                                            }}
-                                            className="line-clamp"
-                                        >
+                                        <Typography className="line-clamp">
                                             Lorem ipsum, dolor sit amet consectetur adipisicing
                                             elit. Amet quae quibusdam nam veniam laborum iusto
                                             magnam inventore voluptate officia voluptatibus! Sit,
