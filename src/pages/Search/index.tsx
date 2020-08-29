@@ -20,7 +20,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 
+import Pagination from '@material-ui/lab/Pagination';
+
 import MovieCard from './MovieCard';
+import PeopleCard from './PeopleCard';
 
 // const useStyles = makeStyles({});
 
@@ -34,7 +37,7 @@ const SearchPage: React.FC<SearchProps> = (props) => {
     const [searchQuery, setSearchQuery] = useState<string>(searchTxt);
 
     return (
-        <Box display="flex" p={3}>
+        <Box display="flex" mt={3}>
             <Container disableGutters maxWidth="lg">
                 <Grid container>
                     <Grid item xs={2}>
@@ -88,16 +91,24 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                     </Grid>
 
                     {/* results */}
-                    <Grid item xs={9}>
+                    <Grid item xs={10}>
                         <Box display="flex" flexDirection="column" ml={3}>
-                            {[...new Array(10)].map(() => (
+                            {[...new Array(3)].map(() => (
                                 <MovieCard
                                     image="https://via.placeholder.com/94x141/767c77/fabea7"
                                     title="Movie title"
                                     subtitle="July 10, 2020"
                                     description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet quae quibusdam nam veniam laborum iusto magnam inventore voluptate officia voluptatibus! Sit, vel omnis enim ex sunt dolores officiis velit molestiae."
                                 />
+                                // <PeopleCard />
                             ))}
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={2} />
+                    <Grid item xs={10}>
+                        <Box display="flex" flexDirection="column" alignItems="center" mt={1}>
+                            <Pagination count={10} />
                         </Box>
                     </Grid>
                 </Grid>
