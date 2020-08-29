@@ -16,7 +16,7 @@ import useIntersect from '../../customhooks/useIntersect';
 const useStyles = makeStyles({
     root: {
         display: 'flex',
-        marginBottom: '18px',
+        marginBottom: 18,
         background: 'none',
         boxShadow: 'none',
         height: 70
@@ -34,26 +34,32 @@ const useStyles = makeStyles({
     }
 });
 
-interface IPeopleCard {}
+interface IPeopleCard {
+    image: string;
+    name: string;
+    details: string;
+}
 
-const PeopleCard: React.FC<IPeopleCard> = ({}) => {
+const PeopleCard: React.FC<IPeopleCard> = ({ image, name, details }) => {
+    const [isShown, setIsShown] = useState<boolean>(false);
+
     const classes = useStyles();
 
+    const IOOptions = { rootMargin: '176px 0px 0px 0px' };
+    const [IOref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
+
     return (
-        <Card className={classes.root}>
-            <CardMedia
-                className={classes.cover}
-                image="https://via.placeholder.com/70x70/767c77/fabea7"
-                title="Lord"
-            />
+        <Card className={classes.root} {...({ ref: IOref } as any)}>
+            {isShown ? (
+                <CardMedia className={classes.cover} image={image} title={name} />
+            ) : (
+                <Skeleton variant="rect" animation="pulse" className={classes.cover} />
+            )}
             <CardContent className={classes.content} style={{ paddingTop: 0, paddingBottom: 0 }}>
                 <Typography variant="h6" style={{ fontWeight: 600 }}>
-                    Tom Holland
+                    {name}
                 </Typography>
-                <Typography>
-                    Acting • Avengers: Infinity War, Captain America: Civil War, Spider-Man:
-                    Homecoming
-                </Typography>
+                <Typography>{details}</Typography>
             </CardContent>
         </Card>
     );

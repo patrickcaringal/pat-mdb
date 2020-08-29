@@ -16,7 +16,7 @@ import useIntersect from '../../customhooks/useIntersect';
 const useStyles = makeStyles({
     root: {
         display: 'flex',
-        marginBottom: '18px'
+        marginBottom: 18
     },
     cover: {
         width: 94,
@@ -42,7 +42,7 @@ const MovieCard: React.FC<IMovieCard> = ({ image, title, subtitle, description }
 
     const classes = useStyles();
 
-    const IOOptions = { rootMargin: '282px 0px 0px 0px' };
+    const IOOptions = { rootMargin: '318px 0px 0px 0px' };
     const [IOref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
 
     return (

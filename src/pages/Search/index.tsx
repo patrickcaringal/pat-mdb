@@ -93,14 +93,18 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                     {/* results */}
                     <Grid item xs={10}>
                         <Box display="flex" flexDirection="column" ml={3}>
-                            {[...new Array(3)].map(() => (
+                            {[...new Array(20)].map(() => (
                                 <MovieCard
                                     image="https://via.placeholder.com/94x141/767c77/fabea7"
                                     title="Movie title"
                                     subtitle="July 10, 2020"
                                     description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet quae quibusdam nam veniam laborum iusto magnam inventore voluptate officia voluptatibus! Sit, vel omnis enim ex sunt dolores officiis velit molestiae."
                                 />
-                                // <PeopleCard />
+                                // <PeopleCard
+                                //     image="https://via.placeholder.com/70x70/767c77/fabea7"
+                                //     name="Tom Holland"
+                                //     details="Acting • Avengers: Infinity War, Captain America: Civil War, Spider-Man: Homecoming"
+                                // />
                             ))}
                         </Box>
                     </Grid>
