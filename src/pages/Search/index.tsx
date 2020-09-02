@@ -42,11 +42,14 @@ const SearchPage: React.FC<SearchProps> = (props) => {
 
     const [searchQuery, setSearchQuery] = useState<string>(searchTxt);
     const [mediaType, setMediaType] = useState<MediaType>(MediaType.Movie);
+    const [active, setActivePage] = useState<number>(1);
+    const [pageCount, setPageCount] = useState<number>(5);
 
     return (
         <Box display="flex" mt={3}>
             <Container disableGutters maxWidth="lg">
                 <Grid container>
+                    {/* Search & Media type sidebar */}
                     <Grid item xs={2}>
                         <Box mb={3} display="flex" bgcolor="#fff" boxShadow={1} borderRadius={4}>
                             <FormControl variant="filled" fullWidth>
@@ -80,6 +83,7 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                                     selected={mediaType === MediaType.Movie}
                                     onClick={() => {
                                         setMediaType(MediaType.Movie);
+                                        setActivePage(1);
                                     }}
                                 >
                                     <ListItemText primary="Movies" />
@@ -92,6 +96,7 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                                     selected={mediaType === MediaType.TVShow}
                                     onClick={() => {
                                         setMediaType(MediaType.TVShow);
+                                        setActivePage(1);
                                     }}
                                 >
                                     <ListItemText primary="TV Shows" />
@@ -101,9 +106,10 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                                 </ListItem>
                                 <ListItem
                                     button
-                                    selected={mediaType === MediaType.TVShow}
+                                    selected={mediaType === MediaType.People}
                                     onClick={() => {
                                         setMediaType(MediaType.People);
+                                        setActivePage(1);
                                     }}
                                 >
                                     <ListItemText primary="People" />
@@ -115,31 +121,54 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                         </Box>
                     </Grid>
 
-                    {/* results */}
+                    {/* Search results */}
                     <Grid item xs={10}>
                         <Box display="flex" flexDirection="column" ml={3}>
-                            {[...new Array(20)].map(() => (
-                                <MovieCard
-                                    image="https://via.placeholder.com/94x141/767c77/fabea7"
-                                    title="Movie title"
-                                    subtitle="July 10, 2020"
-                                    description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet quae quibusdam nam veniam laborum iusto magnam inventore voluptate officia voluptatibus! Sit, vel omnis enim ex sunt dolores officiis velit molestiae."
-                                />
-                                // <PeopleCard
-                                //     image="https://via.placeholder.com/70x70/767c77/fabea7"
-                                //     name="Tom Holland"
-                                //     details="Acting • Avengers: Infinity War, Captain America: Civil War, Spider-Man: Homecoming"
-                                // />
-                            ))}
+                            {[...new Array(3)].map(() => {
+                                if (mediaType !== MediaType.People) {
+                                    return (
+                                        <MovieCard
+                                            image="https://via.placeholder.com/94x141/767c77/fabea7"
+                                            title="Movie title"
+                                            subtitle="July 10, 2020"
+                                            description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet quae quibusdam nam veniam laborum iusto magnam inventore voluptate officia voluptatibus! Sit, vel omnis enim ex sunt dolores officiis velit molestiae."
+                                        />
+                                    );
+                                }
+
+                                return (
+                                    <PeopleCard
+                                        image="https://via.placeholder.com/70x70/767c77/fabea7"
+                                        name="Tom Holland"
+                                        details="Acting • Avengers: Infinity War, Captain America: Civil War, Spider-Man: Homecoming"
+                                    />
+                                );
+                            })}
                         </Box>
                     </Grid>
 
-                    <Grid item xs={2} />
-                    <Grid item xs={10}>
-                        <Box display="flex" flexDirection="column" alignItems="center" mt={1}>
-                            <Pagination count={10} />
-                        </Box>
-                    </Grid>
+                    {/* Pagination */}
+                    {pageCount > 1 && (
+                        <>
+                            <Grid item xs={2} />
+                            <Grid item xs={10}>
+                                <Box
+                                    display="flex"
+                                    flexDirection="column"
+                                    alignItems="center"
+                                    mt={1}
+                                >
+                                    <Pagination
+                                        count={pageCount}
+                                        page={active}
+                                        onChange={(event: any, page: number) => {
+                                            setActivePage(page);
+                                        }}
+                                    />
+                                </Box>
+                            </Grid>
+                        </>
+                    )}
                 </Grid>
             </Container>
         </Box>
