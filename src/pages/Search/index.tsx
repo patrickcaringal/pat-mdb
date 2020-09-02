@@ -29,12 +29,19 @@ import PeopleCard from './PeopleCard';
 
 interface SearchProps extends RouteComponentProps {}
 
+enum MediaType {
+    Movie = 'Movie',
+    TVShow = 'TVShow',
+    People = 'People'
+}
+
 const SearchPage: React.FC<SearchProps> = (props) => {
     // const classes = useStyles();
 
     const searchTxt: string = QSParse(props.location.search).query as string;
 
     const [searchQuery, setSearchQuery] = useState<string>(searchTxt);
+    const [mediaType, setMediaType] = useState<MediaType>(MediaType.Movie);
 
     return (
         <Box display="flex" mt={3}>
@@ -68,19 +75,37 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                                 <Typography variant="h6">Search result</Typography>
                             </Box>
                             <List disablePadding>
-                                <ListItem>
+                                <ListItem
+                                    button
+                                    selected={mediaType === MediaType.Movie}
+                                    onClick={() => {
+                                        setMediaType(MediaType.Movie);
+                                    }}
+                                >
                                     <ListItemText primary="Movies" />
                                     <ListItemSecondaryAction>
                                         <Typography>22</Typography>
                                     </ListItemSecondaryAction>
                                 </ListItem>
-                                <ListItem>
+                                <ListItem
+                                    button
+                                    selected={mediaType === MediaType.TVShow}
+                                    onClick={() => {
+                                        setMediaType(MediaType.TVShow);
+                                    }}
+                                >
                                     <ListItemText primary="TV Shows" />
                                     <ListItemSecondaryAction>
                                         <Typography>0</Typography>
                                     </ListItemSecondaryAction>
                                 </ListItem>
-                                <ListItem>
+                                <ListItem
+                                    button
+                                    selected={mediaType === MediaType.TVShow}
+                                    onClick={() => {
+                                        setMediaType(MediaType.People);
+                                    }}
+                                >
                                     <ListItemText primary="People" />
                                     <ListItemSecondaryAction>
                                         <Typography>3</Typography>
