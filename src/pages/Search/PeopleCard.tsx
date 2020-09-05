@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
 import Card from '@material-ui/core/Card';
