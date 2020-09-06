@@ -4,10 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
 import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Toolbar from '@material-ui/core/Toolbar';
 
+import TabMenu from './TabMenu';
 import Logo from '../../asset/img/pat-logo.png';
 
 const useStyles = makeStyles((theme) => ({
@@ -59,29 +58,50 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     <Link to="/">
                         <img src={Logo} className={classes.logo} alt="PAT MDb" />
                     </Link>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        aria-label="navbar tabs"
-                        classes={{ indicator: classes.indicator }}
-                    >
-                        <Tab
-                            value="movie"
-                            label="Movie"
-                            id="navbar-tab-0"
-                            component={Link}
-                            to="/movie/popular"
-                            classes={{ selected: classes.selected }}
-                        />
-                        <Tab
-                            value="tv-show"
-                            label="TV show"
-                            id="navbar-tab-1"
-                            component={Link}
-                            to="/tv-show/popular"
-                            classes={{ selected: classes.selected }}
-                        />
-                    </Tabs>
+
+                    <TabMenu
+                        label="Movie"
+                        options={[
+                            {
+                                label: 'Popular',
+                                linkTo: '/movie/popular'
+                            },
+                            {
+                                label: 'Upcoming',
+                                linkTo: '/movie/upcoming'
+                            },
+                            {
+                                label: 'Top Rated',
+                                linkTo: '/movie/top-rated'
+                            }
+                        ]}
+                    />
+                    <TabMenu
+                        label="Tv show"
+                        options={[
+                            {
+                                label: 'Popular',
+                                linkTo: '/tv-show/popular'
+                            },
+                            {
+                                label: 'Upcoming',
+                                linkTo: '/tv-show/upcoming'
+                            },
+                            {
+                                label: 'Top Rated',
+                                linkTo: '/tv-show/top-rated'
+                            }
+                        ]}
+                    />
+                    <TabMenu
+                        label="People"
+                        options={[
+                            {
+                                label: 'Popular',
+                                linkTo: '/people/popular'
+                            }
+                        ]}
+                    />
                 </Toolbar>
             </AppBar>
         </ElevationScroll>

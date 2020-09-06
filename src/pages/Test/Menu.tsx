@@ -81,34 +81,28 @@ export default function MenuListComposition() {
     // }, [open]);
 
     return (
-        <div className={classes.root}>
-            {/* <Paper className={classes.paper}>
-                <MenuList>
-                    <MenuItem>Profile</MenuItem>
-                    <MenuItem>My account</MenuItem>
-                    <MenuItem>Logout</MenuItem>
-                </MenuList>
-            </Paper> */}
-            <div>
-                <Button
-                    ref={anchorRef}
-                    aria-controls={open ? 'menu-list-grow' : undefined}
-                    aria-haspopup="true"
-                    // onClick={handlePopoverOpen}
-                    onMouseEnter={handlePopoverOpen}
-                    onMouseLeave={handleTriggerPointerLeave}
-                >
-                    Toggle Menu Grow
-                </Button>
-                <Popper
-                    open={open}
-                    anchorEl={anchorRef.current}
-                    transition
-                    disablePortal
-                    onMouseEnter={handleMenuPointerEnter}
-                    onMouseLeave={handleMenuPointerLeave}
-                >
-                    {({ TransitionProps, placement }) => (
+        <>
+            <Button
+                ref={anchorRef}
+                aria-controls={open ? 'menu-list-grow' : undefined}
+                aria-haspopup="true"
+                // onClick={handlePopoverOpen}
+                onMouseEnter={handlePopoverOpen}
+                onMouseLeave={handleTriggerPointerLeave}
+            >
+                Toggle Menu Grow
+            </Button>
+            <Popper
+                open={open}
+                anchorEl={anchorRef.current}
+                transition
+                disablePortal
+                // onMouseEnter={handleMenuPointerEnter}
+                // onMouseLeave={handleMenuPointerLeave}
+            >
+                {({ TransitionProps, placement }) => {
+                    console.log(TransitionProps, placement);
+                    return (
                         <Grow
                             {...TransitionProps}
                             style={{
@@ -130,9 +124,9 @@ export default function MenuListComposition() {
                                 </ClickAwayListener>
                             </Paper>
                         </Grow>
-                    )}
-                </Popper>
-            </div>
-        </div>
+                    );
+                }}
+            </Popper>
+        </>
     );
 }
