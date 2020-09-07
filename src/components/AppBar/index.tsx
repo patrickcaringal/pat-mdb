@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
@@ -21,20 +21,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface NavBarProps extends RouteComponentProps {}
+interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = (props) => {
     const classes = useStyles();
-
-    const [value, setValue] = useState<string>();
-
-    useEffect(() => {
-        const path = props.location.pathname;
-        const index = path.indexOf('/', path.indexOf('/') + 1);
-        const activeTab = path.substr(1, index - 1);
-
-        setValue(activeTab);
-    }, [props.location.pathname]);
 
     const ElevationScroll = ({ children }: { children: React.ReactElement }) => {
         const trigger = useScrollTrigger({
@@ -47,10 +37,6 @@ const NavBar: React.FC<NavBarProps> = (props) => {
         });
     };
 
-    const handleChange = (event: any, newValue: string) => {
-        setValue(newValue);
-    };
-
     return (
         <ElevationScroll>
             <AppBar>
@@ -61,6 +47,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 
                     <TabMenu
                         label="Movie"
+                        value="movie"
                         options={[
                             {
                                 label: 'Popular',
@@ -78,6 +65,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     />
                     <TabMenu
                         label="Tv show"
+                        value="tv-show"
                         options={[
                             {
                                 label: 'Popular',
@@ -95,6 +83,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     />
                     <TabMenu
                         label="People"
+                        value="people"
                         options={[
                             {
                                 label: 'Popular',
@@ -108,4 +97,4 @@ const NavBar: React.FC<NavBarProps> = (props) => {
     );
 };
 
-export default withRouter(NavBar);
+export default NavBar;

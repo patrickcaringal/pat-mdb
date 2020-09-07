@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -10,34 +11,38 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 
 const useStyles = makeStyles((theme) => ({
-    button: {
+    menu: {
         '&:hover': {
             background: 'none'
         },
-        width: 125
+        width: 125,
+        color: '#fff',
+        fontWeight: ({ menuSelected }: { menuSelected: boolean }) =>
+            menuSelected ? 'bold' : 'normal'
     },
-    selected: {
-        fontWeight: 'bold'
+    menuItemCont: {
+        marginLeft: 100
     }
 }));
 
-export interface TabMenuProps {
+export interface TabMenuProps extends RouteComponentProps {
     label: string;
+    value: string;
     options?: { label: string; linkTo: string }[];
 }
 
-const TabMenu: React.FC<TabMenuProps> = ({ label, options = [], ...rest }) => {
-    const classes = useStyles();
+const TabMenu: React.FC<TabMenuProps> = ({ label, value, options = [], location, ...rest }) => {
+    const classes = useStyles({ menuSelected: location.pathname.includes(`/${value}/`) });
 
-    const [open, setOpen] = useState(false);
-    const [isPointerOnMenu, setIsPointerOnMenu] = React.useState(false);
+    const [isMenuItemsOpen, setIsMenuItemsOpen] = useState<boolean>(false);
+    const [isPointerOnMenuItems, setIsPointerOnMenuItems] = useState<boolean>(false);
 
     const anchorRef = useRef(null);
-    const pointerRef = React.useRef(isPointerOnMenu);
-    pointerRef.current = isPointerOnMenu;
+    const pointerRef = useRef(isPointerOnMenuItems);
+    pointerRef.current = isPointerOnMenuItems;
 
     const handlePopoverOpen = () => {
-        setOpen(true);
+        setIsMenuItemsOpen(true);
     };
 
     const handleTriggerPointerLeave = () => {
@@ -45,29 +50,29 @@ const TabMenu: React.FC<TabMenuProps> = ({ label, options = [], ...rest }) => {
             if (pointerRef.current) {
                 return;
             }
-            setOpen(false);
+            setIsMenuItemsOpen(false);
         }, 100);
     };
 
     const handleMenuPointerEnter = () => {
-        setIsPointerOnMenu(true);
+        setIsPointerOnMenuItems(true);
     };
 
     const handleMenuPointerLeave = () => {
-        setIsPointerOnMenu(false);
-        setOpen(false);
+        setIsPointerOnMenuItems(false);
+        setIsMenuItemsOpen(false);
     };
 
     const handleClose = (event: React.MouseEvent<EventTarget>) => {
-        setOpen(false);
+        setIsMenuItemsOpen(false);
     };
 
     return (
         <>
             <Button
-                className={classes.button}
+                className={classes.menu}
                 ref={anchorRef}
-                aria-controls={open ? 'menu-list-grow' : undefined}
+                aria-controls={isMenuItemsOpen ? 'menu-list-grow' : undefined}
                 aria-haspopup="true"
                 disableRipple
                 disableFocusRipple
@@ -79,12 +84,13 @@ const TabMenu: React.FC<TabMenuProps> = ({ label, options = [], ...rest }) => {
                 {label}
             </Button>
             <Popper
-                open={open}
+                open={isMenuItemsOpen}
                 anchorEl={anchorRef.current}
                 transition
                 disablePortal
                 onMouseEnter={handleMenuPointerEnter}
                 onMouseLeave={handleMenuPointerLeave}
+                className={classes.menuItemCont}
             >
                 {({ TransitionProps, placement }) => (
                     <Grow
@@ -95,9 +101,15 @@ const TabMenu: React.FC<TabMenuProps> = ({ label, options = [], ...rest }) => {
                     >
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
-                                <MenuList autoFocusItem={open} id="menu-list-grow">
+                                <MenuList autoFocusItem={isMenuItemsOpen} id="menu-list-grow">
                                     {options.map((i) => (
-                                        <MenuItem onClick={handleClose} style={{ width: 150 }}>
+                                        <MenuItem
+                                            component={Link}
+                                            to={i.linkTo}
+                                            onClick={handleClose}
+                                            style={{ width: 150 }}
+                                            selected={location.pathname.includes(i.linkTo)}
+                                        >
                                             {i.label}
                                         </MenuItem>
                                     ))}
@@ -111,4 +123,4 @@ const TabMenu: React.FC<TabMenuProps> = ({ label, options = [], ...rest }) => {
     );
 };
 
-export default TabMenu;
+export default withRouter(TabMenu);
