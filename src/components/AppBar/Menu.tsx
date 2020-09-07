@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: 'none'
         },
-        width: 125,
+        width: 150,
         color: '#fff',
         fontWeight: ({ menuSelected }: { menuSelected: boolean }) =>
             menuSelected ? 'bold' : 'normal'
@@ -25,13 +25,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export interface TabMenuProps extends RouteComponentProps {
+export interface MenuProps extends RouteComponentProps {
     label: string;
     value: string;
     options?: { label: string; linkTo: string }[];
 }
 
-const TabMenu: React.FC<TabMenuProps> = ({ label, value, options = [], location, ...rest }) => {
+const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...rest }) => {
     const classes = useStyles({ menuSelected: location.pathname.includes(`/${value}/`) });
 
     const [isMenuItemsOpen, setIsMenuItemsOpen] = useState<boolean>(false);
@@ -101,7 +101,7 @@ const TabMenu: React.FC<TabMenuProps> = ({ label, value, options = [], location,
                     >
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
-                                <MenuList autoFocusItem={isMenuItemsOpen} id="menu-list-grow">
+                                <MenuList id="menu-list-grow">
                                     {options.map((i) => (
                                         <MenuItem
                                             component={Link}
@@ -123,4 +123,4 @@ const TabMenu: React.FC<TabMenuProps> = ({ label, value, options = [], location,
     );
 };
 
-export default withRouter(TabMenu);
+export default withRouter(Menu);

@@ -6,7 +6,7 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
-import TabMenu from './TabMenu';
+import Menu from './Menu';
 import Logo from '../../asset/img/pat-logo.png';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,7 +45,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                         <img src={Logo} className={classes.logo} alt="PAT MDb" />
                     </Link>
 
-                    <TabMenu
+                    <Menu
                         label="Movie"
                         value="movie"
                         options={[
@@ -63,7 +63,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                             }
                         ]}
                     />
-                    <TabMenu
+                    <Menu
                         label="Tv show"
                         value="tv-show"
                         options={[
@@ -81,7 +81,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                             }
                         ]}
                     />
-                    <TabMenu
+                    <Menu
                         label="People"
                         value="people"
                         options={[
