@@ -20,12 +20,33 @@ import { Popular as PopularMovies, Genres } from './mockData';
 import landingImg from '../../asset/img/landing-bg.jpg';
 
 const useStyles = makeStyles((theme) => ({
-    searchCont: {
+    bannerGrid: {
+        minHeight: '300px',
+        height: 'calc(100vh / 2.5)',
+        maxHeight: '360px',
+        background: `linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.75)), url(${landingImg}) repeat`,
+        backgroundSize: 'contain',
+        backgroundPosition: 'center'
+    },
+    bannerHeader: { color: '#fff', fontWeight: 700 },
+    bannerSubheader: { color: '#fff', fontWeight: 600 },
+    searchForm: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    searchContainer: {
         display: 'flex',
         background: 'white',
         width: '65%',
         paddingLeft: '15px',
         borderRadius: '30px'
+    },
+    searchInput: {
+        background: 'transparent',
+        '&:hover': { background: 'transparent' },
+        '&.Mui-focused': { background: 'transparent' }
     },
     seachBtn: {
         width: '75px',
@@ -39,28 +60,24 @@ const Home: React.FC<HomeProps> = (props) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const onSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const doSearch = () => {
+        if (!searchQuery) return;
+
         props.history.push({
             pathname: '/search',
             search: `?query=${searchQuery}`
         });
     };
 
+    const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        doSearch();
+    };
+
     return (
         <Grid container>
             {/* Banner */}
-            <Grid
-                item
-                xs={12}
-                style={{
-                    minHeight: '300px',
-                    height: 'calc(100vh / 2.5)',
-                    maxHeight: '360px',
-                    background: `linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.75)), url(${landingImg}) repeat`,
-                    backgroundSize: 'contain',
-                    backgroundPosition: 'center'
-                }}
-            >
+            <Grid item xs={12} className={classes.bannerGrid}>
                 <Box
                     height="100%"
                     display="flex"
@@ -68,39 +85,40 @@ const Home: React.FC<HomeProps> = (props) => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        mb={3}
-                        style={{ color: '#fff' }}
-                    >
-                        <Typography variant="h3" component="h1" style={{ fontWeight: 700 }}>
+                    <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
+                        <Typography variant="h3" component="h2" className={classes.bannerHeader}>
                             Discover lots of movies and TV series.
                         </Typography>
-                        <Typography variant="h4" style={{ fontWeight: 600 }}>
+                        <Typography variant="h4" className={classes.bannerSubheader}>
                             Keep track of your favorite shows.
                         </Typography>
                     </Box>
 
-                    <Paper className={classes.searchCont}>
-                        <FormControl variant="filled" fullWidth>
-                            <InputLabel>Search for a movie, tv show series, person</InputLabel>
-                            <FilledInput
-                                value={searchQuery}
-                                disableUnderline
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                style={{ background: 'none' }}
-                            />
-                        </FormControl>
-                        <IconButton
-                            className={classes.seachBtn}
-                            aria-label="search"
-                            onClick={onSearch}
-                        >
-                            <SearchIcon />
-                        </IconButton>
-                    </Paper>
+                    <form
+                        noValidate
+                        autoComplete="off"
+                        className={classes.searchForm}
+                        onSubmit={handleOnSubmit}
+                    >
+                        <Paper className={classes.searchContainer}>
+                            <FormControl variant="filled" fullWidth>
+                                <InputLabel>Search for a movie, tv show series, person</InputLabel>
+                                <FilledInput
+                                    value={searchQuery}
+                                    disableUnderline
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    classes={{ root: classes.searchInput }}
+                                />
+                            </FormControl>
+                            <IconButton
+                                type="submit"
+                                className={classes.seachBtn}
+                                aria-label="search"
+                            >
+                                <SearchIcon />
+                            </IconButton>
+                        </Paper>
+                    </form>
                 </Box>
             </Grid>
 
