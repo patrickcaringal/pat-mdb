@@ -9,6 +9,7 @@ import './App.css';
 import AppBar from './components/AppBar';
 import Home from './pages/Home';
 import SearchPage from './pages/Search';
+import MoviePage from './pages/Movie';
 // import Test from './pages/Test/Menu';
 
 interface AppProps {}
@@ -23,7 +24,7 @@ const App: React.FC<AppProps> = (props) => {
                 <Switch>
                     {/* <Route path="/test" component={() => <Test />} /> */}
                     <Route path="/people/:id" exact component={() => <h1>People</h1>} />
-                    <Route path="/movie/:id" exact component={() => <h1>Movie</h1>} />
+                    <Route path="/movie/:id" exact component={() => <MoviePage />} />
                     <Route path="/tv-show/:id" exact component={() => <h1>tv-show</h1>} />
                     <Route path="/search" component={() => <SearchPage />} />
                     <Route path="/not-found" component={() => <h1>NotFound</h1>} />
