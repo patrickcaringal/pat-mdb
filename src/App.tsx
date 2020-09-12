@@ -10,7 +10,7 @@ import AppBar from './components/AppBar';
 import Home from './pages/Home';
 import SearchPage from './pages/Search';
 import MoviePage from './pages/Movie';
-// import Test from './pages/Test/Menu';
+import Test from './pages/Test/AutoComplete';
 
 interface AppProps {}
 
@@ -22,7 +22,7 @@ const App: React.FC<AppProps> = (props) => {
             <Toolbar />
             <Container disableGutters maxWidth={false}>
                 <Switch>
-                    {/* <Route path="/test" component={() => <Test />} /> */}
+                    <Route path="/test" component={() => <Test />} />
                     <Route path="/people/:id" exact component={() => <h1>People</h1>} />
                     <Route path="/movie/:id" exact component={() => <MoviePage />} />
                     <Route path="/tv-show/:id" exact component={() => <h1>tv-show</h1>} />
