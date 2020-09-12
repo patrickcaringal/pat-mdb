@@ -19,6 +19,8 @@ import MomentUtils from '@date-io/moment';
 
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
+import KeywordsAutocomplete from './KeywordsAutocomplete';
+
 const Catalog: React.FC<{}> = ({}) => {
     const [selectedDate, setSelectedDate] = useState<any>(null);
 
@@ -120,20 +122,7 @@ const Catalog: React.FC<{}> = ({}) => {
 
                             <Divider />
                             <Box display="flex" flexDirection="column" px={2} py={1}>
-                                <FormControl variant="filled">
-                                    <InputLabel id="sort-select">Keywords</InputLabel>
-                                    <Select
-                                        labelId="sort-select"
-                                        id="demo-simple-select"
-                                        value="10"
-                                        onChange={() => {}}
-                                        disableUnderline
-                                    >
-                                        <MenuItem value={10}>1</MenuItem>
-                                        <MenuItem value={20}>2</MenuItem>
-                                        <MenuItem value={30}>3</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <KeywordsAutocomplete />
                             </Box>
                         </Box>
                     </Grid>

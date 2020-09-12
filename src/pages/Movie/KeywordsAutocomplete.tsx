@@ -8,7 +8,12 @@ import TextField from '@material-ui/core/TextField';
 const useStyles = makeStyles({
     inputRoot: {
         '& .MuiAutocomplete-inputRoot[class*="MuiFilledInput-root"]': {
-            paddingTop: 25
+            paddingTop: 28,
+            paddingRight: '8px !important'
+        },
+        '& .MuiAutocomplete-endAdornment': {
+            position: 'absolute',
+            top: 3
         }
     }
 });
@@ -59,7 +64,6 @@ export default function Tags() {
             options={top100Films.map((option) => option.title)}
             inputValue={inputValue}
             onClose={handleClose}
-            style={{ width: 300 }}
             renderTags={(value: string[], getTagProps) =>
                 value.map((option: string, index: number) => (
                     <Chip variant="outlined" label={option} {...getTagProps({ index })} />
