@@ -38,13 +38,12 @@ const Catalog: React.FC<{}> = ({}) => {
                             borderRadius={4}
                             border="1px solid rgba(0, 0, 0, 0.12)"
                         >
-                            {/* p={2} */}
-                            <Box display="flex" flexDirection="column" px={2} py={1}>
+                            <Box display="flex" flexDirection="column" p={2}>
                                 <Typography variant="h6">Filter & Sort</Typography>
                             </Box>
 
                             <Divider />
-                            <Box display="flex" flexDirection="column" px={2} py={1}>
+                            <Box display="flex" flexDirection="column" px={2} py={2}>
                                 <FormControl variant="filled">
                                     <InputLabel id="sort-select">Sort result by</InputLabel>
                                     <Select
@@ -62,7 +61,7 @@ const Catalog: React.FC<{}> = ({}) => {
                             </Box>
 
                             <Divider />
-                            <Box display="flex" flexDirection="column" px={2} py={1}>
+                            <Box display="flex" flexDirection="column" px={2} py={2}>
                                 <Typography style={{ marginBottom: 8 }}>Genres</Typography>
                                 <Box display="flex" flexWrap="wrap">
                                     <Chip label="Action" onClick={() => {}} style={{ margin: 4 }} />
@@ -87,7 +86,7 @@ const Catalog: React.FC<{}> = ({}) => {
                             </Box>
 
                             <Divider />
-                            <Box display="flex" flexDirection="column" px={2} py={1}>
+                            <Box display="flex" flexDirection="column" px={2} py={2}>
                                 <Typography>Release date</Typography>
 
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -121,7 +120,7 @@ const Catalog: React.FC<{}> = ({}) => {
                             </Box>
 
                             <Divider />
-                            <Box display="flex" flexDirection="column" px={2} py={1}>
+                            <Box display="flex" flexDirection="column" px={2} py={2}>
                                 <KeywordsAutocomplete />
                             </Box>
                         </Box>
