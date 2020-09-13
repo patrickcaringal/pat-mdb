@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import Sidebar from './Sidebar';
+import MovieCards from './MovieCards';
 
 interface MatchParams {
     id: string;
@@ -40,9 +41,11 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
                         <Box
                             display="flex"
                             flexDirection="column"
-                            ml={3}
+                            // ml={3}
                             style={{ border: '1px solid #ccc' }}
-                        ></Box>
+                        >
+                            <MovieCards />
+                        </Box>
                     </Grid>
                 </Grid>
             </Container>
