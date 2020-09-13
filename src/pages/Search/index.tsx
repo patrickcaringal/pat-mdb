@@ -50,7 +50,7 @@ const SearchPage: React.FC<SearchProps> = (props) => {
             <Container disableGutters maxWidth="lg">
                 <Grid container>
                     {/* Search & Media type sidebar */}
-                    <Grid item xs={2}>
+                    <Grid item xs={3}>
                         <Box mb={3} display="flex" bgcolor="#fff" boxShadow={1} borderRadius={4}>
                             <FormControl variant="filled" fullWidth>
                                 <InputLabel>Search</InputLabel>
@@ -122,7 +122,7 @@ const SearchPage: React.FC<SearchProps> = (props) => {
                     </Grid>
 
                     {/* Search results */}
-                    <Grid item xs={10}>
+                    <Grid item xs={9}>
                         <Box display="flex" flexDirection="column" ml={3}>
                             {[...new Array(3)].map(() => {
                                 if (mediaType !== MediaType.People) {

@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -21,15 +20,64 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 
 import KeywordsAutocomplete from './KeywordsAutocomplete';
 
+const sortOptions = {
+    'popularity.desc': 'Popularity Descending',
+    'popularity.asc': 'Popularity Ascending',
+    'release_date.desc': 'Rating Descending',
+    'release_date.asc': 'Rating Ascending',
+    'primary_release_date.desc': 'Release Date Descending',
+    'primary_release_date.asc': 'Release Date Ascending',
+    'original_title.asc': 'Title (A-Z)',
+    'vote_average.desc': 'Title (Z-A)'
+};
+
+const genres = {
+    '12': 'Adventure',
+    '14': 'Fantasy',
+    '16': 'Animation',
+    '18': 'Drama',
+    '27': 'Horror',
+    '28': 'Action',
+    '35': 'Comedy',
+    '36': 'History',
+    '37': 'Western',
+    '53': 'Thriller',
+    '80': 'Crime',
+    '99': 'Documentary',
+    '878': 'Science Fiction',
+    '9648': 'Mystery',
+    '10402': 'Music',
+    '10749': 'Romance',
+    '10751': 'Family',
+    '10752': 'War',
+    '10770': 'TV Movie'
+};
+
 const Catalog: React.FC<{}> = ({}) => {
+    const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
+    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<any>(null);
+
+    const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setSelectedSort(event.target.value as string);
+    };
+
+    const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
+
+    const handleGenreChipClick = (genre: string) => {
+        if (!isGenreSelected(genre)) {
+            setSelectedGenres([...selectedGenres, genre]);
+        } else {
+            setSelectedGenres(selectedGenres.filter((g) => g !== genre));
+        }
+    };
 
     return (
         <Box display="flex" mt={3}>
             <Container disableGutters maxWidth="lg">
                 <Grid container>
                     {/* Sort & Filter sidebar */}
-                    <Grid item xs={2}>
+                    <Grid item xs={3}>
                         <Box
                             display="flex"
                             flexDirection="column"
@@ -43,50 +91,55 @@ const Catalog: React.FC<{}> = ({}) => {
                             </Box>
 
                             <Divider />
-                            <Box display="flex" flexDirection="column" px={2} py={2}>
+                            <Box display="flex" flexDirection="column" p={2}>
                                 <FormControl variant="filled">
                                     <InputLabel id="sort-select">Sort result by</InputLabel>
                                     <Select
                                         labelId="sort-select"
                                         id="demo-simple-select"
-                                        value="10"
-                                        onChange={() => {}}
+                                        value={selectedSort}
+                                        onChange={handleSortChange}
                                         disableUnderline
+                                        MenuProps={{
+                                            anchorOrigin: {
+                                                vertical: 'bottom',
+                                                horizontal: 'left'
+                                            },
+                                            transformOrigin: {
+                                                vertical: 'top',
+                                                horizontal: 'left'
+                                            },
+                                            getContentAnchorEl: null
+                                        }}
                                     >
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
+                                        {Object.entries(sortOptions).map(([key, value]) => (
+                                            <MenuItem value={key} key={key}>
+                                                {value}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                 </FormControl>
                             </Box>
 
                             <Divider />
-                            <Box display="flex" flexDirection="column" px={2} py={2}>
+                            <Box display="flex" flexDirection="column" p={2}>
                                 <Typography style={{ marginBottom: 8 }}>Genres</Typography>
                                 <Box display="flex" flexWrap="wrap">
-                                    <Chip label="Action" onClick={() => {}} style={{ margin: 4 }} />
-                                    <Chip
-                                        label="Adventure"
-                                        onClick={() => {}}
-                                        style={{ margin: 4 }}
-                                    />
-                                    <Chip
-                                        label="Romance"
-                                        onClick={() => {}}
-                                        style={{ margin: 4 }}
-                                    />
-                                    <Chip label="Horror" onClick={() => {}} style={{ margin: 4 }} />
-                                    <Chip label="SciFi" onClick={() => {}} style={{ margin: 4 }} />
-                                    <Chip
-                                        label="Thriller"
-                                        onClick={() => {}}
-                                        style={{ margin: 4 }}
-                                    />
+                                    {Object.entries(genres).map(([key, value]) => (
+                                        <Chip
+                                            key={key}
+                                            label={value}
+                                            onClick={() => handleGenreChipClick(key)}
+                                            variant={isGenreSelected(key) ? 'default' : 'outlined'}
+                                            size="small"
+                                            style={{ margin: 4 }}
+                                        />
+                                    ))}
                                 </Box>
                             </Box>
 
                             <Divider />
-                            <Box display="flex" flexDirection="column" px={2} py={2}>
+                            <Box display="flex" flexDirection="column" p={2}>
                                 <Typography>Release date</Typography>
 
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -99,9 +152,7 @@ const Catalog: React.FC<{}> = ({}) => {
                                         value={selectedDate}
                                         onChange={setSelectedDate}
                                         KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                                        InputProps={{
-                                            disableUnderline: true
-                                        }}
+                                        InputProps={{ disableUnderline: true }}
                                     />
                                     <KeyboardDatePicker
                                         id="end-release-date"
@@ -112,22 +163,20 @@ const Catalog: React.FC<{}> = ({}) => {
                                         value={selectedDate}
                                         onChange={setSelectedDate}
                                         KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                                        InputProps={{
-                                            disableUnderline: true
-                                        }}
+                                        InputProps={{ disableUnderline: true }}
                                     />
                                 </MuiPickersUtilsProvider>
                             </Box>
 
                             <Divider />
-                            <Box display="flex" flexDirection="column" px={2} py={2}>
+                            <Box display="flex" flexDirection="column" p={2}>
                                 <KeywordsAutocomplete />
                             </Box>
                         </Box>
                     </Grid>
 
                     {/* Catalog */}
-                    <Grid item xs={10}></Grid>
+                    <Grid item xs={9}></Grid>
                 </Grid>
             </Container>
         </Box>
