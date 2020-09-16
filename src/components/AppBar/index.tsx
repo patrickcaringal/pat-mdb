@@ -54,6 +54,10 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                                 linkTo: '/movie/popular'
                             },
                             {
+                                label: 'Now Playing',
+                                linkTo: '/movie/now-playing'
+                            },
+                            {
                                 label: 'Upcoming',
                                 linkTo: '/movie/upcoming'
                             },
@@ -72,8 +76,12 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                                 linkTo: '/tv-show/popular'
                             },
                             {
-                                label: 'Upcoming',
-                                linkTo: '/tv-show/upcoming'
+                                label: 'Airing Today',
+                                linkTo: '/tv-show/airing-today'
+                            },
+                            {
+                                label: 'On TV',
+                                linkTo: '/tv-show/on-the-air'
                             },
                             {
                                 label: 'Top Rated',

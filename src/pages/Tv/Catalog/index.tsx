@@ -7,15 +7,15 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import Sidebar from './Sidebar';
-import MovieCards from './MovieCards';
+import TvShowCards from './TvShowCards';
 
 interface MatchParams {
     id: string;
 }
 
-interface MovieProps extends RouteComponentProps<MatchParams> {}
+interface CatalogProps extends RouteComponentProps<MatchParams> {}
 
-const Catalog: React.FC<MovieProps> = ({ match }) => {
+const Catalog: React.FC<CatalogProps> = ({ match }) => {
     const { id: movieCategory } = match.params;
 
     const urlToWord = (str: string) => str.replace('-', ' '); // helper
@@ -38,7 +38,9 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
 
                     {/* Catalog */}
                     <Grid item xs={9}>
-                        <MovieCards />
+                        <Box display="flex" flexDirection="column">
+                            <TvShowCards />
+                        </Box>
                     </Grid>
                 </Grid>
             </Container>
