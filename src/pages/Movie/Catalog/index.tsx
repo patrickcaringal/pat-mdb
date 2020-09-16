@@ -38,12 +38,7 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
 
                     {/* Catalog */}
                     <Grid item xs={9}>
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            // ml={3}
-                            style={{ border: '1px solid #ccc' }}
-                        >
+                        <Box display="flex" flexDirection="column">
                             <MovieCards />
                         </Box>
                     </Grid>
