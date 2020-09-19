@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
 import { makeStyles } from '@material-ui/core/styles';
+
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-
 import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Typography from '@material-ui/core/Typography';
-
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
+import InputLabel from '@material-ui/core/InputLabel';
+import Paper from '@material-ui/core/Paper';
 import SearchIcon from '@material-ui/icons/Search';
+import Typography from '@material-ui/core/Typography';
 
 import Card from './Card';
 import { Popular as PopularMovies, Genres } from './mockData';
@@ -55,22 +53,23 @@ const useStyles = makeStyles((theme) => ({
 
 interface HomeProps extends RouteComponentProps {}
 
-const Home: React.FC<HomeProps> = (props) => {
+const Home: React.FC<HomeProps> = ({ history }) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const doSearch = () => {
+    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
         if (!searchQuery) return;
 
-        props.history.push({
+        history.push({
             pathname: '/search',
             search: `?query=${searchQuery}`
         });
     };
 
-    const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        doSearch();
+    const handleCardClick = (id: string) => {
+        history.push(`movie/${id}`);
     };
 
     return (
@@ -97,7 +96,7 @@ const Home: React.FC<HomeProps> = (props) => {
                     noValidate
                     autoComplete="off"
                     className={classes.searchForm}
-                    onSubmit={handleOnSubmit}
+                    onSubmit={handleSearchSubmit}
                 >
                     <Paper className={classes.searchContainer}>
                         <FormControl variant="filled" fullWidth>
@@ -138,6 +137,7 @@ const Home: React.FC<HomeProps> = (props) => {
                                     image={image}
                                     title={m.original_title}
                                     subtitle={genre}
+                                    onClick={() => handleCardClick(`${m.id}`)}
                                 />
                             );
                         })}
@@ -167,6 +167,7 @@ const Home: React.FC<HomeProps> = (props) => {
                                     image={image}
                                     title={m.original_title}
                                     subtitle={genre}
+                                    onClick={() => handleCardClick(`${m.id}`)}
                                 />
                             );
                         })}
@@ -196,6 +197,7 @@ const Home: React.FC<HomeProps> = (props) => {
                                     image={image}
                                     title={m.original_title}
                                     subtitle={genre}
+                                    onClick={() => handleCardClick(`${m.id}`)}
                                 />
                             );
                         })}
@@ -225,6 +227,7 @@ const Home: React.FC<HomeProps> = (props) => {
                                     image={image}
                                     title={m.original_title}
                                     subtitle={genre}
+                                    onClick={() => handleCardClick(`${m.id}`)}
                                 />
                             );
                         })}
