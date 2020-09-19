@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { parse as QSParse } from 'query-string';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
@@ -9,13 +12,19 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
+import FilledInput from '@material-ui/core/FilledInput';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
+
 import { Popular as PopularPeople } from './mockData';
 
 const useStyles = makeStyles({
     cardCont: {
         width: 'calc(((100vw - 80px - 260px - 128px) / 4))',
         maxWidth: 200,
-        marginLeft: 15,
+        marginLeft: 30,
         marginBottom: 30
     },
     cardImg: {
@@ -35,8 +44,14 @@ const useStyles = makeStyles({
     }
 });
 
-const PeopleCatalog: React.FC<{}> = ({}) => {
+interface PeopleCatalogProps extends RouteComponentProps {}
+
+const PeopleCatalog: React.FC<PeopleCatalogProps> = ({ location }) => {
     const classes = useStyles();
+
+    const searchTxt: string = QSParse(location.search).query as string;
+
+    const [searchQuery, setSearchQuery] = useState<string>(searchTxt);
 
     return (
         <Box display="flex" mx={4} my={3}>
@@ -47,13 +62,27 @@ const PeopleCatalog: React.FC<{}> = ({}) => {
                 >
                     Popular People
                 </Typography>
+                <Box mb={3} display="flex" bgcolor="#fff" boxShadow={1} borderRadius={4}>
+                    <FormControl variant="filled" fullWidth>
+                        <InputLabel>Search</InputLabel>
+                        <FilledInput
+                            value={searchQuery}
+                            disableUnderline
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            style={{ background: 'none' }}
+                        />
+                    </FormControl>
+                    <IconButton type="submit" aria-label="search">
+                        <SearchIcon />
+                    </IconButton>
+                </Box>
 
                 <Box
                     display="flex"
                     flexDirection="row"
                     flexWrap="wrap"
                     justifyContent="space-between"
-                    style={{ marginLeft: '-15px' }}
+                    style={{ marginLeft: '-30px' }}
                 >
                     {PopularPeople.map((p) => {
                         const image = `https://image.tmdb.org/t/p/w185/${p.profile_path}`;
@@ -89,4 +118,4 @@ const PeopleCatalog: React.FC<{}> = ({}) => {
     );
 };
 
-export default PeopleCatalog;
+export default withRouter(PeopleCatalog);

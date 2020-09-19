@@ -45,6 +45,9 @@ const Card: React.FC<ICard> = ({ image, title, subtitle }) => {
             {...({ ref: IOref } as any)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => {
+                alert();
+            }}
         >
             {isShown ? (
                 <CardMedia

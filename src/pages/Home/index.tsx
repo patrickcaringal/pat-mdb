@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 
@@ -75,190 +74,164 @@ const Home: React.FC<HomeProps> = (props) => {
     };
 
     return (
-        <Grid container>
+        <>
             {/* Banner */}
-            <Grid item xs={12} className={classes.bannerGrid}>
-                <Box
-                    height="100%"
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
+            <Box
+                className={classes.bannerGrid}
+                height="100%"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+            >
+                <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
+                    <Typography variant="h3" component="h2" className={classes.bannerHeader}>
+                        Discover lots of movies and TV series.
+                    </Typography>
+                    <Typography variant="h4" className={classes.bannerSubheader}>
+                        Keep track of your favorite shows.
+                    </Typography>
+                </Box>
+
+                <form
+                    noValidate
+                    autoComplete="off"
+                    className={classes.searchForm}
+                    onSubmit={handleOnSubmit}
                 >
-                    <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
-                        <Typography variant="h3" component="h2" className={classes.bannerHeader}>
-                            Discover lots of movies and TV series.
-                        </Typography>
-                        <Typography variant="h4" className={classes.bannerSubheader}>
-                            Keep track of your favorite shows.
+                    <Paper className={classes.searchContainer}>
+                        <FormControl variant="filled" fullWidth>
+                            <InputLabel>Search for a movie, tv show series, person</InputLabel>
+                            <FilledInput
+                                value={searchQuery}
+                                disableUnderline
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                classes={{ root: classes.searchInput }}
+                            />
+                        </FormControl>
+                        <IconButton type="submit" className={classes.seachBtn} aria-label="search">
+                            <SearchIcon />
+                        </IconButton>
+                    </Paper>
+                </form>
+            </Box>
+
+            {/* Popular */}
+            <Box display="flex" p={3}>
+                <Container disableGutters maxWidth="lg">
+                    <Box display="flex" py={1}>
+                        <Typography variant="h5" style={{ fontWeight: 600 }}>
+                            Popular
                         </Typography>
                     </Box>
 
-                    <form
-                        noValidate
-                        autoComplete="off"
-                        className={classes.searchForm}
-                        onSubmit={handleOnSubmit}
-                    >
-                        <Paper className={classes.searchContainer}>
-                            <FormControl variant="filled" fullWidth>
-                                <InputLabel>Search for a movie, tv show series, person</InputLabel>
-                                <FilledInput
-                                    value={searchQuery}
-                                    disableUnderline
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    classes={{ root: classes.searchInput }}
+                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
+                        {PopularMovies.map((m) => {
+                            const image = `https://image.tmdb.org/t/p/w185/${m.poster_path}`;
+                            const genre = m.genre_ids
+                                .map((g) => Genres.find((i) => i.id === g)?.name)
+                                .join(', ');
+
+                            return (
+                                <Card
+                                    key={m.id}
+                                    image={image}
+                                    title={m.original_title}
+                                    subtitle={genre}
                                 />
-                            </FormControl>
-                            <IconButton
-                                type="submit"
-                                className={classes.seachBtn}
-                                aria-label="search"
-                            >
-                                <SearchIcon />
-                            </IconButton>
-                        </Paper>
-                    </form>
-                </Box>
-            </Grid>
-
-            {/* Popular 83A0A0*/}
-            <Grid item xs={12}>
-                <Box display="flex" p={3}>
-                    <Container disableGutters maxWidth="lg">
-                        <Box display="flex" py={1}>
-                            <Typography variant="h5" style={{ fontWeight: 600 }}>
-                                Popular
-                            </Typography>
-                        </Box>
-
-                        <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                            {PopularMovies.map((m) => {
-                                const image = `https://image.tmdb.org/t/p/w185/${m.poster_path}`;
-                                const genre = m.genre_ids
-                                    .map((g) => Genres.find((i) => i.id === g)?.name)
-                                    .join(', ');
-
-                                return (
-                                    <Card
-                                        key={m.id}
-                                        image={image}
-                                        title={m.original_title}
-                                        subtitle={genre}
-                                    />
-                                );
-                            })}
-                        </Box>
-                    </Container>
-                </Box>
-            </Grid>
+                            );
+                        })}
+                    </Box>
+                </Container>
+            </Box>
 
             {/* Top Rated */}
-            <Grid item xs={12}>
-                <Box display="flex" p={3}>
-                    <Container disableGutters maxWidth="lg">
-                        <Box display="flex" py={1}>
-                            <Typography variant="h5" style={{ fontWeight: 600 }}>
-                                Top Rated
-                            </Typography>
-                        </Box>
+            <Box display="flex" p={3}>
+                <Container disableGutters maxWidth="lg">
+                    <Box display="flex" py={1}>
+                        <Typography variant="h5" style={{ fontWeight: 600 }}>
+                            Top Rated
+                        </Typography>
+                    </Box>
 
-                        <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                            {PopularMovies.map((m) => {
-                                const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
-                                const genre = m.genre_ids
-                                    .map((g) => Genres.find((i) => i.id === g)?.name)
-                                    .join(', ');
+                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
+                        {PopularMovies.map((m) => {
+                            const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
+                            const genre = m.genre_ids
+                                .map((g) => Genres.find((i) => i.id === g)?.name)
+                                .join(', ');
 
-                                return (
-                                    <Card
-                                        key={m.id}
-                                        image={image}
-                                        title={m.original_title}
-                                        subtitle={genre}
-                                    />
-                                );
-                            })}
-                        </Box>
-                    </Container>
-                </Box>
-            </Grid>
+                            return (
+                                <Card
+                                    key={m.id}
+                                    image={image}
+                                    title={m.original_title}
+                                    subtitle={genre}
+                                />
+                            );
+                        })}
+                    </Box>
+                </Container>
+            </Box>
 
             {/* Upcoming */}
-            <Grid item xs={12}>
-                <Box display="flex" p={3}>
-                    <Container disableGutters maxWidth="lg">
-                        <Box display="flex" py={1}>
-                            <Typography variant="h5" style={{ fontWeight: 600 }}>
-                                Upcoming
-                            </Typography>
-                        </Box>
+            <Box display="flex" p={3}>
+                <Container disableGutters maxWidth="lg">
+                    <Box display="flex" py={1}>
+                        <Typography variant="h5" style={{ fontWeight: 600 }}>
+                            Upcoming
+                        </Typography>
+                    </Box>
 
-                        <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                            {PopularMovies.map((m) => {
-                                const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
-                                const genre = m.genre_ids
-                                    .map((g) => Genres.find((i) => i.id === g)?.name)
-                                    .join(', ');
+                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
+                        {PopularMovies.map((m) => {
+                            const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
+                            const genre = m.genre_ids
+                                .map((g) => Genres.find((i) => i.id === g)?.name)
+                                .join(', ');
 
-                                return (
-                                    <Card
-                                        key={m.id}
-                                        image={image}
-                                        title={m.original_title}
-                                        subtitle={genre}
-                                    />
-                                );
-                            })}
-                        </Box>
-                    </Container>
-                </Box>
-            </Grid>
+                            return (
+                                <Card
+                                    key={m.id}
+                                    image={image}
+                                    title={m.original_title}
+                                    subtitle={genre}
+                                />
+                            );
+                        })}
+                    </Box>
+                </Container>
+            </Box>
 
             {/* Trending */}
-            <Grid item xs={12}>
-                <Box display="flex" p={3}>
-                    <Container disableGutters maxWidth="lg">
-                        <Box display="flex" py={1}>
-                            <Typography variant="h5" style={{ fontWeight: 600 }}>
-                                Trending
-                            </Typography>
-                        </Box>
-
-                        <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                            {PopularMovies.map((m) => {
-                                const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
-                                const genre = m.genre_ids
-                                    .map((g) => Genres.find((i) => i.id === g)?.name)
-                                    .join(', ');
-
-                                return (
-                                    <Card
-                                        key={m.id}
-                                        image={image}
-                                        title={m.original_title}
-                                        subtitle={genre}
-                                    />
-                                );
-                            })}
-                        </Box>
-                    </Container>
-                </Box>
-            </Grid>
-
-            {/* ETC */}
-            {/* <Grid item xs={12}>
-                    <Box
-                        display="flex"
-                        mt={50}
-                        p={3}
-                        style={{ background: isShown ? 'khaki' : 'salmon' }}
-                        {...({ ref: ref } as any)}
-                    >
-                        Load
+            <Box display="flex" p={3}>
+                <Container disableGutters maxWidth="lg">
+                    <Box display="flex" py={1}>
+                        <Typography variant="h5" style={{ fontWeight: 600 }}>
+                            Trending
+                        </Typography>
                     </Box>
-                </Grid> */}
-        </Grid>
+
+                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
+                        {PopularMovies.map((m) => {
+                            const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
+                            const genre = m.genre_ids
+                                .map((g) => Genres.find((i) => i.id === g)?.name)
+                                .join(', ');
+
+                            return (
+                                <Card
+                                    key={m.id}
+                                    image={image}
+                                    title={m.original_title}
+                                    subtitle={genre}
+                                />
+                            );
+                        })}
+                    </Box>
+                </Container>
+            </Box>
+        </>
     );
 };
 
