@@ -29,15 +29,11 @@ const useStyles = makeStyles({
         height: 450,
         borderRadius: 8
     },
-    movieConent: {
-        // background: 'khaki',
-        // height: 500
-    },
+    movieConent: {},
     leftSidebar: {
-        // border: '1px solid red',
-        // boxSizing: 'border-box',
         width: 260,
         minWidth: 260
+        // border: '1px solid red'
     },
 
     cardCont: {
@@ -57,6 +53,19 @@ const useStyles = makeStyles({
     },
     subtitle: {
         color: '#696969'
+    },
+
+    recommendationCard: {
+        width: 120,
+        marginBottom: 16
+    },
+    recommendationCardImg: {
+        height: 195
+    },
+    recommendationCardContent: {
+        '&.MuiCardContent-root': {
+            padding: 10
+        }
     }
 });
 
@@ -166,6 +175,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match }) => {
                         flexDirection="column"
                         flex="1"
                         style={{ overflow: 'hidden' }}
+                        mr={3}
                     >
                         <Typography variant="h5" style={{ fontWeight: 600 }}>
                             Cast
@@ -204,10 +214,10 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match }) => {
                         </Typography>
                     </Box>
 
-                    <Box display="flex" className={classes.leftSidebar} ml={3}>
+                    <Box display="flex" className={classes.leftSidebar}>
                         <Box display="flex" flexDirection="column">
                             <Typography style={{ fontWeight: 700 }}>Keywords</Typography>
-                            <Box display="flex" flexWrap="wrap" mt={2} mb={4}>
+                            <Box display="flex" flexWrap="wrap" mt={2} mb={3}>
                                 {[...Array(8)].map((i) => (
                                     <Chip
                                         // key={key}
@@ -221,6 +231,40 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match }) => {
                             </Box>
 
                             <Typography style={{ fontWeight: 700 }}>You may also like</Typography>
+                            <Box
+                                display="flex"
+                                flexDirection="row"
+                                flexWrap="wrap"
+                                justifyContent="space-around"
+                                mt={2}
+                                // style={{ background: 'khaki' }}
+                            >
+                                {[...Array(4)].map((i) => (
+                                    <Card className={classes.recommendationCard}>
+                                        <CardMedia
+                                            className={classes.recommendationCardImg}
+                                            image="https://image.tmdb.org/t/p/w130_and_h195_bestv2/1GEp7DDQhIHlw0vgBdQGiF4WhgS.jpg"
+                                            title="yeah"
+                                        />
+                                        <CardContent className={classes.recommendationCardContent}>
+                                            <Typography
+                                                variant="caption"
+                                                display="block"
+                                                className={classes.title}
+                                            >
+                                                Úrsula Corberó Úrsula Corberó
+                                            </Typography>
+                                            <Typography
+                                                variant="caption"
+                                                display="block"
+                                                className={classes.subtitle}
+                                            >
+                                                Tokyo
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </Box>
                         </Box>
                     </Box>
                 </Box>
