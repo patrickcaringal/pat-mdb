@@ -12,6 +12,9 @@ import CardContent from '@material-ui/core/CardContent';
 
 import Chip from '@material-ui/core/Chip';
 
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+
 const useStyles = makeStyles({
     backdrop: {
         background:
@@ -66,6 +69,33 @@ const useStyles = makeStyles({
         '&.MuiCardContent-root': {
             padding: 10
         }
+    },
+
+    mediaTab: {
+        '&.MuiTab-root': {
+            textTransform: 'none'
+        },
+        '&.Mui-selected': {
+            fontWeight: 600
+        }
+    },
+
+    photoCard: {
+        minWidth: 533,
+        borderRadius: 0,
+        marginRight: 14
+    },
+    photoCardImg: {
+        height: 300
+    },
+
+    posterCard: {
+        minWidth: 200,
+        borderRadius: 0,
+        marginRight: 14
+    },
+    posterCardImg: {
+        height: 300
     }
 });
 
@@ -212,6 +242,50 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match }) => {
                         <Typography variant="h5" style={{ fontWeight: 600 }}>
                             Media
                         </Typography>
+
+                        {/* style={{ border: '1px solid khaki' }} */}
+                        <Box>
+                            <Tabs
+                                value={0}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                onChange={() => {}}
+                                aria-label="tabs example"
+                            >
+                                <Tab className={classes.mediaTab} label="Photos" />
+                                <Tab className={classes.mediaTab} label="Videos" />
+                                <Tab className={classes.mediaTab} label="Posters" />
+                            </Tabs>
+                            <Box
+                                display="flex"
+                                flexDirection="row"
+                                mt={2}
+                                // mb={4}
+                                pb={2}
+                                style={{ width: '100%', overflow: 'auto' }}
+                            >
+                                {/* Poster */}
+                                {/* {[...Array(8)].map((i) => (
+                                    <Card className={classes.posterCard}>
+                                        <CardMedia
+                                            className={classes.posterCardImg}
+                                            image="https://image.tmdb.org/t/p/w220_and_h330_face/4LjPjtfaxEn2W61ORPeytr5Qq7j.jpg"
+                                            title="title"
+                                        />
+                                    </Card>
+                                ))} */}
+
+                                {[...Array(8)].map((i) => (
+                                    <Card className={classes.photoCard}>
+                                        <CardMedia
+                                            className={classes.photoCardImg}
+                                            image="https://image.tmdb.org/t/p/w533_and_h300_bestv2/xGexTKCJDkl12dTW4YCBDXWb1AD.jpg"
+                                            title="title"
+                                        />
+                                    </Card>
+                                ))}
+                            </Box>
+                        </Box>
                     </Box>
 
                     <Box display="flex" className={classes.leftSidebar}>
@@ -237,7 +311,6 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match }) => {
                                 flexWrap="wrap"
                                 justifyContent="space-around"
                                 mt={2}
-                                // style={{ background: 'khaki' }}
                             >
                                 {[...Array(4)].map((i) => (
                                     <Card className={classes.recommendationCard}>
