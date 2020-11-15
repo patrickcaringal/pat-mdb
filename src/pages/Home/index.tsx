@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -11,6 +12,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
+
+import { actions } from '../../ducks';
 
 import Card from './Card';
 import { Popular as PopularMovies, Genres } from './mockData';
@@ -51,11 +54,27 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface HomeProps extends RouteComponentProps {}
+interface IStateToProps {
+    movies: string[];
+}
 
-const Home: React.FC<HomeProps> = ({ history }) => {
+interface IDispatchToProps {
+    getMovies: (payload: any) => void;
+}
+
+interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
+
+const Home: React.FC<HomeProps> = ({ movies, getMovies, history }) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
+
+    // useEffect(() => {
+    //     getMovies('asd');
+    // }, []);
+
+    // useEffect(() => {
+    //     console.log(movies);
+    // }, [movies]);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -238,4 +257,17 @@ const Home: React.FC<HomeProps> = ({ history }) => {
     );
 };
 
-export default withRouter(Home);
+const mapStateToProps = (state: any /*, ownProps*/) => {
+    return {
+        movies: state.movies
+        // counter: state.counter
+    };
+};
+
+const mapDispatchToProps = {
+    getMovies: actions.getMovies
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Home));
+
+// export default withRouter(Home);

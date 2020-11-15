@@ -1,10 +1,13 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 
+import configureStore from './configureStore';
 import './App.css';
 import AppBar from './components/AppBar';
 import Home from './pages/Home';
@@ -16,9 +19,11 @@ import Test from './pages/Test/AutoComplete';
 
 interface AppProps {}
 
+const store = configureStore();
+
 const App: React.FC<AppProps> = (props) => {
     return (
-        <React.Fragment>
+        <Provider store={store}>
             <CssBaseline />
             <AppBar />
             <Toolbar />
@@ -35,7 +40,7 @@ const App: React.FC<AppProps> = (props) => {
                     <Redirect to="/not-found" />
                 </Switch>
             </Container>
-        </React.Fragment>
+        </Provider>
     );
 };
 
