@@ -1,10 +1,8 @@
-import { all, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
 import * as constants from './constants';
 import * as actions from './actions';
-
-// export default function* watchIncrementAsync() {
-//     yield takeEvery('INCREMENT_ASYNC', incrementAsync);
-// }
+import * as interfaces from './interfaces';
+import http from '../utils/http';
 
 function* getMovies() {
     try {
@@ -14,7 +12,19 @@ function* getMovies() {
     }
 }
 
+function* getPopularMovies() {
+    try {
+        const { data }: { data: interfaces.IMovie[] } = yield call(http.get, 'movie/popular');
+
+        yield put(actions.getPopularMoviesSucceed(data));
+    } catch (error) {
+        console.log(error);
+        yield put(actions.getPopularMoviesFailed('Error'));
+    }
+}
+
 export default function* rootSaga() {
     // yield takeLatest(constants.GET_MOVIES, getMovies);
     yield all([yield takeLatest(constants.GET_MOVIES, getMovies)]);
+    yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMovies)]);
 }

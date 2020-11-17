@@ -1,3 +1,26 @@
+// disover api on movie popular, ...
+/**
+ * Nov 15, 2020
+ * movie -> movies type
+ *
+ */
+
+/**
+ * id: string
+ * title: string
+ * genres: string[]
+ * poster: string
+ * release_date
+ *
+ * // for details
+ * backdrop_path?: string
+ * runtime?: string
+ * overview?: string
+ * budget?: number
+ * revenue?: number
+ * tagline?: string
+ */
+
 export const Popular = [
     {
         popularity: 167.259,

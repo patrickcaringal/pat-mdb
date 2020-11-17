@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
 
-import { actions } from '../../ducks';
+import { actions, interfaces } from '../../ducks';
 
 import Card from './Card';
 import { Popular as PopularMovies, Genres } from './mockData';
@@ -55,26 +55,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface IStateToProps {
-    movies: string[];
+    popularMovies: interfaces.IMovie[];
 }
 
 interface IDispatchToProps {
-    getMovies: (payload: any) => void;
+    getPopularMovies: () => interfaces.TAction;
 }
 
 interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
 
-const Home: React.FC<HomeProps> = ({ movies, getMovies, history }) => {
+const Home: React.FC<HomeProps> = ({ popularMovies, getPopularMovies, history }) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    // useEffect(() => {
-    //     getMovies('asd');
-    // }, []);
+    useEffect(() => {
+        getPopularMovies();
+    }, [getPopularMovies]);
 
-    // useEffect(() => {
-    //     console.log(movies);
-    // }, [movies]);
+    console.log(popularMovies);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -257,17 +255,14 @@ const Home: React.FC<HomeProps> = ({ movies, getMovies, history }) => {
     );
 };
 
-const mapStateToProps = (state: any /*, ownProps*/) => {
+const mapStateToProps = (state: interfaces.TState) => {
     return {
-        movies: state.movies
-        // counter: state.counter
+        popularMovies: state.popularMovies
     };
 };
 
 const mapDispatchToProps = {
-    getMovies: actions.getMovies
+    getPopularMovies: actions.getPopularMovies
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Home));
-
-// export default withRouter(Home);

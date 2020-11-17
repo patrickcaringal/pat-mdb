@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 
-import configureStore from './configureStore';
+import configureStore from './utils/configureStore';
 import './App.css';
 import AppBar from './components/AppBar';
 import Home from './pages/Home';
