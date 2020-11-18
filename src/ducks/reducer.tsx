@@ -5,7 +5,7 @@ export const initialState: interfaces.TState = {
     movies: [],
     popularMovies: [] as interfaces.IMovie[],
     // UI
-    request: {} as interfaces.IRequestObj
+    loaders: {}
 };
 
 const reducer = (
@@ -16,10 +16,9 @@ const reducer = (
         case constants.GET_POPULAR_MOVIES: {
             return {
                 ...state,
-                request: {
-                    isLoading: true,
-                    isSucceed: false,
-                    isFailed: false
+                loaders: {
+                    ...state.loaders,
+                    isPopularLoading: true
                 }
             };
         }
@@ -28,10 +27,9 @@ const reducer = (
             return {
                 ...state,
                 popularMovies: action.payload,
-                request: {
-                    isLoading: false,
-                    isSucceed: true,
-                    isFailed: false
+                loaders: {
+                    ...state.loaders,
+                    isPopularLoading: false
                 }
             };
         }
@@ -39,10 +37,9 @@ const reducer = (
         case constants.GET_POPULAR_MOVIES_FAILED: {
             return {
                 ...state,
-                request: {
-                    isLoading: false,
-                    isSucceed: false,
-                    isFailed: true
+                loaders: {
+                    ...state.loaders,
+                    isPopularLoading: false
                 }
             };
         }

@@ -5,7 +5,7 @@ export interface IMovie {
     id: string;
     title: string;
     genres: string[];
-    poster_path: string;
+    poster: string;
     release_date: string;
 }
 
@@ -24,17 +24,11 @@ export interface IGetPopularMoviesFailed {
     payload: string;
 }
 
-export interface IRequestObj {
-    isLoading: boolean;
-    isSucceed: boolean;
-    isFailed: boolean;
-}
-
 export type TState = {
     movies: string[];
     popularMovies: IMovie[];
     // UI
-    request: IRequestObj;
+    loaders: { [key: string]: boolean };
 };
 
 export type TAction = IGetPopularMovies | IGetPopularMoviesSucceed | IGetPopularMoviesFailed;

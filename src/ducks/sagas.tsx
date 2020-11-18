@@ -1,4 +1,4 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
 import * as constants from './constants';
 import * as actions from './actions';
 import * as interfaces from './interfaces';
@@ -16,6 +16,7 @@ function* getPopularMovies() {
     try {
         const { data }: { data: interfaces.IMovie[] } = yield call(http.get, 'movie/popular');
 
+        yield delay(500);
         yield put(actions.getPopularMoviesSucceed(data));
     } catch (error) {
         console.log(error);

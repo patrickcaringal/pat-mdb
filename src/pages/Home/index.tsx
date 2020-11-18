@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { actions, interfaces } from '../../ducks';
 
 import Card from './Card';
+import SkeletonCard from './SkeletonCard';
 import { Popular as PopularMovies, Genres } from './mockData';
 import landingImg from '../../asset/img/landing-bg.jpg';
 
@@ -56,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface IStateToProps {
     popularMovies: interfaces.IMovie[];
+    loaders: { [key: string]: boolean };
 }
 
 interface IDispatchToProps {
@@ -64,15 +66,17 @@ interface IDispatchToProps {
 
 interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
 
-const Home: React.FC<HomeProps> = ({ popularMovies, getPopularMovies, history }) => {
+const Home: React.FC<HomeProps> = ({ loaders, popularMovies, getPopularMovies, history }) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const { isPopularLoading } = loaders;
 
     useEffect(() => {
         getPopularMovies();
     }, [getPopularMovies]);
 
-    console.log(popularMovies);
+    // console.log(JSON.stringify(loaders, null, 4));
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -142,22 +146,21 @@ const Home: React.FC<HomeProps> = ({ popularMovies, getPopularMovies, history })
                     </Box>
 
                     <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                        {PopularMovies.map((m) => {
-                            const image = `https://image.tmdb.org/t/p/w185/${m.poster_path}`;
-                            const genre = m.genre_ids
-                                .map((g) => Genres.find((i) => i.id === g)?.name)
-                                .join(', ');
+                        {!isPopularLoading
+                            ? popularMovies.map((m: interfaces.IMovie) => {
+                                  const { id, poster, title, genres } = m;
 
-                            return (
-                                <Card
-                                    key={m.id}
-                                    image={image}
-                                    title={m.original_title}
-                                    subtitle={genre}
-                                    onClick={() => handleCardClick(`${m.id}`)}
-                                />
-                            );
-                        })}
+                                  return (
+                                      <Card
+                                          key={id}
+                                          image={poster}
+                                          title={title}
+                                          subtitle={genres.join(', ')}
+                                          onClick={() => handleCardClick(`${id}`)}
+                                      />
+                                  );
+                              })
+                            : [...Array(10)].map(() => <SkeletonCard />)}
                     </Box>
                 </Container>
             </Box>
@@ -257,7 +260,8 @@ const Home: React.FC<HomeProps> = ({ popularMovies, getPopularMovies, history })
 
 const mapStateToProps = (state: interfaces.TState) => {
     return {
-        popularMovies: state.popularMovies
+        popularMovies: state.popularMovies,
+        loaders: state.loaders
     };
 };
 

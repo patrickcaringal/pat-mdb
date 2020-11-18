@@ -66,19 +66,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ image, title, subtitle, onClick =
                 onClick={onClick}
             >
                 {isShown ? (
-                    <CardMedia
-                        className={classes.cardImg}
-                        image={image}
-                        // 'https://via.placeholder.com/150x225/767c77/fabea7'
-                        title={title}
-                    />
+                    <CardMedia className={classes.cardImg} image={image} title={title} />
                 ) : (
-                    <Skeleton
-                        variant="rect"
-                        animation="pulse"
-                        height={225}
-                        style={{ borderRadius: '8px' }}
-                    />
+                    <Skeleton variant="rect" animation="pulse" className={classes.cardImg} />
                 )}
 
                 <CardContent
