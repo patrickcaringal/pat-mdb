@@ -24,8 +24,21 @@ function* getPopularMovies() {
     }
 }
 
+function* getTrendingMovies() {
+    try {
+        const { data }: { data: interfaces.IMovie[] } = yield call(http.get, 'movie/trending');
+
+        yield delay(500);
+        yield put(actions.getTrendingMoviesSucceed(data));
+    } catch (error) {
+        console.log(error);
+        yield put(actions.getTrendingMoviesFailed('Error'));
+    }
+}
+
 export default function* rootSaga() {
     // yield takeLatest(constants.GET_MOVIES, getMovies);
     yield all([yield takeLatest(constants.GET_MOVIES, getMovies)]);
     yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMovies)]);
+    yield all([yield takeLatest(constants.GET_TRENDING_MOVIES, getTrendingMovies)]);
 }

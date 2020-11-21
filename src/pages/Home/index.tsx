@@ -57,23 +57,34 @@ const useStyles = makeStyles((theme) => ({
 
 interface IStateToProps {
     popularMovies: interfaces.IMovie[];
+    trendingMovies: interfaces.IMovie[];
     loaders: { [key: string]: boolean };
 }
 
 interface IDispatchToProps {
     getPopularMovies: () => interfaces.TAction;
+    getTrendingMovies: () => interfaces.TAction;
 }
 
 interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
 
-const Home: React.FC<HomeProps> = ({ loaders, popularMovies, getPopularMovies, history }) => {
+const Home: React.FC<HomeProps> = ({
+    loaders,
+    popularMovies,
+    trendingMovies,
+    getPopularMovies,
+    getTrendingMovies,
+    history
+}) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const { isPopularLoading } = loaders;
+    const { isPopularLoading, isTrendingLoading } = loaders;
 
+    console.log(trendingMovies);
     useEffect(() => {
         getPopularMovies();
+        getTrendingMovies();
     }, [getPopularMovies]);
 
     const mapToCardData = (data: interfaces.IMovie[]) => {
@@ -153,63 +164,14 @@ const Home: React.FC<HomeProps> = ({ loaders, popularMovies, getPopularMovies, h
                 isLoading={isPopularLoading}
                 onCardClick={handleCardClick}
             />
-            {/* <Box display="flex" p={3}>
-                <Container disableGutters maxWidth="lg">
-                    <Box display="flex" py={1}>
-                        <Typography variant="h5" style={{ fontWeight: 600 }}>
-                            Popular
-                        </Typography>
-                    </Box>
-
-                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                        {!isPopularLoading
-                            ? popularMovies.map((m: interfaces.IMovie) => {
-                                  const { id, poster, title, genres } = m;
-
-                                  return (
-                                      <Card
-                                          key={id}
-                                          image={poster}
-                                          title={title}
-                                          subtitle={genres.join(', ')}
-                                          onClick={() => handleCardClick(`${id}`)}
-                                      />
-                                  );
-                              })
-                            : [...Array(10)].map(() => <SkeletonCard />)}
-                    </Box>
-                </Container>
-            </Box> */}
 
             {/* Top Rated */}
-            <Box display="flex" p={3}>
-                <Container disableGutters maxWidth="lg">
-                    <Box display="flex" py={1}>
-                        <Typography variant="h5" style={{ fontWeight: 600 }}>
-                            Top Rated
-                        </Typography>
-                    </Box>
-
-                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                        {PopularMovies.map((m) => {
-                            const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
-                            const genre = m.genre_ids
-                                .map((g) => Genres.find((i) => i.id === g)?.name)
-                                .join(', ');
-
-                            return (
-                                <Card
-                                    key={m.id}
-                                    image={image}
-                                    title={m.original_title}
-                                    subtitle={genre}
-                                    onClick={() => handleCardClick(`${m.id}`)}
-                                />
-                            );
-                        })}
-                    </Box>
-                </Container>
-            </Box>
+            <CardList
+                header="Trending"
+                data={mapToCardData(trendingMovies)}
+                isLoading={isTrendingLoading}
+                onCardClick={handleCardClick}
+            />
 
             {/* Upcoming */}
             <Box display="flex" p={3}>
@@ -277,12 +239,14 @@ const Home: React.FC<HomeProps> = ({ loaders, popularMovies, getPopularMovies, h
 const mapStateToProps = (state: interfaces.TState) => {
     return {
         popularMovies: state.popularMovies,
+        trendingMovies: state.trendingMovies,
         loaders: state.loaders
     };
 };
 
 const mapDispatchToProps = {
-    getPopularMovies: actions.getPopularMovies
+    getPopularMovies: actions.getPopularMovies,
+    getTrendingMovies: actions.getTrendingMovies
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Home));

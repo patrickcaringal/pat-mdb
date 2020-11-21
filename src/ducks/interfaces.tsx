@@ -24,11 +24,32 @@ export interface IGetPopularMoviesFailed {
     payload: string;
 }
 
+export interface IGetTrendingMovies {
+    type: typeof constants.GET_TRENDING_MOVIES;
+}
+
+export interface IGetTrendingMoviesSucceed {
+    type: typeof constants.GET_TRENDING_MOVIES_SUCCEED;
+    payload: IMovie[];
+}
+
+export interface IGetTrendingMoviesFailed {
+    type: typeof constants.GET_TRENDING_MOVIES_FAILED;
+    payload: string;
+}
+
 export type TState = {
     movies: string[];
     popularMovies: IMovie[];
+    trendingMovies: IMovie[];
     // UI
     loaders: { [key: string]: boolean };
 };
 
-export type TAction = IGetPopularMovies | IGetPopularMoviesSucceed | IGetPopularMoviesFailed;
+export type TAction =
+    | IGetPopularMovies
+    | IGetPopularMoviesSucceed
+    | IGetPopularMoviesFailed
+    | IGetTrendingMovies
+    | IGetTrendingMoviesSucceed
+    | IGetTrendingMoviesFailed;

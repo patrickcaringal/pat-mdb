@@ -4,6 +4,7 @@ import * as interfaces from './interfaces';
 export const initialState: interfaces.TState = {
     movies: [],
     popularMovies: [] as interfaces.IMovie[],
+    trendingMovies: [] as interfaces.IMovie[],
     // UI
     loaders: {}
 };
@@ -40,6 +41,37 @@ const reducer = (
                 loaders: {
                     ...state.loaders,
                     isPopularLoading: false
+                }
+            };
+        }
+
+        case constants.GET_TRENDING_MOVIES: {
+            return {
+                ...state,
+                loaders: {
+                    ...state.loaders,
+                    isTrendingLoading: true
+                }
+            };
+        }
+
+        case constants.GET_TRENDING_MOVIES_SUCCEED: {
+            return {
+                ...state,
+                trendingMovies: action.payload,
+                loaders: {
+                    ...state.loaders,
+                    isTrendingLoading: false
+                }
+            };
+        }
+
+        case constants.GET_TRENDING_MOVIES_FAILED: {
+            return {
+                ...state,
+                loaders: {
+                    ...state.loaders,
+                    isTrendingLoading: false
                 }
             };
         }
