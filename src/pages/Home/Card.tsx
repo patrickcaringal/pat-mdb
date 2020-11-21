@@ -31,12 +31,14 @@ const useStyles = makeStyles({
     focusHighlight: {}
 });
 
-interface MovieCardProps extends RouteComponentProps {
+interface IStateToProps {
     image: string;
     title: string;
     subtitle: string;
     onClick?: () => void;
 }
+
+interface MovieCardProps extends IStateToProps, RouteComponentProps {}
 
 const MovieCard: React.FC<MovieCardProps> = ({ image, title, subtitle, onClick = () => {} }) => {
     const [isShown, setIsShown] = useState<boolean>(false);
@@ -71,13 +73,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ image, title, subtitle, onClick =
                     <Skeleton variant="rect" animation="pulse" className={classes.cardImg} />
                 )}
 
-                <CardContent
-                    style={{
-                        padding: '8px 0 0',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                    }}
-                >
+                <CardContent style={{ padding: '8px 0 0' }}>
                     <Typography noWrap style={{ fontWeight: 600 }}>
                         {title}
                     </Typography>
@@ -91,3 +87,29 @@ const MovieCard: React.FC<MovieCardProps> = ({ image, title, subtitle, onClick =
 };
 
 export default withRouter(MovieCard);
+
+export const CardSkeleton: React.FC = () => {
+    const classes = useStyles({ isHovered: false });
+
+    return (
+        <Card className={classes.cardCont} elevation={0} square>
+            <CardActionArea disableRipple disableTouchRipple>
+                <Skeleton
+                    variant="rect"
+                    animation="pulse"
+                    height={225}
+                    style={{ borderRadius: '8px' }}
+                />
+
+                <CardContent style={{ padding: '8px 0 0' }}>
+                    <Typography style={{ fontWeight: 600 }}>
+                        <Skeleton variant="text" />
+                    </Typography>
+                    <Typography variant="body2">
+                        <Skeleton variant="text" />
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+        </Card>
+    );
+};

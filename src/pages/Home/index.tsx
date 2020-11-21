@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { actions, interfaces } from '../../ducks';
 
 import Card from './Card';
-import SkeletonCard from './SkeletonCard';
+import CardList from './CardList';
 import { Popular as PopularMovies, Genres } from './mockData';
 import landingImg from '../../asset/img/landing-bg.jpg';
 
@@ -76,7 +76,17 @@ const Home: React.FC<HomeProps> = ({ loaders, popularMovies, getPopularMovies, h
         getPopularMovies();
     }, [getPopularMovies]);
 
-    // console.log(JSON.stringify(loaders, null, 4));
+    const mapToCardData = (data: interfaces.IMovie[]) => {
+        return data.map((i: interfaces.IMovie) => {
+            const { id, poster: image, title, genres: subtitle } = i;
+            return {
+                id,
+                image,
+                title,
+                subtitle: subtitle.join(', ')
+            };
+        });
+    };
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -137,7 +147,13 @@ const Home: React.FC<HomeProps> = ({ loaders, popularMovies, getPopularMovies, h
             </Box>
 
             {/* Popular */}
-            <Box display="flex" p={3}>
+            <CardList
+                header="Popular"
+                data={mapToCardData(popularMovies)}
+                isLoading={isPopularLoading}
+                onCardClick={handleCardClick}
+            />
+            {/* <Box display="flex" p={3}>
                 <Container disableGutters maxWidth="lg">
                     <Box display="flex" py={1}>
                         <Typography variant="h5" style={{ fontWeight: 600 }}>
@@ -163,7 +179,7 @@ const Home: React.FC<HomeProps> = ({ loaders, popularMovies, getPopularMovies, h
                             : [...Array(10)].map(() => <SkeletonCard />)}
                     </Box>
                 </Container>
-            </Box>
+            </Box> */}
 
             {/* Top Rated */}
             <Box display="flex" p={3}>
