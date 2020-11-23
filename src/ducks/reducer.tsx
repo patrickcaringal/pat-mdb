@@ -38,6 +38,7 @@ const reducer = (
         case constants.GET_POPULAR_MOVIES_FAILED: {
             return {
                 ...state,
+                popularMovies: [],
                 loaders: {
                     ...state.loaders,
                     isPopularLoading: false

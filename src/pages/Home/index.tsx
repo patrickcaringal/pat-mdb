@@ -17,6 +17,8 @@ import { actions, interfaces } from '../../ducks';
 
 import Card from './Card';
 import CardList from './CardList';
+import Toggle from './Toggle';
+
 import { Popular as PopularMovies, Genres } from './mockData';
 import landingImg from '../../asset/img/landing-bg.jpg';
 
@@ -78,10 +80,10 @@ const Home: React.FC<HomeProps> = ({
 }) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [popularMediaType, setPopularMediaType] = React.useState('Movies');
 
     const { isPopularLoading, isTrendingLoading } = loaders;
 
-    console.log(trendingMovies);
     useEffect(() => {
         getPopularMovies();
         getTrendingMovies();
@@ -159,17 +161,39 @@ const Home: React.FC<HomeProps> = ({
 
             {/* Popular */}
             <CardList
-                header="Popular"
+                header={
+                    <>
+                        <Typography variant="h5" style={{ fontWeight: 600, marginRight: 16 }}>
+                            Popular
+                        </Typography>
+                        <Toggle
+                            buttons={[
+                                {
+                                    label: 'Movies',
+                                    value: 'Movies'
+                                },
+                                {
+                                    label: 'TV',
+                                    value: 'TV'
+                                }
+                            ]}
+                            selected={popularMediaType}
+                            onToggleChange={(value: string) => {
+                                setPopularMediaType(value);
+                            }}
+                        />
+                    </>
+                }
                 data={mapToCardData(popularMovies)}
-                isLoading={isPopularLoading}
+                loading={isPopularLoading}
                 onCardClick={handleCardClick}
             />
 
             {/* Top Rated */}
             <CardList
-                header="Trending"
+                header="Top Rated"
                 data={mapToCardData(trendingMovies)}
-                isLoading={isTrendingLoading}
+                loading={isTrendingLoading}
                 onCardClick={handleCardClick}
             />
 

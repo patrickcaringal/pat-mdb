@@ -1,4 +1,5 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -13,24 +14,32 @@ interface ICard {
 }
 
 interface ICardList {
-    header: string;
+    header: string | React.ReactElement;
     data: ICard[];
-    isLoading: boolean;
+    loading: boolean;
     onCardClick: (id: string) => void;
 }
 
-const CardList: React.FC<ICardList> = ({ data, header, isLoading, onCardClick }) => {
+const useStyles = makeStyles((theme) => ({}));
+
+const CardList: React.FC<ICardList> = ({ data, header, loading, onCardClick }) => {
+    const classes = useStyles();
+
     return (
         <Box display="flex" p={3}>
             <Container disableGutters maxWidth="lg">
                 <Box display="flex" py={1}>
-                    <Typography variant="h5" style={{ fontWeight: 600 }}>
-                        {header}
-                    </Typography>
+                    {typeof header === 'string' ? (
+                        <Typography variant="h5" style={{ fontWeight: 600 }}>
+                            {header}
+                        </Typography>
+                    ) : (
+                        header
+                    )}
                 </Box>
 
                 <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                    {!isLoading
+                    {!loading && data.length
                         ? data.map((i: ICard) => {
                               const { id, ...rest } = i;
                               return (
