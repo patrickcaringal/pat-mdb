@@ -1,7 +1,7 @@
 import * as constants from './constants';
 
 // State
-export interface IMovie {
+export interface IMedia {
     id: string;
     title: string;
     genres: string[];
@@ -10,17 +10,17 @@ export interface IMovie {
 }
 
 // Action
-export interface IGetPopularMovies {
+export interface IGetPopularMedias {
     type: typeof constants.GET_POPULAR_MOVIES;
 }
 
-export interface IGetPopularMoviesSucceed {
-    type: typeof constants.GET_POPULAR_MOVIES_SUCCEED;
-    payload: IMovie[];
+export interface IGetPopularMediasSucceed {
+    type: typeof constants.GET_POPULAR_MEDIAS_SUCCEED;
+    payload: IMedia[];
 }
 
-export interface IGetPopularMoviesFailed {
-    type: typeof constants.GET_POPULAR_MOVIES_FAILED;
+export interface IGetPopularMediasFailed {
+    type: typeof constants.GET_POPULAR_MEDIAS_FAILED;
     payload: string;
 }
 
@@ -30,7 +30,7 @@ export interface IGetTrendingMovies {
 
 export interface IGetTrendingMoviesSucceed {
     type: typeof constants.GET_TRENDING_MOVIES_SUCCEED;
-    payload: IMovie[];
+    payload: IMedia[];
 }
 
 export interface IGetTrendingMoviesFailed {
@@ -40,16 +40,16 @@ export interface IGetTrendingMoviesFailed {
 
 export type TState = {
     movies: string[];
-    popularMovies: IMovie[];
-    trendingMovies: IMovie[];
+    popularMedias: IMedia[];
+    trendingMovies: IMedia[];
     // UI
     loaders: { [key: string]: boolean };
 };
 
 export type TAction =
-    | IGetPopularMovies
-    | IGetPopularMoviesSucceed
-    | IGetPopularMoviesFailed
+    | IGetPopularMedias
+    | IGetPopularMediasSucceed
+    | IGetPopularMediasFailed
     | IGetTrendingMovies
     | IGetTrendingMoviesSucceed
     | IGetTrendingMoviesFailed;

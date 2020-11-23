@@ -3,8 +3,8 @@ import * as interfaces from './interfaces';
 
 export const initialState: interfaces.TState = {
     movies: [],
-    popularMovies: [] as interfaces.IMovie[],
-    trendingMovies: [] as interfaces.IMovie[],
+    popularMedias: [] as interfaces.IMedia[],
+    trendingMovies: [] as interfaces.IMedia[],
     // UI
     loaders: {}
 };
@@ -24,10 +24,10 @@ const reducer = (
             };
         }
 
-        case constants.GET_POPULAR_MOVIES_SUCCEED: {
+        case constants.GET_POPULAR_MEDIAS_SUCCEED: {
             return {
                 ...state,
-                popularMovies: action.payload,
+                popularMedias: action.payload,
                 loaders: {
                     ...state.loaders,
                     isPopularLoading: false
@@ -35,10 +35,10 @@ const reducer = (
             };
         }
 
-        case constants.GET_POPULAR_MOVIES_FAILED: {
+        case constants.GET_POPULAR_MEDIAS_FAILED: {
             return {
                 ...state,
-                popularMovies: [],
+                popularMedias: [],
                 loaders: {
                     ...state.loaders,
                     isPopularLoading: false

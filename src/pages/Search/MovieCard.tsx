@@ -30,14 +30,14 @@ const useStyles = makeStyles({
     }
 });
 
-interface IMovieCard {
+interface IMediaCard {
     image: string;
     title: string;
     subtitle: string;
     description: string;
 }
 
-const MovieCard: React.FC<IMovieCard> = ({ image, title, subtitle, description }) => {
+const MovieCard: React.FC<IMediaCard> = ({ image, title, subtitle, description }) => {
     const [isShown, setIsShown] = useState<boolean>(false);
 
     const classes = useStyles();
