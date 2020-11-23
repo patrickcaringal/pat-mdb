@@ -1,4 +1,5 @@
 import * as constants from './constants';
+import * as types from './types';
 
 // State
 export interface IMedia {
@@ -12,6 +13,7 @@ export interface IMedia {
 // Action
 export interface IGetPopularMedias {
     type: typeof constants.GET_POPULAR_MOVIES;
+    payload: types.media;
 }
 
 export interface IGetPopularMediasSucceed {

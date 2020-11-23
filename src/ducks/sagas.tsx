@@ -12,8 +12,9 @@ function* getMovies() {
     }
 }
 
-function* getPopularMedias() {
+function* getPopularMedias({ payload: media }: interfaces.IGetPopularMedias) {
     try {
+        console.log(media);
         const { data }: { data: interfaces.IMedia[] } = yield call(http.get, 'movie/popular');
 
         yield delay(500);

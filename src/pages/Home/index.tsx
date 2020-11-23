@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
 
-import { actions, interfaces } from '../../ducks';
+import { actions, interfaces, types } from '../../ducks';
 
 import Card from './Card';
 import CardList from './CardList';
@@ -64,7 +64,7 @@ interface IStateToProps {
 }
 
 interface IDispatchToProps {
-    getPopularMedias: () => interfaces.TAction;
+    getPopularMedias: (media: types.media) => interfaces.IGetPopularMedias;
     getTrendingMovies: () => interfaces.TAction;
 }
 
@@ -80,7 +80,7 @@ const Home: React.FC<HomeProps> = ({
 }) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [popularMediaType, setPopularMediaType] = React.useState('Movies');
+    const [popularMediaType, setPopularMediaType] = useState('Movies');
 
     const { isPopularLoading, isTrendingLoading } = loaders;
 
@@ -89,7 +89,7 @@ const Home: React.FC<HomeProps> = ({
     }, [getPopularMedias]);
 
     useEffect(() => {
-        getPopularMedias();
+        getPopularMedias(popularMediaType.toLowerCase() as types.media);
     }, [popularMediaType, getPopularMedias]);
 
     const toggleButtons = ['Movies', 'TV'].map((i) => ({ label: i, value: i }));
