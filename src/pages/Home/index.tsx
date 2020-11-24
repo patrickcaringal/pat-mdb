@@ -59,13 +59,13 @@ const useStyles = makeStyles((theme) => ({
 
 interface IStateToProps {
     popularMedias: interfaces.IMedia[];
-    trendingMovies: interfaces.IMedia[];
+    trendingMedias: interfaces.IMedia[];
     loaders: { [key: string]: boolean };
 }
 
 interface IDispatchToProps {
     getPopularMedias: (media: types.media) => interfaces.IGetPopularMedias;
-    getTrendingMovies: () => interfaces.TAction;
+    getTrendingMedias: (media: types.media) => interfaces.IGetTrendingMedias;
 }
 
 interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
@@ -73,26 +73,30 @@ interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps
 const Home: React.FC<HomeProps> = ({
     loaders,
     popularMedias,
-    trendingMovies,
+    trendingMedias,
     getPopularMedias,
-    getTrendingMovies,
+    getTrendingMedias,
     history
 }) => {
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [popularMediaType, setPopularMediaType] = useState('Movies');
+    const [popularMediaType, setPopularMediaType] = useState('movie');
+    const [trendingMediaType, setTrendingMediaType] = useState('movie');
 
     const { isPopularLoading, isTrendingLoading } = loaders;
 
     useEffect(() => {
-        getTrendingMovies();
-    }, [getPopularMedias]);
+        getTrendingMedias(trendingMediaType as types.media);
+    }, [trendingMediaType, getTrendingMedias]);
 
     useEffect(() => {
-        getPopularMedias(popularMediaType.toLowerCase() as types.media);
+        getPopularMedias(popularMediaType as types.media);
     }, [popularMediaType, getPopularMedias]);
 
-    const toggleButtons = ['Movies', 'TV'].map((i) => ({ label: i, value: i }));
+    const toggleButtons = [
+        { label: 'Movies', value: 'movie' },
+        { label: 'TV', value: 'tv' }
+    ];
 
     const mapToCardData = (data: interfaces.IMedia[]) => {
         return data.map((i: interfaces.IMedia) => {
@@ -185,10 +189,23 @@ const Home: React.FC<HomeProps> = ({
                 onCardClick={handleCardClick}
             />
 
-            {/* Top Rated */}
+            {/* Trending */}
             <CardList
-                header="Top Rated"
-                data={mapToCardData(trendingMovies)}
+                header={
+                    <>
+                        <Typography variant="h5" style={{ fontWeight: 600, marginRight: 16 }}>
+                            Trending
+                        </Typography>
+                        <Toggle
+                            buttons={toggleButtons}
+                            selected={trendingMediaType}
+                            onToggleChange={(value: string) => {
+                                setTrendingMediaType(value);
+                            }}
+                        />
+                    </>
+                }
+                data={mapToCardData(trendingMedias)}
                 loading={isTrendingLoading}
                 onCardClick={handleCardClick}
             />
@@ -259,14 +276,14 @@ const Home: React.FC<HomeProps> = ({
 const mapStateToProps = (state: interfaces.TState) => {
     return {
         popularMedias: state.popularMedias,
-        trendingMovies: state.trendingMovies,
+        trendingMedias: state.trendingMedias,
         loaders: state.loaders
     };
 };
 
 const mapDispatchToProps = {
     getPopularMedias: actions.getPopularMedias,
-    getTrendingMovies: actions.getTrendingMovies
+    getTrendingMedias: actions.getTrendingMedias
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Home));

@@ -14,8 +14,7 @@ function* getMovies() {
 
 function* getPopularMedias({ payload: media }: interfaces.IGetPopularMedias) {
     try {
-        console.log(media);
-        const { data }: { data: interfaces.IMedia[] } = yield call(http.get, 'movie/popular');
+        const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/popular`);
 
         yield delay(500);
         yield put(actions.getPopularMediasSucceed(data));
@@ -25,15 +24,15 @@ function* getPopularMedias({ payload: media }: interfaces.IGetPopularMedias) {
     }
 }
 
-function* getTrendingMovies() {
+function* getTrendingMedias({ payload: media }: interfaces.IGetTrendingMedias) {
     try {
-        const { data }: { data: interfaces.IMedia[] } = yield call(http.get, 'movie/trending');
+        const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/trending`);
 
         yield delay(500);
-        yield put(actions.getTrendingMoviesSucceed(data));
+        yield put(actions.getTrendingMediasSucceed(data));
     } catch (error) {
         console.log(error);
-        yield put(actions.getTrendingMoviesFailed('Error'));
+        yield put(actions.getTrendingMediasFailed('Error'));
     }
 }
 
@@ -41,5 +40,5 @@ export default function* rootSaga() {
     // yield takeLatest(constants.GET_MOVIES, getMovies);
     yield all([yield takeLatest(constants.GET_MOVIES, getMovies)]);
     yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMedias)]);
-    yield all([yield takeLatest(constants.GET_TRENDING_MOVIES, getTrendingMovies)]);
+    yield all([yield takeLatest(constants.GET_TRENDING_MEDIAS, getTrendingMedias)]);
 }

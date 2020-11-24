@@ -19,16 +19,19 @@ export const getPopularMediasFailed = (payload: string): interfaces.IGetPopularM
     payload
 });
 
-export const getTrendingMovies = (): interfaces.TAction => ({
-    type: constants.GET_TRENDING_MOVIES
-});
-
-export const getTrendingMoviesSucceed = (payload: interfaces.IMedia[]): interfaces.TAction => ({
-    type: constants.GET_TRENDING_MOVIES_SUCCEED,
+export const getTrendingMedias = (payload: types.media): interfaces.IGetTrendingMedias => ({
+    type: constants.GET_TRENDING_MEDIAS,
     payload
 });
 
-export const getTrendingMoviesFailed = (payload: string): interfaces.TAction => ({
-    type: constants.GET_TRENDING_MOVIES_FAILED,
+export const getTrendingMediasSucceed = (
+    payload: interfaces.IMedia[]
+): interfaces.IGetTrendingMediasSucceed => ({
+    type: constants.GET_TRENDING_MEDIAS_SUCCEED,
+    payload
+});
+
+export const getTrendingMediasFailed = (payload: string): interfaces.IGetTrendingMediasFailed => ({
+    type: constants.GET_TRENDING_MEDIAS_FAILED,
     payload
 });

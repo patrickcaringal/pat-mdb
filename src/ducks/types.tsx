@@ -1,1 +1,1 @@
-export type media = 'movies' | 'tv';
+export type media = 'movie' | 'tv';

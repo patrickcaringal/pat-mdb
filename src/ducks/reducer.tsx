@@ -4,7 +4,7 @@ import * as interfaces from './interfaces';
 export const initialState: interfaces.TState = {
     movies: [],
     popularMedias: [] as interfaces.IMedia[],
-    trendingMovies: [] as interfaces.IMedia[],
+    trendingMedias: [] as interfaces.IMedia[],
     // UI
     loaders: {}
 };
@@ -46,7 +46,7 @@ const reducer = (
             };
         }
 
-        case constants.GET_TRENDING_MOVIES: {
+        case constants.GET_TRENDING_MEDIAS: {
             return {
                 ...state,
                 loaders: {
@@ -56,10 +56,10 @@ const reducer = (
             };
         }
 
-        case constants.GET_TRENDING_MOVIES_SUCCEED: {
+        case constants.GET_TRENDING_MEDIAS_SUCCEED: {
             return {
                 ...state,
-                trendingMovies: action.payload,
+                trendingMedias: action.payload,
                 loaders: {
                     ...state.loaders,
                     isTrendingLoading: false
@@ -67,9 +67,10 @@ const reducer = (
             };
         }
 
-        case constants.GET_TRENDING_MOVIES_FAILED: {
+        case constants.GET_TRENDING_MEDIAS_FAILED: {
             return {
                 ...state,
+                trendingMedias: [],
                 loaders: {
                     ...state.loaders,
                     isTrendingLoading: false
