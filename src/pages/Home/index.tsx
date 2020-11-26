@@ -15,11 +15,9 @@ import Typography from '@material-ui/core/Typography';
 
 import { actions, interfaces, types } from '../../ducks';
 
-import Card from './Card';
 import CardList from './CardList';
 import Toggle from './Toggle';
 
-import { Popular as PopularMovies, Genres } from './mockData';
 import landingImg from '../../asset/img/landing-bg.jpg';
 
 const useStyles = makeStyles((theme) => ({
@@ -85,17 +83,9 @@ const Home: React.FC<HomeProps> = ({
 
     const { isPopularLoading, isTrendingLoading } = loaders;
 
-    useEffect(() => {
-        getTrendingMedias(trendingMediaType as types.media);
-    }, [trendingMediaType, getTrendingMedias]);
-
-    useEffect(() => {
-        getPopularMedias(popularMediaType as types.media);
-    }, [popularMediaType, getPopularMedias]);
-
     const toggleButtons = [
         { label: 'Movies', value: 'movie' },
-        { label: 'TV', value: 'tv' }
+        { label: 'TV shows', value: 'tv' }
     ];
 
     const mapToCardData = (data: interfaces.IMedia[]) => {
@@ -109,6 +99,14 @@ const Home: React.FC<HomeProps> = ({
             };
         });
     };
+
+    useEffect(() => {
+        getTrendingMedias(trendingMediaType as types.media);
+    }, [trendingMediaType, getTrendingMedias]);
+
+    useEffect(() => {
+        getPopularMedias(popularMediaType as types.media);
+    }, [popularMediaType, getPopularMedias]);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -209,66 +207,6 @@ const Home: React.FC<HomeProps> = ({
                 loading={isTrendingLoading}
                 onCardClick={handleCardClick}
             />
-
-            {/* Upcoming */}
-            <Box display="flex" p={3}>
-                <Container disableGutters maxWidth="lg">
-                    <Box display="flex" py={1}>
-                        <Typography variant="h5" style={{ fontWeight: 600 }}>
-                            Upcoming
-                        </Typography>
-                    </Box>
-
-                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                        {PopularMovies.map((m) => {
-                            const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
-                            const genre = m.genre_ids
-                                .map((g) => Genres.find((i) => i.id === g)?.name)
-                                .join(', ');
-
-                            return (
-                                <Card
-                                    key={m.id}
-                                    image={image}
-                                    title={m.original_title}
-                                    subtitle={genre}
-                                    onClick={() => handleCardClick(`${m.id}`)}
-                                />
-                            );
-                        })}
-                    </Box>
-                </Container>
-            </Box>
-
-            {/* Trending */}
-            <Box display="flex" p={3}>
-                <Container disableGutters maxWidth="lg">
-                    <Box display="flex" py={1}>
-                        <Typography variant="h5" style={{ fontWeight: 600 }}>
-                            Trending
-                        </Typography>
-                    </Box>
-
-                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                        {PopularMovies.map((m) => {
-                            const image = `https://image.tmdb.org/t/p/w154/${m.poster_path}`;
-                            const genre = m.genre_ids
-                                .map((g) => Genres.find((i) => i.id === g)?.name)
-                                .join(', ');
-
-                            return (
-                                <Card
-                                    key={m.id}
-                                    image={image}
-                                    title={m.original_title}
-                                    subtitle={genre}
-                                    onClick={() => handleCardClick(`${m.id}`)}
-                                />
-                            );
-                        })}
-                    </Box>
-                </Container>
-            </Box>
         </>
     );
 };

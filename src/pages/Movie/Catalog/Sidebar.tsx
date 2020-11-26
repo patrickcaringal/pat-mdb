@@ -17,12 +17,12 @@ import KeywordsAutocomplete from './KeywordsAutocomplete';
 const sortOptions = {
     'popularity.desc': 'Popularity Descending',
     'popularity.asc': 'Popularity Ascending',
-    'release_date.desc': 'Rating Descending',
-    'release_date.asc': 'Rating Ascending',
+    // 'release_date.desc': 'Rating Descending',
+    // 'release_date.asc': 'Rating Ascending',
     'primary_release_date.desc': 'Release Date Descending',
     'primary_release_date.asc': 'Release Date Ascending',
     'original_title.asc': 'Title (A-Z)',
-    'vote_average.desc': 'Title (Z-A)'
+    'original_title.desc': 'Title (Z-A)'
 };
 
 const genres = {
@@ -59,6 +59,19 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
     const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
     const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
 
+    console.log(
+        JSON.stringify(
+            {
+                selectedSort: selectedSort,
+                selectedGenres: selectedGenres,
+                releaseStartDate: releaseStartDate,
+                releaseEndDate: releaseEndDate
+            },
+            null,
+            4
+        )
+    );
+
     const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedSort(event.target.value as string);
     };
@@ -87,6 +100,7 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
             </Box>
 
             <Divider />
+
             <Box display="flex" flexDirection="column" p={2}>
                 <FormControl variant="filled">
                     <InputLabel id="sort-select">Sort result by</InputLabel>
@@ -118,6 +132,7 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
             </Box>
 
             <Divider />
+
             <Box display="flex" flexDirection="column" p={2}>
                 <Typography style={{ marginBottom: 8 }}>Genres</Typography>
                 <Box display="flex" flexWrap="wrap">
@@ -135,6 +150,7 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
             </Box>
 
             <Divider />
+
             <Box display="flex" flexDirection="column" p={2}>
                 <Typography>Release date</Typography>
 
@@ -169,6 +185,7 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
             </Box>
 
             <Divider />
+
             <Box display="flex" flexDirection="column" p={2}>
                 <KeywordsAutocomplete />
             </Box>

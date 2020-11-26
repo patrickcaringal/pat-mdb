@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     toggleButton: {
         '&.MuiToggleButton-root': {
             padding: 5,
-            minWidth: 60,
+            minWidth: 80,
             textTransform: 'none'
         },
         '&.Mui-selected': {

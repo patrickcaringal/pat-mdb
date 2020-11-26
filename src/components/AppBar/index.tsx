@@ -60,10 +60,6 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                             {
                                 label: 'Upcoming',
                                 linkTo: '/movie/upcoming'
-                            },
-                            {
-                                label: 'Top Rated',
-                                linkTo: '/movie/top-rated'
                             }
                         ]}
                     />
@@ -82,10 +78,6 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                             {
                                 label: 'On TV',
                                 linkTo: '/tv-show/on-the-air'
-                            },
-                            {
-                                label: 'Top Rated',
-                                linkTo: '/tv-show/top-rated'
                             }
                         ]}
                     />

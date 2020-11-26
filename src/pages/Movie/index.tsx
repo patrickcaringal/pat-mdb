@@ -17,12 +17,12 @@ enum PageType {
 const Movie: React.FC<MovieProps> = ({ match }) => {
     const [pageType, setPageType] = useState<PageType>(PageType.Catalog);
 
+    const catalogPages = ['popular', 'now-playing', 'upcoming', 'top-rated'];
+
     useEffect(() => {
-        if (['popular', 'now-playing', 'upcoming', 'top-rated'].includes(match.params.id)) {
-            setPageType(PageType.Catalog);
-        } else {
-            setPageType(PageType.Detail);
-        }
+        const page = catalogPages.includes(match.params.id) ? PageType.Catalog : PageType.Detail;
+
+        setPageType(page);
     }, [match.params.id]);
 
     if (pageType === PageType.Catalog) {

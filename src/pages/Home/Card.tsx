@@ -107,6 +107,7 @@ export const CardSkeleton: React.FC = () => {
                     </Typography>
                     <Typography variant="body2">
                         <Skeleton variant="text" />
+                        <Skeleton variant="text" />
                     </Typography>
                 </CardContent>
             </CardActionArea>
