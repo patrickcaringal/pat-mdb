@@ -36,9 +36,24 @@ function* getTrendingMedias({ payload: media }: interfaces.IGetTrendingMedias) {
     }
 }
 
+function* getCatalogMovies({ payload }: interfaces.IGetCatalogMovies) {
+    try {
+        const { selectedSort, selectedGenres, releaseStartDate, releaseEndDate } = payload;
+        // const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/trending`);
+
+        yield delay(500);
+        // yield put(actions.getCatalogMoviesSucceed(data));
+        console.log('getTrendingMediasSucceed');
+    } catch (error) {
+        console.log(error);
+        yield put(actions.getCatalogMoviesFailed('Error'));
+    }
+}
+
 export default function* rootSaga() {
     // yield takeLatest(constants.GET_MOVIES, getMovies);
     yield all([yield takeLatest(constants.GET_MOVIES, getMovies)]);
     yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMedias)]);
     yield all([yield takeLatest(constants.GET_TRENDING_MEDIAS, getTrendingMedias)]);
+    yield all([yield takeLatest(constants.GET_CATALOG_MOVIES, getCatalogMovies)]);
 }

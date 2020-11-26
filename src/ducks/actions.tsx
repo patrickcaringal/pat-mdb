@@ -35,3 +35,22 @@ export const getTrendingMediasFailed = (payload: string): interfaces.IGetTrendin
     type: constants.GET_TRENDING_MEDIAS_FAILED,
     payload
 });
+
+export const getCatalogMovies = (
+    payload: interfaces.IGetCatalogMoviesPayload
+): interfaces.IGetCatalogMovies => ({
+    type: constants.GET_CATALOG_MOVIES,
+    payload
+});
+
+export const getCatalogMoviesSucceed = (
+    payload: interfaces.IMediaCatalog
+): interfaces.IGetCatalogMoviesSucceed => ({
+    type: constants.GET_CATALOG_MOVIES_SUCCEED,
+    payload
+});
+
+export const getCatalogMoviesFailed = (payload: string): interfaces.IGetCatalogMoviesFailed => ({
+    type: constants.GET_CATALOG_MOVIES_FAILED,
+    payload
+});

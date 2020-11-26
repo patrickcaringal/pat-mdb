@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
@@ -7,6 +8,8 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+
+import { actions, interfaces, types } from '../../../ducks';
 
 import { Popular as PopularMovies, Genres } from '../../Home/mockData';
 
@@ -34,9 +37,21 @@ const useStyles = makeStyles({
     }
 });
 
-interface MovieProps {}
+// interface IStateToProps {
+//     popularMedias: interfaces.IMedia[];
+//     trendingMedias: interfaces.IMedia[];
+//     loaders: { [key: string]: boolean };
+// }
 
-const MovieCards: React.FC<MovieProps> = ({}) => {
+interface IDispatchToProps {
+    getCatalogMovies: (
+        queries: interfaces.IGetCatalogMoviesPayload
+    ) => interfaces.IGetCatalogMovies;
+}
+
+interface MovieProps extends IDispatchToProps {}
+
+const MovieCards: React.FC<MovieProps> = ({ getCatalogMovies }) => {
     const classes = useStyles();
 
     return (
@@ -72,4 +87,12 @@ const MovieCards: React.FC<MovieProps> = ({}) => {
     );
 };
 
-export default MovieCards;
+const mapStateToProps = (state: interfaces.TState) => ({
+    loaders: state.loaders
+});
+
+const mapDispatchToProps = {
+    getCatalogMovies: actions.getCatalogMovies
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieCards);

@@ -10,6 +10,13 @@ export interface IMedia {
     release_date: string;
 }
 
+export interface IMediaCatalog {
+    page: boolean;
+    total_pages: boolean;
+    total_results: boolean;
+    movies: IMedia[];
+}
+
 // Action
 export interface IGetPopularMedias {
     type: typeof constants.GET_POPULAR_MOVIES;
@@ -41,10 +48,34 @@ export interface IGetTrendingMediasFailed {
     payload: string;
 }
 
+export interface IGetCatalogMoviesPayload {
+    // "popularity.desc"
+    selectedSort: string;
+    selectedGenres: string;
+    releaseStartDate: string;
+    releaseEndDate: string;
+}
+
+export interface IGetCatalogMovies {
+    type: typeof constants.GET_CATALOG_MOVIES;
+    payload: IGetCatalogMoviesPayload;
+}
+
+export interface IGetCatalogMoviesSucceed {
+    type: typeof constants.GET_CATALOG_MOVIES_SUCCEED;
+    payload: IMediaCatalog;
+}
+
+export interface IGetCatalogMoviesFailed {
+    type: typeof constants.GET_CATALOG_MOVIES_FAILED;
+    payload: string;
+}
+
 export type TState = {
     movies: string[];
     popularMedias: IMedia[];
     trendingMedias: IMedia[];
+    catalogMovies: IMediaCatalog;
     // UI
     loaders: { [key: string]: boolean };
 };
@@ -55,4 +86,7 @@ export type TAction =
     | IGetPopularMediasFailed
     | IGetTrendingMedias
     | IGetTrendingMediasSucceed
-    | IGetTrendingMediasFailed;
+    | IGetTrendingMediasFailed
+    | IGetCatalogMovies
+    | IGetCatalogMoviesSucceed
+    | IGetCatalogMoviesFailed;
