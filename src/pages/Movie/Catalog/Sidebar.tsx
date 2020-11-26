@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import MomentUtils from '@date-io/moment';
+import moment from 'moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
 import Button from '@material-ui/core/Button';
@@ -51,6 +52,11 @@ const genres = {
     '10770': 'TV Movie'
 };
 
+interface IStateToProps {
+    catalogMovies: interfaces.IMediaCatalog;
+    loaders: { [key: string]: boolean };
+}
+
 interface IDispatchToProps {
     getCatalogMovies: (
         queries: interfaces.IGetCatalogMoviesPayload
@@ -61,26 +67,16 @@ interface IMatchParams {
     id: string;
 }
 
-interface ISidebarProps extends IDispatchToProps, RouteComponentProps<IMatchParams> {}
+interface ISidebarProps
+    extends IStateToProps,
+        IDispatchToProps,
+        RouteComponentProps<IMatchParams> {}
 
-const Sidebar: React.FC<ISidebarProps> = ({ match }) => {
+const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, getCatalogMovies, match }) => {
     const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
     const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
-
-    // console.log(
-    //     JSON.stringify(
-    //         {
-    //             selectedSort: selectedSort,
-    //             selectedGenres: selectedGenres,
-    //             releaseStartDate: releaseStartDate,
-    //             releaseEndDate: releaseEndDate
-    //         },
-    //         null,
-    //         4
-    //     )
-    // );
 
     const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedSort(event.target.value as string);
@@ -97,8 +93,23 @@ const Sidebar: React.FC<ISidebarProps> = ({ match }) => {
     };
 
     const handleSearchClick = () => {
-        console.log('handleSearchClick');
+        const payload = {
+            sort_by: selectedSort,
+            with_genres: selectedGenres.join(','),
+            'primary_release_date.gte': releaseStartDate
+                ? moment(releaseStartDate).format('YYYY-MM-DD')
+                : '',
+            'primary_release_date.lte': releaseEndDate
+                ? moment(releaseEndDate).format('YYYY-MM-DD')
+                : ''
+        };
+
+        getCatalogMovies(payload);
     };
+
+    useEffect(() => {
+        getCatalogMovies({} as interfaces.IGetCatalogMoviesPayload);
+    }, []);
 
     return (
         <>
@@ -203,11 +214,10 @@ const Sidebar: React.FC<ISidebarProps> = ({ match }) => {
                     </MuiPickersUtilsProvider>
                 </Box>
 
-                <Divider />
-
+                {/* <Divider />
                 <Box display="flex" flexDirection="column" p={2}>
                     <KeywordsAutocomplete />
-                </Box>
+                </Box> */}
 
                 <Divider />
             </Box>
@@ -222,6 +232,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ match }) => {
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
+    catalogMovies: state.catalogMovies,
     loaders: state.loaders
 });
 

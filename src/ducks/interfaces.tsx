@@ -49,11 +49,10 @@ export interface IGetTrendingMediasFailed {
 }
 
 export interface IGetCatalogMoviesPayload {
-    // "popularity.desc"
-    selectedSort: string;
-    selectedGenres: string;
-    releaseStartDate: string;
-    releaseEndDate: string;
+    sort_by: string;
+    with_genres: string;
+    'primary_release_date.gte': string;
+    'primary_release_date.lte': string;
 }
 
 export interface IGetCatalogMovies {

@@ -1,17 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 
 import Box from '@material-ui/core/Box';
-
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 import { actions, interfaces, types } from '../../../ducks';
-
-import { Popular as PopularMovies, Genres } from '../../Home/mockData';
 
 const useStyles = makeStyles({
     cardCont: {
@@ -37,11 +35,10 @@ const useStyles = makeStyles({
     }
 });
 
-// interface IStateToProps {
-//     popularMedias: interfaces.IMedia[];
-//     trendingMedias: interfaces.IMedia[];
-//     loaders: { [key: string]: boolean };
-// }
+interface IStateToProps {
+    catalogMovies: interfaces.IMediaCatalog;
+    loaders: { [key: string]: boolean };
+}
 
 interface IDispatchToProps {
     getCatalogMovies: (
@@ -49,31 +46,29 @@ interface IDispatchToProps {
     ) => interfaces.IGetCatalogMovies;
 }
 
-interface MovieProps extends IDispatchToProps {}
+interface MovieProps extends IStateToProps, IDispatchToProps {}
 
-const MovieCards: React.FC<MovieProps> = ({ getCatalogMovies }) => {
+const MovieCards: React.FC<MovieProps> = ({ catalogMovies }) => {
     const classes = useStyles();
+
+    const { movies = [] } = catalogMovies;
 
     return (
         <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
-            {PopularMovies.map((m) => {
-                const image = `https://image.tmdb.org/t/p/w300/${m.poster_path}`;
-                const genre = m.genre_ids
-                    .map((g) => Genres.find((i) => i.id === g)?.name)
-                    .join(', ');
+            {movies.map((m) => {
+                const { id, poster: image, title, genres: subtitle, release_date } = m;
 
                 return (
-                    <Card className={classes.cardCont}>
-                        <CardMedia
-                            className={classes.cardImg}
-                            image={image}
-                            title={m.original_title}
-                        />
+                    <Card key={id} className={classes.cardCont}>
+                        <CardMedia className={classes.cardImg} image={image} title={title} />
                         <CardContent className={classes.cardContent}>
-                            <Typography className={classes.title}>{m.original_title}</Typography>
+                            <Typography className={classes.title}>{m.title}</Typography>
                             <Typography variant="body2" className={classes.subtitle}>
-                                {genre}
+                                {subtitle.join(', ')}
                             </Typography>
+                            {/* <Typography variant="body2" className={classes.subtitle}>
+                                {moment(release_date).format('MMM DD, YYYY')}
+                            </Typography> */}
                         </CardContent>
                     </Card>
                 );
@@ -88,6 +83,7 @@ const MovieCards: React.FC<MovieProps> = ({ getCatalogMovies }) => {
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
+    catalogMovies: state.catalogMovies,
     loaders: state.loaders
 });
 
