@@ -100,14 +100,6 @@ const Home: React.FC<HomeProps> = ({
         });
     };
 
-    useEffect(() => {
-        getTrendingMedias(trendingMediaType as types.media);
-    }, [trendingMediaType, getTrendingMedias]);
-
-    useEffect(() => {
-        getPopularMedias(popularMediaType as types.media);
-    }, [popularMediaType, getPopularMedias]);
-
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -122,6 +114,14 @@ const Home: React.FC<HomeProps> = ({
     const handleCardClick = (id: string) => {
         history.push(`movie/${id}`);
     };
+
+    useEffect(() => {
+        getTrendingMedias(trendingMediaType as types.media);
+    }, [trendingMediaType, getTrendingMedias]);
+
+    useEffect(() => {
+        getPopularMedias(popularMediaType as types.media);
+    }, [popularMediaType, getPopularMedias]);
 
     return (
         <>

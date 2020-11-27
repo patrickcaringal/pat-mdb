@@ -8,6 +8,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Chip from '@material-ui/core/Chip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -17,7 +18,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { actions, interfaces, types } from '../../../ducks';
 
-import KeywordsAutocomplete from './KeywordsAutocomplete';
+// import KeywordsAutocomplete from './KeywordsAutocomplete';
 
 const sortOptions = {
     'popularity.desc': 'Popularity Descending',
@@ -72,36 +73,41 @@ interface ISidebarProps
         IDispatchToProps,
         RouteComponentProps<IMatchParams> {}
 
-const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, getCatalogMovies, match }) => {
+const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, loaders, getCatalogMovies }) => {
     const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
     const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
 
+    const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
+
+    const { isCatalogLoading } = loaders;
+
+    const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
+
     const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedSort(event.target.value as string);
     };
 
-    const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
-
     const handleGenreChipClick = (genre: string) => {
-        if (!isGenreSelected(genre)) {
-            setSelectedGenres([...selectedGenres, genre]);
-        } else {
-            setSelectedGenres(selectedGenres.filter((g) => g !== genre));
-        }
+        const selected = !isGenreSelected(genre)
+            ? [...selectedGenres, genre]
+            : selectedGenres.filter((g) => g !== genre);
+
+        setSelectedGenres(selected);
     };
 
     const handleSearchClick = () => {
+        setIsSearchClicked(true);
+
+        const startDate = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
+        const endDate = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+
         const payload = {
             sort_by: selectedSort,
             with_genres: selectedGenres.join(','),
-            'primary_release_date.gte': releaseStartDate
-                ? moment(releaseStartDate).format('YYYY-MM-DD')
-                : '',
-            'primary_release_date.lte': releaseEndDate
-                ? moment(releaseEndDate).format('YYYY-MM-DD')
-                : ''
+            'primary_release_date.gte': startDate,
+            'primary_release_date.lte': endDate
         };
 
         getCatalogMovies(payload);
@@ -110,6 +116,10 @@ const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, getCatalogMovies, mat
     useEffect(() => {
         getCatalogMovies({} as interfaces.IGetCatalogMoviesPayload);
     }, []);
+
+    useEffect(() => {
+        if (!isCatalogLoading) setIsSearchClicked(false);
+    }, [isCatalogLoading]);
 
     return (
         <>
@@ -223,8 +233,13 @@ const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, getCatalogMovies, mat
             </Box>
 
             <Box display="flex" flexDirection="column" mt={3}>
-                <Button variant="contained" color="primary" onClick={handleSearchClick}>
-                    Search
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSearchClick}
+                    disabled={isCatalogLoading}
+                >
+                    {!isSearchClicked ? 'Search' : <CircularProgress size={20} thickness={5} />}
                 </Button>
             </Box>
         </>
