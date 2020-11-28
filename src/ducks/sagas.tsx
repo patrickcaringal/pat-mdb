@@ -4,14 +4,6 @@ import * as actions from './actions';
 import * as interfaces from './interfaces';
 import http, { getQueryString } from '../utils/http';
 
-function* getMovies() {
-    try {
-        console.log('getMovies');
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 function* getPopularMedias({ payload: media }: interfaces.IGetPopularMedias) {
     try {
         const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/popular`);
@@ -54,7 +46,6 @@ function* getCatalogMovies({ payload }: interfaces.IGetCatalogMovies) {
 }
 
 export default function* rootSaga() {
-    yield all([yield takeLatest(constants.GET_MOVIES, getMovies)]);
     yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMedias)]);
     yield all([yield takeLatest(constants.GET_TRENDING_MEDIAS, getTrendingMedias)]);
     yield all([yield takeLatest(constants.GET_CATALOG_MOVIES, getCatalogMovies)]);

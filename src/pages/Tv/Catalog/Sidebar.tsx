@@ -17,8 +17,6 @@ import KeywordsAutocomplete from './KeywordsAutocomplete';
 const sortOptions = {
     'popularity.desc': 'Popularity Descending',
     'popularity.asc': 'Popularity Ascending',
-    'release_date.desc': 'Rating Descending',
-    'release_date.asc': 'Rating Ascending',
     'primary_release_date.desc': 'Release Date Descending',
     'primary_release_date.asc': 'Release Date Ascending',
     'original_title.asc': 'Title (A-Z)',

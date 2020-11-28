@@ -23,8 +23,6 @@ import { actions, interfaces, types } from '../../../ducks';
 const sortOptions = {
     'popularity.desc': 'Popularity Descending',
     'popularity.asc': 'Popularity Ascending',
-    // 'release_date.desc': 'Rating Descending',
-    // 'release_date.asc': 'Rating Ascending',
     'primary_release_date.desc': 'Release Date Descending',
     'primary_release_date.asc': 'Release Date Ascending',
     'original_title.asc': 'Title (A-Z)',
@@ -125,7 +123,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, loaders, getCatalogMo
             releaseStartDateInitValue = moment().subtract(1, 'months').format('YYYY-MM-DD');
             releaseEndDateInitValue = moment().format('YYYY-MM-DD');
         } else if (movieCategory === 'upcoming') {
-            releaseStartDateInitValue = moment().format('YYYY-MM-DD');
+            releaseStartDateInitValue = moment().add(1, 'days').format('YYYY-MM-DD');
             releaseEndDateInitValue = moment().add(1, 'months').format('YYYY-MM-DD');
         }
 

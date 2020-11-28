@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
+import Pagination from '@material-ui/lab/Pagination';
 
 import { actions, interfaces, types } from '../../../ducks';
 
@@ -30,28 +31,48 @@ const MovieCards: React.FC<MovieProps> = ({ catalogMovies, loaders }) => {
     const { isCatalogLoading } = loaders;
 
     return (
-        <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
-            {!isCatalogLoading
-                ? movies.map((movie) => {
-                      const { id, poster: image, title, genres: subtitle } = movie;
+        <>
+            <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+                {!isCatalogLoading
+                    ? movies.map((movie) => {
+                          const {
+                              id,
+                              poster: image,
+                              title,
+                              genres: subtitle,
+                              release_date
+                          } = movie;
 
-                      return (
-                          <Card
-                              key={id}
-                              image={image}
-                              title={title}
-                              subtitle={subtitle.join(', ')}
-                              onClick={() => alert(`${id}`)}
-                          />
-                      );
-                  })
-                : [...Array(12)].map(() => <CardSkeleton />)}
+                          return (
+                              <Card
+                                  key={id}
+                                  image={image}
+                                  title={title}
+                                  subtitle={subtitle.join(', ')}
+                                  // subtitle={`${moment(release_date).format('MMM DD, YYYY')}`}
+                                  onClick={() => alert(`${id}`)}
+                              />
+                          );
+                      })
+                    : [...Array(12)].map(() => <CardSkeleton />)}
 
-            {/* fillers */}
-            {[...Array(4)].map(() => (
-                <CardFiller />
-            ))}
-        </Box>
+                {/* fillers */}
+                {[...Array(4)].map(() => (
+                    <CardFiller />
+                ))}
+            </Box>
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Pagination
+                    count={10}
+                    variant="outlined"
+                    shape="rounded"
+                    size="large"
+                    onChange={(event: object, page: number) => {
+                        console.log(page);
+                    }}
+                />
+            </Box>
+        </>
     );
 };
 
