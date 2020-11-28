@@ -73,12 +73,16 @@ interface ISidebarProps
         IDispatchToProps,
         RouteComponentProps<IMatchParams> {}
 
-const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, loaders, getCatalogMovies }) => {
+const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, loaders, getCatalogMovies, match }) => {
+    const { id: movieCategory } = match.params;
+
+    // filter & sort state
     const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
     const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
 
+    // other state
     const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
 
     const { isCatalogLoading } = loaders;
@@ -114,8 +118,29 @@ const Sidebar: React.FC<ISidebarProps> = ({ catalogMovies, loaders, getCatalogMo
     };
 
     useEffect(() => {
-        getCatalogMovies({} as interfaces.IGetCatalogMoviesPayload);
-    }, []);
+        let releaseStartDateInitValue = null;
+        let releaseEndDateInitValue = null;
+
+        if (movieCategory === 'now-playing') {
+            releaseStartDateInitValue = moment().subtract(1, 'months').format('YYYY-MM-DD');
+            releaseEndDateInitValue = moment().format('YYYY-MM-DD');
+        } else if (movieCategory === 'upcoming') {
+            releaseStartDateInitValue = moment().format('YYYY-MM-DD');
+            releaseEndDateInitValue = moment().add(1, 'months').format('YYYY-MM-DD');
+        }
+
+        setReleaseStartDate(releaseStartDateInitValue);
+        setReleaseEndDate(releaseEndDateInitValue);
+
+        const payload = {
+            sort_by: selectedSort,
+            with_genres: selectedGenres.join(','),
+            'primary_release_date.gte': releaseStartDateInitValue,
+            'primary_release_date.lte': releaseEndDateInitValue
+        };
+
+        getCatalogMovies(payload as interfaces.IGetCatalogMoviesPayload);
+    }, [movieCategory]);
 
     useEffect(() => {
         if (!isCatalogLoading) setIsSearchClicked(false);

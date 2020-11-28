@@ -3,6 +3,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import MovieCatalog from './Catalog';
 import MovieDetail from './Detail';
 
+import { isCategoryForCatalog } from '../../utils/helpers';
+
 interface MatchParams {
     id: string;
 }
@@ -17,13 +19,13 @@ enum PageType {
 const Movie: React.FC<MovieProps> = ({ match }) => {
     const [pageType, setPageType] = useState<PageType>(PageType.Catalog);
 
-    const catalogPages = ['popular', 'now-playing', 'upcoming', 'top-rated'];
+    const { id: movieCategory } = match.params;
 
     useEffect(() => {
-        const page = catalogPages.includes(match.params.id) ? PageType.Catalog : PageType.Detail;
+        const page = isCategoryForCatalog(movieCategory) ? PageType.Catalog : PageType.Detail;
 
         setPageType(page);
-    }, [match.params.id]);
+    }, [movieCategory]);
 
     if (pageType === PageType.Catalog) {
         return <MovieCatalog />;

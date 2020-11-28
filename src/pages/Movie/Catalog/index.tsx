@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import Sidebar from './Sidebar';
 import MovieCards from './MovieCards';
 
+import { convertUrlToWord } from '../../../utils/helpers';
+
 interface MatchParams {
     id: string;
 }
@@ -18,8 +20,6 @@ interface MovieProps extends RouteComponentProps<MatchParams> {}
 const Catalog: React.FC<MovieProps> = ({ match }) => {
     const { id: movieCategory } = match.params;
 
-    const urlToWord = (str: string) => str.replace('-', ' '); // helper
-
     return (
         <Box display="flex" mx={4} my={3}>
             <Container disableGutters maxWidth="lg">
@@ -27,7 +27,7 @@ const Catalog: React.FC<MovieProps> = ({ match }) => {
                     variant="h5"
                     style={{ fontWeight: 600, marginBottom: 16, textTransform: 'capitalize' }}
                 >
-                    {urlToWord(movieCategory)}
+                    {convertUrlToWord(movieCategory)}
                 </Typography>
 
                 <Grid container>
