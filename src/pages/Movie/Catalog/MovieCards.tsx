@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
@@ -22,13 +23,40 @@ interface IDispatchToProps {
     ) => interfaces.IGetCatalogMovies;
 }
 
-interface MovieProps extends IStateToProps, IDispatchToProps {}
+interface MovieProps extends IStateToProps, IDispatchToProps {
+    selectedSort: string;
+    selectedGenres: string[];
+    releaseStartDate: any;
+    releaseEndDate: any;
+}
 
-const MovieCards: React.FC<MovieProps> = ({ catalogMovies, loaders }) => {
+const MovieCards: React.FC<MovieProps> = ({
+    selectedSort,
+    selectedGenres,
+    releaseStartDate,
+    releaseEndDate,
+    catalogMovies,
+    loaders,
+    getCatalogMovies
+}) => {
     const classes = useStyles();
-
-    const { movies = [] } = catalogMovies;
+    const { movies = [], total_pages, page } = catalogMovies;
     const { isCatalogLoading } = loaders;
+
+    const paginationPages = (total_pages as unknown) as number;
+
+    const handlePaginationChange = (page: number) => {
+        const startDate = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
+        const endDate = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+
+        getCatalogMovies({
+            sort_by: selectedSort,
+            with_genres: selectedGenres.join(','),
+            'primary_release_date.gte': startDate,
+            'primary_release_date.lte': endDate,
+            page
+        });
+    };
 
     return (
         <>
@@ -61,17 +89,23 @@ const MovieCards: React.FC<MovieProps> = ({ catalogMovies, loaders }) => {
                     <CardFiller />
                 ))}
             </Box>
-            <Box display="flex" flexDirection="column" alignItems="center">
-                <Pagination
-                    count={10}
-                    variant="outlined"
-                    shape="rounded"
-                    size="large"
-                    onChange={(event: object, page: number) => {
-                        console.log(page);
-                    }}
-                />
-            </Box>
+
+            {paginationPages > 1 && (
+                <Box display="flex" flexDirection="column" alignItems="center">
+                    <Pagination
+                        count={paginationPages}
+                        page={(page as unknown) as number}
+                        variant="outlined"
+                        shape="rounded"
+                        size="large"
+                        disabled={isCatalogLoading}
+                        onChange={(event: object, page: number) => {
+                            window.scrollTo(0, 0);
+                            handlePaginationChange(page);
+                        }}
+                    />
+                </Box>
+            )}
         </>
     );
 };

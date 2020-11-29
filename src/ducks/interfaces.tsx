@@ -53,6 +53,7 @@ export interface IGetCatalogMoviesPayload {
     with_genres: string;
     'primary_release_date.gte': string;
     'primary_release_date.lte': string;
+    page?: number;
 }
 
 export interface IGetCatalogMovies {
