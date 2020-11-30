@@ -88,8 +88,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
     onReleaseEndDateChange,
     catalogMovies,
     loaders,
-    getCatalogMovies,
-    match
+    getCatalogMovies
 }) => {
     const [UIselectedSort, setUISelectedSort] = useState<string>('popularity.desc');
     const [UIselectedGenres, setUISelectedGenres] = useState<string[]>([]);

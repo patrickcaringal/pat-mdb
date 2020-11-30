@@ -8,16 +8,13 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import { actions, interfaces, types } from '../../../ducks';
+import { actions, interfaces } from '../../../ducks';
 import { convertUrlToWord } from '../../../utils/helpers';
 
 import Sidebar from './Sidebar';
 import MovieCards from './MovieCards';
 
-interface IStateToProps {
-    // catalogMovies: interfaces.IMediaCatalog;
-    // loaders: { [key: string]: boolean };
-}
+interface IStateToProps {}
 
 interface IDispatchToProps {
     getCatalogMovies: (
@@ -40,6 +37,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, match }) => {
     const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
     const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
 
+    // modify sidebar state on movie category navigate
     useEffect(() => {
         let releaseStartDateInitValue = null;
         let releaseEndDateInitValue = null;
@@ -52,8 +50,10 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, match }) => {
             releaseEndDateInitValue = moment().add(1, 'months').format('YYYY-MM-DD');
         }
 
+        // set to default
         setSelectedSort('popularity.desc');
         setSelectedGenres([]);
+        // set to specific date defaults based on category
         setReleaseStartDate(releaseStartDateInitValue);
         setReleaseEndDate(releaseEndDateInitValue);
 
@@ -103,10 +103,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, match }) => {
     );
 };
 
-const mapStateToProps = (state: interfaces.TState) => ({
-    catalogMovies: state.catalogMovies,
-    loaders: state.loaders
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
     getCatalogMovies: actions.getCatalogMovies
