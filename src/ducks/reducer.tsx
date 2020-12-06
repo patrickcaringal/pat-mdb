@@ -5,7 +5,8 @@ export const initialState: interfaces.TState = {
     movies: [],
     popularMedias: [] as interfaces.IMedia[],
     trendingMedias: [] as interfaces.IMedia[],
-    catalogMovies: {} as interfaces.IMediaCatalog,
+    catalogMovies: {} as interfaces.IMovieCatalog,
+    catalogTVShows: {} as interfaces.ITVShowCatalog,
     // UI
     loaders: {}
 };
@@ -103,7 +104,39 @@ const reducer = (
         case constants.GET_CATALOG_MOVIES_FAILED: {
             return {
                 ...state,
-                catalogMovies: {} as interfaces.IMediaCatalog,
+                catalogMovies: {} as interfaces.IMovieCatalog,
+                loaders: {
+                    ...state.loaders,
+                    isCatalogLoading: false
+                }
+            };
+        }
+
+        case constants.GET_CATALOG_TV_SHOWS: {
+            return {
+                ...state,
+                loaders: {
+                    ...state.loaders,
+                    isCatalogLoading: true
+                }
+            };
+        }
+
+        case constants.GET_CATALOG_TV_SHOWS_SUCCEED: {
+            return {
+                ...state,
+                catalogTVShows: action.payload,
+                loaders: {
+                    ...state.loaders,
+                    isCatalogLoading: false
+                }
+            };
+        }
+
+        case constants.GET_CATALOG_TV_SHOWS_FAILED: {
+            return {
+                ...state,
+                catalogTVShows: {} as interfaces.ITVShowCatalog,
                 loaders: {
                     ...state.loaders,
                     isCatalogLoading: false

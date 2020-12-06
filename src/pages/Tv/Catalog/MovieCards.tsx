@@ -13,14 +13,14 @@ import Card, { CardSkeleton, CardFiller } from './Card';
 const useStyles = makeStyles({});
 
 interface IStateToProps {
-    catalogMovies: interfaces.IMovieCatalog;
+    catalogTVShows: interfaces.ITVShowCatalog;
     loaders: { [key: string]: boolean };
 }
 
 interface IDispatchToProps {
-    getCatalogMovies: (
-        queries: interfaces.IGetCatalogMoviesPayload
-    ) => interfaces.IGetCatalogMovies;
+    getCatalogTVShows: (
+        queries: interfaces.IGetCatalogTVShowsPayload
+    ) => interfaces.IGetCatalogTVShows;
 }
 
 interface MovieProps extends IStateToProps, IDispatchToProps {
@@ -35,12 +35,12 @@ const MovieCards: React.FC<MovieProps> = ({
     selectedGenres,
     releaseStartDate,
     releaseEndDate,
-    catalogMovies,
+    catalogTVShows,
     loaders,
-    getCatalogMovies
+    getCatalogTVShows
 }) => {
     const classes = useStyles();
-    const { movies = [], total_pages, page } = catalogMovies;
+    const { tvShows = [], total_pages, page } = catalogTVShows;
     const { isCatalogLoading } = loaders;
 
     const paginationPages = (total_pages as unknown) as number;
@@ -49,11 +49,11 @@ const MovieCards: React.FC<MovieProps> = ({
         const startDate = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
         const endDate = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
 
-        getCatalogMovies({
+        getCatalogTVShows({
             sort_by: selectedSort,
             with_genres: selectedGenres.join(','),
-            'primary_release_date.gte': startDate,
-            'primary_release_date.lte': endDate,
+            'air_date.gte': startDate,
+            'air_date.lte': endDate,
             page
         });
     };
@@ -62,14 +62,14 @@ const MovieCards: React.FC<MovieProps> = ({
         <>
             <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
                 {!isCatalogLoading
-                    ? movies.map((movie) => {
+                    ? tvShows.map((tvShow) => {
                           const {
                               id,
                               poster: image,
                               title,
                               genres: subtitle,
                               release_date
-                          } = movie;
+                          } = tvShow;
 
                           return (
                               <Card
@@ -111,12 +111,12 @@ const MovieCards: React.FC<MovieProps> = ({
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
-    catalogMovies: state.catalogMovies,
+    catalogTVShows: state.catalogTVShows,
     loaders: state.loaders
 });
 
 const mapDispatchToProps = {
-    getCatalogMovies: actions.getCatalogMovies
+    getCatalogTVShows: actions.getCatalogTVShows
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieCards);

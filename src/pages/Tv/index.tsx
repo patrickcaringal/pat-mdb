@@ -3,6 +3,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import TvShowCatalog from './Catalog';
 import TvShowDetail from './Detail';
 
+import { isCategoryForCatalog } from '../../utils/helpers';
+
 interface MatchParams {
     id: string;
 }
@@ -17,12 +19,12 @@ enum PageType {
 const TvShow: React.FC<TvShowProps> = ({ match }) => {
     const [pageType, setPageType] = useState<PageType>(PageType.Catalog);
 
+    const { id: tvShowCategory } = match.params;
+
     useEffect(() => {
-        if (['popular', 'airing-today', 'on-the-air', 'top-rated'].includes(match.params.id)) {
-            setPageType(PageType.Catalog);
-        } else {
-            setPageType(PageType.Detail);
-        }
+        const page = isCategoryForCatalog(tvShowCategory) ? PageType.Catalog : PageType.Detail;
+
+        setPageType(page);
     }, [match.params.id]);
 
     if (pageType === PageType.Catalog) {

@@ -44,7 +44,7 @@ export const getCatalogMovies = (
 });
 
 export const getCatalogMoviesSucceed = (
-    payload: interfaces.IMediaCatalog
+    payload: interfaces.IMovieCatalog
 ): interfaces.IGetCatalogMoviesSucceed => ({
     type: constants.GET_CATALOG_MOVIES_SUCCEED,
     payload
@@ -52,5 +52,24 @@ export const getCatalogMoviesSucceed = (
 
 export const getCatalogMoviesFailed = (payload: string): interfaces.IGetCatalogMoviesFailed => ({
     type: constants.GET_CATALOG_MOVIES_FAILED,
+    payload
+});
+
+export const getCatalogTVShows = (
+    payload: interfaces.IGetCatalogTVShowsPayload
+): interfaces.IGetCatalogTVShows => ({
+    type: constants.GET_CATALOG_TV_SHOWS,
+    payload
+});
+
+export const getCatalogTVShowsSucceed = (
+    payload: interfaces.ITVShowCatalog
+): interfaces.IGetCatalogTVShowsSucceed => ({
+    type: constants.GET_CATALOG_TV_SHOWS_SUCCEED,
+    payload
+});
+
+export const getCatalogTVShowsFailed = (payload: string): interfaces.IGetCatalogTVShowsFailed => ({
+    type: constants.GET_CATALOG_TV_SHOWS_FAILED,
     payload
 });

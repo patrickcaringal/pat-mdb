@@ -52,7 +52,7 @@ const genres = {
 };
 
 interface IStateToProps {
-    catalogMovies: interfaces.IMediaCatalog;
+    catalogMovies: interfaces.IMovieCatalog;
     loaders: { [key: string]: boolean };
 }
 

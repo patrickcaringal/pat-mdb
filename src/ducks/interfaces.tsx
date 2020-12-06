@@ -10,11 +10,18 @@ export interface IMedia {
     release_date: string;
 }
 
-export interface IMediaCatalog {
+export interface IMovieCatalog {
     page: boolean;
     total_pages: boolean;
     total_results: boolean;
     movies: IMedia[];
+}
+
+export interface ITVShowCatalog {
+    page: boolean;
+    total_pages: boolean;
+    total_results: boolean;
+    tvShows: IMedia[];
 }
 
 // Action
@@ -63,7 +70,7 @@ export interface IGetCatalogMovies {
 
 export interface IGetCatalogMoviesSucceed {
     type: typeof constants.GET_CATALOG_MOVIES_SUCCEED;
-    payload: IMediaCatalog;
+    payload: IMovieCatalog;
 }
 
 export interface IGetCatalogMoviesFailed {
@@ -71,11 +78,35 @@ export interface IGetCatalogMoviesFailed {
     payload: string;
 }
 
+export interface IGetCatalogTVShowsPayload {
+    sort_by: string;
+    with_genres: string;
+    'air_date.gte': string;
+    'air_date.lte': string;
+    page?: number;
+}
+
+export interface IGetCatalogTVShows {
+    type: typeof constants.GET_CATALOG_TV_SHOWS;
+    payload: IGetCatalogTVShowsPayload;
+}
+
+export interface IGetCatalogTVShowsSucceed {
+    type: typeof constants.GET_CATALOG_TV_SHOWS_SUCCEED;
+    payload: ITVShowCatalog;
+}
+
+export interface IGetCatalogTVShowsFailed {
+    type: typeof constants.GET_CATALOG_TV_SHOWS_FAILED;
+    payload: string;
+}
+
 export type TState = {
     movies: string[];
     popularMedias: IMedia[];
     trendingMedias: IMedia[];
-    catalogMovies: IMediaCatalog;
+    catalogMovies: IMovieCatalog;
+    catalogTVShows: ITVShowCatalog;
     // UI
     loaders: { [key: string]: boolean };
 };
@@ -89,4 +120,7 @@ export type TAction =
     | IGetTrendingMediasFailed
     | IGetCatalogMovies
     | IGetCatalogMoviesSucceed
-    | IGetCatalogMoviesFailed;
+    | IGetCatalogMoviesFailed
+    | IGetCatalogTVShows
+    | IGetCatalogTVShowsSucceed
+    | IGetCatalogTVShowsFailed;

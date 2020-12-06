@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import MomentUtils from '@date-io/moment';
+import moment from 'moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
+import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Chip from '@material-ui/core/Chip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -12,15 +16,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 
-import KeywordsAutocomplete from './KeywordsAutocomplete';
+import { actions, interfaces, types } from '../../../ducks';
+
+// import KeywordsAutocomplete from './KeywordsAutocomplete';
 
 const sortOptions = {
     'popularity.desc': 'Popularity Descending',
     'popularity.asc': 'Popularity Ascending',
-    'primary_release_date.desc': 'Release Date Descending',
-    'primary_release_date.asc': 'Release Date Ascending',
-    'original_title.asc': 'Title (A-Z)',
-    'vote_average.desc': 'Title (Z-A)'
+    'first_air_date.desc': 'Air Date Descending',
+    'first_air_date.asc': 'Air Date Ascending'
 };
 
 const genres = {
@@ -45,133 +49,237 @@ const genres = {
     '10770': 'TV Movie'
 };
 
-interface MatchParams {
+interface IStateToProps {
+    catalogMovies: interfaces.IMovieCatalog;
+    loaders: { [key: string]: boolean };
+}
+
+interface IDispatchToProps {
+    getCatalogTVShows: (
+        queries: interfaces.IGetCatalogTVShowsPayload
+    ) => interfaces.IGetCatalogTVShows;
+}
+
+interface IMatchParams {
     id: string;
 }
 
-interface CatalogProps extends RouteComponentProps<MatchParams> {}
+interface ISidebarProps extends IStateToProps, IDispatchToProps, RouteComponentProps<IMatchParams> {
+    selectedSort: string;
+    selectedGenres: string[];
+    releaseStartDate: any;
+    releaseEndDate: any;
+    onSortChange: React.Dispatch<React.SetStateAction<string>>;
+    onSelectedGenres: React.Dispatch<React.SetStateAction<string[]>>;
+    onReleaseStartDateChange: React.Dispatch<any>;
+    onReleaseEndDateChange: React.Dispatch<any>;
+}
 
-const Catalog: React.FC<CatalogProps> = ({ match }) => {
-    const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
-    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-    const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
-    const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
+const Sidebar: React.FC<ISidebarProps> = ({
+    selectedSort,
+    selectedGenres,
+    releaseStartDate,
+    releaseEndDate,
+    onSortChange,
+    onSelectedGenres,
+    onReleaseStartDateChange,
+    onReleaseEndDateChange,
+    catalogMovies,
+    loaders,
+    getCatalogTVShows
+}) => {
+    const [UIselectedSort, setUISelectedSort] = useState<string>('popularity.desc');
+    const [UIselectedGenres, setUISelectedGenres] = useState<string[]>([]);
+    const [UIreleaseStartDate, setUIReleaseStartDate] = useState<any>(null);
+    const [UIreleaseEndDate, setUIReleaseEndDate] = useState<any>(null);
+
+    const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
+
+    const { page } = catalogMovies;
+    const { isCatalogLoading } = loaders;
+
+    const isGenreSelected = (genre: string) => UIselectedGenres.includes(genre);
 
     const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedSort(event.target.value as string);
+        setUISelectedSort(event.target.value as string);
     };
-
-    const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
 
     const handleGenreChipClick = (genre: string) => {
-        if (!isGenreSelected(genre)) {
-            setSelectedGenres([...selectedGenres, genre]);
-        } else {
-            setSelectedGenres(selectedGenres.filter((g) => g !== genre));
-        }
+        const selected = !isGenreSelected(genre)
+            ? [...UIselectedGenres, genre]
+            : UIselectedGenres.filter((g) => g !== genre);
+
+        setUISelectedGenres(selected);
     };
 
+    const handleSearchClick = () => {
+        setIsSearchClicked(true);
+
+        const startDate = UIreleaseStartDate ? moment(UIreleaseStartDate).format('YYYY-MM-DD') : '';
+        const endDate = UIreleaseEndDate ? moment(UIreleaseEndDate).format('YYYY-MM-DD') : '';
+        const payload = {
+            sort_by: UIselectedSort,
+            with_genres: UIselectedGenres.join(','),
+            'air_date.gte': startDate,
+            'air_date.lte': endDate
+        };
+
+        getCatalogTVShows(payload);
+
+        // update parent state only if search is triggered
+        onSortChange(UIselectedSort);
+        onSelectedGenres(UIselectedGenres);
+        onReleaseStartDateChange(UIreleaseStartDate);
+        onReleaseEndDateChange(UIreleaseEndDate);
+    };
+
+    useEffect(() => {
+        if (!isCatalogLoading) setIsSearchClicked(false);
+    }, [isCatalogLoading]);
+
+    // resets sidebar state to default state (navigating through categories)
+    // resets sidebar state to parent's copy state (changed sidebar but navigated on pagination)
+    useEffect(() => {
+        setUISelectedSort(selectedSort);
+        setUISelectedGenres(selectedGenres);
+        setUIReleaseStartDate(releaseStartDate);
+        setUIReleaseEndDate(releaseEndDate);
+    }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate, page]);
+
     return (
-        <Box
-            display="flex"
-            flexDirection="column"
-            bgcolor="#fff"
-            boxShadow={1}
-            borderRadius={4}
-            border="1px solid rgba(0, 0, 0, 0.12)"
-        >
-            <Box display="flex" flexDirection="column" p={2}>
-                <Typography variant="h6">Filter & Sort</Typography>
-            </Box>
-
-            <Divider />
-            <Box display="flex" flexDirection="column" p={2}>
-                <FormControl variant="filled">
-                    <InputLabel id="sort-select">Sort result by</InputLabel>
-                    <Select
-                        labelId="sort-select"
-                        id="demo-simple-select"
-                        value={selectedSort}
-                        onChange={handleSortChange}
-                        disableUnderline
-                        MenuProps={{
-                            anchorOrigin: {
-                                vertical: 'bottom',
-                                horizontal: 'left'
-                            },
-                            transformOrigin: {
-                                vertical: 'top',
-                                horizontal: 'left'
-                            },
-                            getContentAnchorEl: null
-                        }}
-                    >
-                        {Object.entries(sortOptions).map(([key, value]) => (
-                            <MenuItem value={key} key={key}>
-                                {value}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
-
-            <Divider />
-            <Box display="flex" flexDirection="column" p={2}>
-                <Typography style={{ marginBottom: 8 }}>Genres</Typography>
-                <Box display="flex" flexWrap="wrap">
-                    {Object.entries(genres).map(([key, value]) => (
-                        <Chip
-                            key={key}
-                            label={value}
-                            onClick={() => handleGenreChipClick(key)}
-                            variant={isGenreSelected(key) ? 'default' : 'outlined'}
-                            size="small"
-                            style={{ margin: 4 }}
-                        />
-                    ))}
+        <>
+            <Box
+                display="flex"
+                flexDirection="column"
+                bgcolor="#fff"
+                boxShadow={1}
+                borderRadius={4}
+                border="1px solid rgba(0, 0, 0, 0.12)"
+            >
+                <Box display="flex" flexDirection="column" p={2}>
+                    <Typography variant="h6">Filter & Sort</Typography>
                 </Box>
+
+                <Divider />
+
+                <Box display="flex" flexDirection="column" p={2}>
+                    <FormControl variant="filled">
+                        <InputLabel id="sort-select">Sort result by</InputLabel>
+                        <Select
+                            labelId="sort-select"
+                            id="demo-simple-select"
+                            value={UIselectedSort}
+                            onChange={handleSortChange}
+                            disableUnderline
+                            MenuProps={{
+                                anchorOrigin: {
+                                    vertical: 'bottom',
+                                    horizontal: 'left'
+                                },
+                                transformOrigin: {
+                                    vertical: 'top',
+                                    horizontal: 'left'
+                                },
+                                getContentAnchorEl: null
+                            }}
+                        >
+                            {Object.entries(sortOptions).map(([key, value]) => (
+                                <MenuItem value={key} key={key}>
+                                    {value}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
+
+                <Divider />
+
+                <Box display="flex" flexDirection="column" p={2}>
+                    <Typography style={{ marginBottom: 8 }}>Genres</Typography>
+                    <Box display="flex" flexWrap="wrap">
+                        {Object.entries(genres).map(([key, value]) => (
+                            <Chip
+                                key={key}
+                                label={value}
+                                onClick={() => handleGenreChipClick(key)}
+                                variant={isGenreSelected(key) ? 'default' : 'outlined'}
+                                size="small"
+                                style={{ margin: 4 }}
+                            />
+                        ))}
+                    </Box>
+                </Box>
+
+                <Divider />
+
+                <Box display="flex" flexDirection="column" p={2}>
+                    <Typography>Release date</Typography>
+
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <KeyboardDatePicker
+                            id="start-release-date"
+                            inputVariant="filled"
+                            margin="normal"
+                            label="From"
+                            format="MM/DD/yyyy"
+                            value={UIreleaseStartDate}
+                            onChange={setUIReleaseStartDate}
+                            KeyboardButtonProps={{ 'aria-label': 'change date' }}
+                            InputProps={{ disableUnderline: true }}
+                            maxDate={
+                                UIreleaseEndDate
+                                    ? new Date(UIreleaseEndDate)
+                                    : new Date('2100-01-01')
+                            }
+                        />
+                        <KeyboardDatePicker
+                            id="end-release-date"
+                            inputVariant="filled"
+                            margin="normal"
+                            label="To"
+                            format="MM/DD/yyyy"
+                            value={UIreleaseEndDate}
+                            onChange={setUIReleaseEndDate}
+                            KeyboardButtonProps={{ 'aria-label': 'change date' }}
+                            InputProps={{ disableUnderline: true }}
+                            minDate={
+                                UIreleaseStartDate
+                                    ? new Date(UIreleaseStartDate)
+                                    : new Date('1900-01-01')
+                            }
+                        />
+                    </MuiPickersUtilsProvider>
+                </Box>
+
+                {/* <Divider />
+                <Box display="flex" flexDirection="column" p={2}>
+                    <KeywordsAutocomplete />
+                </Box> */}
+
+                <Divider />
             </Box>
 
-            <Divider />
-            <Box display="flex" flexDirection="column" p={2}>
-                <Typography>Release date</Typography>
-
-                <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <KeyboardDatePicker
-                        id="start-release-date"
-                        inputVariant="filled"
-                        margin="normal"
-                        label="From"
-                        format="MM/DD/yyyy"
-                        value={releaseStartDate}
-                        onChange={setReleaseStartDate}
-                        KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                        InputProps={{ disableUnderline: true }}
-                        maxDate={releaseEndDate ? new Date(releaseEndDate) : new Date('2100-01-01')}
-                    />
-                    <KeyboardDatePicker
-                        id="end-release-date"
-                        inputVariant="filled"
-                        margin="normal"
-                        label="To"
-                        format="MM/DD/yyyy"
-                        value={releaseEndDate}
-                        onChange={setReleaseEndDate}
-                        KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                        InputProps={{ disableUnderline: true }}
-                        minDate={
-                            releaseStartDate ? new Date(releaseStartDate) : new Date('1900-01-01')
-                        }
-                    />
-                </MuiPickersUtilsProvider>
+            <Box display="flex" flexDirection="column" mt={3}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSearchClick}
+                    disabled={isCatalogLoading}
+                >
+                    {!isSearchClicked ? 'Search' : <CircularProgress size={20} thickness={5} />}
+                </Button>
             </Box>
-
-            <Divider />
-            <Box display="flex" flexDirection="column" p={2}>
-                <KeywordsAutocomplete />
-            </Box>
-        </Box>
+        </>
     );
 };
 
-export default withRouter(Catalog);
+const mapStateToProps = (state: interfaces.TState) => ({
+    catalogMovies: state.catalogMovies,
+    loaders: state.loaders
+});
+
+const mapDispatchToProps = {
+    getCatalogTVShows: actions.getCatalogTVShows
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Sidebar));
