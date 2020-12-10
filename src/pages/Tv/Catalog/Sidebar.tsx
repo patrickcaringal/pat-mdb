@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import MomentUtils from '@date-io/moment';
 import moment from 'moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { parse as QSParse } from 'query-string';
 
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -69,10 +70,10 @@ interface ISidebarProps extends IStateToProps, IDispatchToProps, RouteComponentP
     selectedGenres: string[];
     releaseStartDate: any;
     releaseEndDate: any;
-    onSortChange: React.Dispatch<React.SetStateAction<string>>;
-    onSelectedGenres: React.Dispatch<React.SetStateAction<string[]>>;
-    onReleaseStartDateChange: React.Dispatch<any>;
-    onReleaseEndDateChange: React.Dispatch<any>;
+    // onSortChange: React.Dispatch<React.SetStateAction<string>>;
+    // onSelectedGenres: React.Dispatch<React.SetStateAction<string[]>>;
+    // onReleaseStartDateChange: React.Dispatch<any>;
+    // onReleaseEndDateChange: React.Dispatch<any>;
 }
 
 const Sidebar: React.FC<ISidebarProps> = ({
@@ -80,21 +81,27 @@ const Sidebar: React.FC<ISidebarProps> = ({
     selectedGenres,
     releaseStartDate,
     releaseEndDate,
-    onSortChange,
-    onSelectedGenres,
-    onReleaseStartDateChange,
-    onReleaseEndDateChange,
+    // onSortChange,
+    // onSelectedGenres,
+    // onReleaseStartDateChange,
+    // onReleaseEndDateChange,
     catalogMovies,
     loaders,
-    getCatalogTVShows
+    getCatalogTVShows,
+    history,
+    location,
+    match
 }) => {
     const [UIselectedSort, setUISelectedSort] = useState<string>('popularity.desc');
     const [UIselectedGenres, setUISelectedGenres] = useState<string[]>([]);
     const [UIreleaseStartDate, setUIReleaseStartDate] = useState<any>(null);
     const [UIreleaseEndDate, setUIReleaseEndDate] = useState<any>(null);
 
+    const currentPage: number = ((QSParse(location.search).page as unknown) as number) || 1;
+
     const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
 
+    const { id: tvShowCategory } = match.params;
     const { page } = catalogMovies;
     const { isCatalogLoading } = loaders;
 
@@ -117,20 +124,25 @@ const Sidebar: React.FC<ISidebarProps> = ({
 
         const startDate = UIreleaseStartDate ? moment(UIreleaseStartDate).format('YYYY-MM-DD') : '';
         const endDate = UIreleaseEndDate ? moment(UIreleaseEndDate).format('YYYY-MM-DD') : '';
-        const payload = {
-            sort_by: UIselectedSort,
-            with_genres: UIselectedGenres.join(','),
-            'air_date.gte': startDate,
-            'air_date.lte': endDate
-        };
 
-        getCatalogTVShows(payload);
+        history.push({
+            pathname: `/tv-show/${tvShowCategory}`,
+            search: `?page=${currentPage}`,
+            state: {
+                sort_by: UIselectedSort,
+                with_genres: UIselectedGenres,
+                'air_date.gte': startDate,
+                'air_date.lte': endDate
+            }
+        });
 
-        // update parent state only if search is triggered
-        onSortChange(UIselectedSort);
-        onSelectedGenres(UIselectedGenres);
-        onReleaseStartDateChange(UIreleaseStartDate);
-        onReleaseEndDateChange(UIreleaseEndDate);
+        // getCatalogTVShows(payload);
+
+        // // update parent state only if search is triggered
+        // onSortChange(UIselectedSort);
+        // onSelectedGenres(UIselectedGenres);
+        // onReleaseStartDateChange(UIreleaseStartDate);
+        // onReleaseEndDateChange(UIreleaseEndDate);
     };
 
     useEffect(() => {

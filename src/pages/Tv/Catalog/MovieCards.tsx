@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter, Redirect } from 'react-router-dom';
 import moment from 'moment';
+import { parse as QSParse } from 'query-string';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
@@ -23,40 +25,62 @@ interface IDispatchToProps {
     ) => interfaces.IGetCatalogTVShows;
 }
 
-interface MovieProps extends IStateToProps, IDispatchToProps {
-    selectedSort: string;
-    selectedGenres: string[];
-    releaseStartDate: any;
-    releaseEndDate: any;
+interface MatchParams {
+    id: string;
+}
+
+interface MovieProps extends IStateToProps, IDispatchToProps, RouteComponentProps<MatchParams> {
+    // selectedSort: string;
+    // selectedGenres: string[];
+    // releaseStartDate: any;
+    // releaseEndDate: any;
 }
 
 const MovieCards: React.FC<MovieProps> = ({
-    selectedSort,
-    selectedGenres,
-    releaseStartDate,
-    releaseEndDate,
+    // selectedSort,
+    // selectedGenres,
+    // releaseStartDate,
+    // releaseEndDate,
     catalogTVShows,
     loaders,
-    getCatalogTVShows
+    getCatalogTVShows,
+    history,
+    location,
+    match
 }) => {
     const classes = useStyles();
     const { tvShows = [], total_pages, page } = catalogTVShows;
     const { isCatalogLoading } = loaders;
 
+    const { id: tvShowCategory } = match.params;
+
+    const currentPage: number = ((QSParse(location.search).page as unknown) as number) || 1;
+
+    // console.log(currentPage, typeof currentPage);
+
     const paginationPages = (total_pages as unknown) as number;
 
     const handlePaginationChange = (page: number) => {
-        const startDate = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
-        const endDate = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
-
-        getCatalogTVShows({
-            sort_by: selectedSort,
-            with_genres: selectedGenres.join(','),
-            'air_date.gte': startDate,
-            'air_date.lte': endDate,
-            page
+        history.push({
+            pathname: `/tv-show/${tvShowCategory}`,
+            search: `?page=${page}`
         });
+        // console.log(`/tv-show/on-the-air?page=${page}`);
+        // return <Redirect to={`/tv-show/on-the-air?page=${page}`} />;
     };
+
+    // useEffect(() => {
+    //     const startDate = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
+    //     const endDate = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+
+    //     getCatalogTVShows({
+    //         sort_by: selectedSort,
+    //         with_genres: selectedGenres.join(','),
+    //         'air_date.gte': startDate,
+    //         'air_date.lte': endDate,
+    //         page: currentPage
+    //     });
+    // }, [currentPage]);
 
     return (
         <>
@@ -94,7 +118,7 @@ const MovieCards: React.FC<MovieProps> = ({
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <Pagination
                         count={paginationPages}
-                        page={(page as unknown) as number}
+                        page={Number(currentPage)}
                         variant="outlined"
                         shape="rounded"
                         size="large"
@@ -119,4 +143,4 @@ const mapDispatchToProps = {
     getCatalogTVShows: actions.getCatalogTVShows
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MovieCards);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MovieCards));
