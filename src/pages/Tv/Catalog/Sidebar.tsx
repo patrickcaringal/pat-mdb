@@ -96,6 +96,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
     const [UIselectedGenres, setUISelectedGenres] = useState<string[]>([]);
     const [UIreleaseStartDate, setUIReleaseStartDate] = useState<any>(null);
     const [UIreleaseEndDate, setUIReleaseEndDate] = useState<any>(null);
+    const [sidebarQuery, setSidebarQuery] = useState<string>('');
 
     const currentPage: number = ((QSParse(location.search).page as unknown) as number) || 1;
 
@@ -120,34 +121,33 @@ const Sidebar: React.FC<ISidebarProps> = ({
     };
 
     const handleSearchClick = () => {
-        setIsSearchClicked(true);
-
-        const startDate = UIreleaseStartDate ? moment(UIreleaseStartDate).format('YYYY-MM-DD') : '';
-        const endDate = UIreleaseEndDate ? moment(UIreleaseEndDate).format('YYYY-MM-DD') : '';
-
         history.push({
             pathname: `/tv-show/${tvShowCategory}`,
-            search: `?page=${currentPage}`,
-            state: {
-                sort_by: UIselectedSort,
-                with_genres: UIselectedGenres,
-                'air_date.gte': startDate,
-                'air_date.lte': endDate
-            }
+            search: sidebarQuery && `?${sidebarQuery}`
         });
-
-        // getCatalogTVShows(payload);
-
-        // // update parent state only if search is triggered
-        // onSortChange(UIselectedSort);
-        // onSelectedGenres(UIselectedGenres);
-        // onReleaseStartDateChange(UIreleaseStartDate);
-        // onReleaseEndDateChange(UIreleaseEndDate);
     };
 
     useEffect(() => {
         if (!isCatalogLoading) setIsSearchClicked(false);
     }, [isCatalogLoading]);
+
+    useEffect(() => {
+        const startDate = UIreleaseStartDate ? moment(UIreleaseStartDate).format('YYYY-MM-DD') : '';
+        const endDate = UIreleaseEndDate ? moment(UIreleaseEndDate).format('YYYY-MM-DD') : '';
+        const genres = UIselectedGenres.join(',');
+
+        const query = Object.entries({
+            sort: UIselectedSort !== 'popularity.desc' ? UIselectedSort : '',
+            genres,
+            from: startDate,
+            to: endDate
+        })
+            .map(([key, value]) => (value ? `${key}=${value}` : ''))
+            .filter((i) => i)
+            .join('&');
+
+        setSidebarQuery(query);
+    }, [UIselectedSort, UIselectedGenres, UIreleaseStartDate, UIreleaseEndDate]);
 
     // resets sidebar state to default state (navigating through categories)
     // resets sidebar state to parent's copy state (changed sidebar but navigated on pagination)
@@ -213,8 +213,8 @@ const Sidebar: React.FC<ISidebarProps> = ({
                             <Chip
                                 key={key}
                                 label={value}
-                                onClick={() => handleGenreChipClick(key)}
-                                variant={isGenreSelected(key) ? 'default' : 'outlined'}
+                                onClick={() => handleGenreChipClick(value)}
+                                variant={isGenreSelected(value) ? 'default' : 'outlined'}
                                 size="small"
                                 style={{ margin: 4 }}
                             />
@@ -235,7 +235,11 @@ const Sidebar: React.FC<ISidebarProps> = ({
                             label="From"
                             format="MM/DD/yyyy"
                             value={UIreleaseStartDate}
-                            onChange={setUIReleaseStartDate}
+                            onChange={(date: any, value?: string | null | undefined) => {
+                                setUIReleaseStartDate(
+                                    date ? moment(date).format('YYYY-MM-DD') : null
+                                );
+                            }}
                             KeyboardButtonProps={{ 'aria-label': 'change date' }}
                             InputProps={{ disableUnderline: true }}
                             maxDate={
@@ -251,7 +255,11 @@ const Sidebar: React.FC<ISidebarProps> = ({
                             label="To"
                             format="MM/DD/yyyy"
                             value={UIreleaseEndDate}
-                            onChange={setUIReleaseEndDate}
+                            onChange={(date: any, value?: string | null | undefined) => {
+                                setUIReleaseEndDate(
+                                    date ? moment(date).format('YYYY-MM-DD') : null
+                                );
+                            }}
                             KeyboardButtonProps={{ 'aria-label': 'change date' }}
                             InputProps={{ disableUnderline: true }}
                             minDate={

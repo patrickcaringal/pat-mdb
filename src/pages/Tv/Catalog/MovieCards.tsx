@@ -55,16 +55,18 @@ const MovieCards: React.FC<MovieProps> = ({
     const { id: tvShowCategory } = match.params;
 
     const currentPage: number = ((QSParse(location.search).page as unknown) as number) || 1;
+    // const currectQueries: number = ((QSParse(location.search).page as unknown) as number) || 1;
 
     // console.log(currentPage, typeof currentPage);
 
     const paginationPages = (total_pages as unknown) as number;
 
     const handlePaginationChange = (page: number) => {
-        history.push({
-            pathname: `/tv-show/${tvShowCategory}`,
-            search: `?page=${page}`
-        });
+        // history.push({
+        //     pathname: `/tv-show/${tvShowCategory}`,
+        //     search: `?page=${page}`,
+        //     state: { ...location.state }
+        // });
         // console.log(`/tv-show/on-the-air?page=${page}`);
         // return <Redirect to={`/tv-show/on-the-air?page=${page}`} />;
     };
@@ -85,28 +87,34 @@ const MovieCards: React.FC<MovieProps> = ({
     return (
         <>
             <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
-                {!isCatalogLoading
-                    ? tvShows.map((tvShow) => {
-                          const {
-                              id,
-                              poster: image,
-                              title,
-                              genres: subtitle,
-                              release_date
-                          } = tvShow;
+                {!isCatalogLoading ? (
+                    tvShows.length ? (
+                        tvShows.map((tvShow) => {
+                            const {
+                                id,
+                                poster: image,
+                                title,
+                                genres: subtitle,
+                                release_date
+                            } = tvShow;
 
-                          return (
-                              <Card
-                                  key={id}
-                                  image={image}
-                                  title={title}
-                                  subtitle={subtitle.join(', ')}
-                                  // subtitle={`${moment(release_date).format('MMM DD, YYYY')}`}
-                                  onClick={() => alert(`${id}`)}
-                              />
-                          );
-                      })
-                    : [...Array(12)].map(() => <CardSkeleton />)}
+                            return (
+                                <Card
+                                    key={id}
+                                    image={image}
+                                    title={title}
+                                    subtitle={subtitle.join(', ')}
+                                    // subtitle={`${moment(release_date).format('MMM DD, YYYY')}`}
+                                    onClick={() => alert(`${id}`)}
+                                />
+                            );
+                        })
+                    ) : (
+                        <h1>No data</h1>
+                    )
+                ) : (
+                    [...Array(12)].map(() => <CardSkeleton />)
+                )}
 
                 {/* fillers */}
                 {[...Array(4)].map(() => (

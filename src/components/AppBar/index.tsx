@@ -73,7 +73,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                             },
                             {
                                 label: 'On Air ',
-                                linkTo: '/tv-show/on-the-air'
+                                linkTo: '/tv-show/on-the-air?from=2020-12-11&to=to=2020-12-11'
                             },
                             {
                                 label: 'Upcoming',
