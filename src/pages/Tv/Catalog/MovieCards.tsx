@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter, Redirect } from 'react-router-dom';
-import moment from 'moment';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { parse as QSParse } from 'query-string';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -49,40 +48,38 @@ const MovieCards: React.FC<MovieProps> = ({
     match
 }) => {
     const classes = useStyles();
-    const { tvShows = [], total_pages, page } = catalogTVShows;
-    const { isCatalogLoading } = loaders;
+
+    const [selectedPage, setSelectedPage] = useState<number>(1);
 
     const { id: tvShowCategory } = match.params;
+    const currentQuery = location.search;
 
-    const currentPage: number = ((QSParse(location.search).page as unknown) as number) || 1;
-    // const currectQueries: number = ((QSParse(location.search).page as unknown) as number) || 1;
-
-    // console.log(currentPage, typeof currentPage);
-
+    const { tvShows = [], total_pages } = catalogTVShows;
+    const { isCatalogLoading } = loaders;
     const paginationPages = (total_pages as unknown) as number;
 
     const handlePaginationChange = (page: number) => {
-        // history.push({
-        //     pathname: `/tv-show/${tvShowCategory}`,
-        //     search: `?page=${page}`,
-        //     state: { ...location.state }
-        // });
-        // console.log(`/tv-show/on-the-air?page=${page}`);
-        // return <Redirect to={`/tv-show/on-the-air?page=${page}`} />;
+        const currentQueryObj = QSParse(currentQuery);
+        delete currentQueryObj.page;
+
+        const query = Object.entries(currentQueryObj)
+            .map(([key, value]) => (value ? `${key}=${value}` : ''))
+            .filter((i) => i)
+            .join('&');
+
+        const newQuery = query ? `?${query}&page=${page}` : `?page=${page}`;
+
+        history.push({
+            pathname: location.pathname,
+            search: newQuery
+        });
     };
 
-    // useEffect(() => {
-    //     const startDate = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
-    //     const endDate = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+    useEffect(() => {
+        const { page = 1 } = QSParse(currentQuery);
 
-    //     getCatalogTVShows({
-    //         sort_by: selectedSort,
-    //         with_genres: selectedGenres.join(','),
-    //         'air_date.gte': startDate,
-    //         'air_date.lte': endDate,
-    //         page: currentPage
-    //     });
-    // }, [currentPage]);
+        setSelectedPage(Number(page as number));
+    }, [tvShowCategory, currentQuery]);
 
     return (
         <>
@@ -126,7 +123,7 @@ const MovieCards: React.FC<MovieProps> = ({
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <Pagination
                         count={paginationPages}
-                        page={Number(currentPage)}
+                        page={selectedPage}
                         variant="outlined"
                         shape="rounded"
                         size="large"
