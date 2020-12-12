@@ -104,23 +104,17 @@ const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...re
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList id="menu-list-grow">
-                                    {options.map((i) => {
-                                        console.log(
-                                            location.pathname,
-                                            convertStringChars(i.label.toLowerCase(), ' ', '-')
-                                        );
-                                        return (
-                                            <MenuItem
-                                                component={Link}
-                                                to={i.linkTo}
-                                                onClick={handleClose}
-                                                style={{ width: 150 }}
-                                                selected={location.pathname.includes(i.rootLink)}
-                                            >
-                                                {i.label}
-                                            </MenuItem>
-                                        );
-                                    })}
+                                    {options.map((i) => (
+                                        <MenuItem
+                                            component={Link}
+                                            to={i.linkTo}
+                                            onClick={handleClose}
+                                            style={{ width: 150 }}
+                                            selected={location.pathname.includes(i.rootLink)}
+                                        >
+                                            {i.label}
+                                        </MenuItem>
+                                    ))}
                                 </MenuList>
                             </ClickAwayListener>
                         </Paper>
