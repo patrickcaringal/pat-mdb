@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import { actions, interfaces } from '../../../ducks';
-import { convertUrlToWord } from '../../../utils/helpers';
+import { convertStringChars } from '../../../utils/helpers';
 
 import Sidebar from './Sidebar';
 import MovieCards from './MovieCards';
@@ -90,7 +90,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogTVShows, history, location, 
                     variant="h5"
                     style={{ fontWeight: 600, marginBottom: 16, textTransform: 'capitalize' }}
                 >
-                    {convertUrlToWord(tvShowCategory)}
+                    {convertStringChars(tvShowCategory, '-', ' ')}
                 </Typography>
 
                 <Grid container>

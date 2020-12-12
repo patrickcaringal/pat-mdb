@@ -10,6 +10,8 @@ import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 
+import { convertStringChars } from '../../utils/helpers';
+
 const useStyles = makeStyles((theme) => ({
     menu: {
         '&:hover': {
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export interface MenuProps extends RouteComponentProps {
     label: string;
     value: string;
-    options?: { label: string; linkTo: string }[];
+    options?: { label: string; rootLink: string; linkTo: string }[];
 }
 
 const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...rest }) => {
@@ -102,17 +104,23 @@ const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...re
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList id="menu-list-grow">
-                                    {options.map((i) => (
-                                        <MenuItem
-                                            component={Link}
-                                            to={i.linkTo}
-                                            onClick={handleClose}
-                                            style={{ width: 150 }}
-                                            selected={location.pathname.includes(i.linkTo)}
-                                        >
-                                            {i.label}
-                                        </MenuItem>
-                                    ))}
+                                    {options.map((i) => {
+                                        console.log(
+                                            location.pathname,
+                                            convertStringChars(i.label.toLowerCase(), ' ', '-')
+                                        );
+                                        return (
+                                            <MenuItem
+                                                component={Link}
+                                                to={i.linkTo}
+                                                onClick={handleClose}
+                                                style={{ width: 150 }}
+                                                selected={location.pathname.includes(i.rootLink)}
+                                            >
+                                                {i.label}
+                                            </MenuItem>
+                                        );
+                                    })}
                                 </MenuList>
                             </ClickAwayListener>
                         </Paper>

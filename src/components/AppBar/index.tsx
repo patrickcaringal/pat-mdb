@@ -51,14 +51,17 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                         options={[
                             {
                                 label: 'Popular',
+                                rootLink: '/movie/popular',
                                 linkTo: '/movie/popular'
                             },
                             {
                                 label: 'Now Playing',
+                                rootLink: '/movie/popular',
                                 linkTo: '/movie/now-playing'
                             },
                             {
                                 label: 'Upcoming',
+                                rootLink: '/movie/popular',
                                 linkTo: '/movie/upcoming'
                             }
                         ]}
@@ -69,14 +72,17 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                         options={[
                             {
                                 label: 'Popular',
+                                rootLink: '/tv-show/popular',
                                 linkTo: '/tv-show/popular'
                             },
                             {
                                 label: 'On Air ',
-                                linkTo: '/tv-show/on-the-air?from=2020-12-12&to=to=2020-12-12'
+                                rootLink: '/tv-show/on-air',
+                                linkTo: '/tv-show/on-air?from=2020-12-12&to=to=2020-12-12'
                             },
                             {
                                 label: 'Upcoming',
+                                rootLink: '/tv-show/upcoming',
                                 linkTo: '/tv-show/upcoming?from=2020-12-13&to=to=2021-01-13'
                             }
                         ]}
@@ -87,6 +93,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                         options={[
                             {
                                 label: 'Popular',
+                                rootLink: '/people/popular',
                                 linkTo: '/people/popular'
                             }
                         ]}
