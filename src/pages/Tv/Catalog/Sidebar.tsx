@@ -17,7 +17,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 
-import { actions, interfaces, types } from '../../../ducks';
+import { interfaces } from '../../../ducks';
+import { getQueryString } from '../../../utils/http';
 
 // import KeywordsAutocomplete from './KeywordsAutocomplete';
 
@@ -55,11 +56,7 @@ interface IStateToProps {
     loaders: { [key: string]: boolean };
 }
 
-interface IDispatchToProps {
-    getCatalogTVShows: (
-        queries: interfaces.IGetCatalogTVShowsPayload
-    ) => interfaces.IGetCatalogTVShows;
-}
+interface IDispatchToProps {}
 
 interface IMatchParams {
     id: string;
@@ -71,33 +68,37 @@ interface ISidebarProps
         RouteComponentProps<IMatchParams> {}
 
 const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match }) => {
-    const [UIselectedSort, setUISelectedSort] = useState<string>('popularity.desc');
-    const [UIselectedGenres, setUISelectedGenres] = useState<string[]>([]);
-    const [UIreleaseStartDate, setUIReleaseStartDate] = useState<any>(null);
-    const [UIreleaseEndDate, setUIReleaseEndDate] = useState<any>(null);
+    const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
+    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+    const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
+    const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
     const [sidebarQuery, setSidebarQuery] = useState<string>('');
 
     const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
 
-    const { id: tvShowCategory } = match.params;
     const currentQuery = location.search;
     const { isCatalogLoading } = loaders;
 
-    const isGenreSelected = (genre: string) => UIselectedGenres.includes(genre);
+    const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
 
     const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setUISelectedSort(event.target.value as string);
+        setSelectedSort(event.target.value as string);
     };
 
     const handleGenreChipClick = (genre: string) => {
         const selected = !isGenreSelected(genre)
-            ? [...UIselectedGenres, genre]
-            : UIselectedGenres.filter((g) => g !== genre);
+            ? [...selectedGenres, genre]
+            : selectedGenres.filter((g) => g !== genre);
 
-        setUISelectedGenres(selected);
+        setSelectedGenres(selected);
     };
 
     const handleSearchClick = () => {
+        window.scrollTo(0, 0);
+
+        // check if query changed
+        if (currentQuery === `?${sidebarQuery}`) return;
+
         setIsSearchClicked(true);
 
         history.push({
@@ -106,34 +107,33 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
         });
     };
 
+    // url query (sidebar & pagination) changes
     useEffect(() => {
         const { sort = 'popularity.desc', genres = '', from = null, to = null } = QSParse(
             currentQuery
         );
 
-        setUISelectedSort(sort as string);
-        setUISelectedGenres((genres as string).split(',').filter((i) => i));
-        setUIReleaseStartDate(from);
-        setUIReleaseEndDate(to);
-    }, [tvShowCategory, currentQuery]);
+        setSelectedSort(sort as string);
+        setSelectedGenres((genres as string).split(',').filter((i) => i));
+        setReleaseStartDate(from);
+        setReleaseEndDate(to);
+    }, [currentQuery]);
 
+    // sidebar changes
+    useEffect(() => {
+        const sort = selectedSort !== 'popularity.desc' ? selectedSort : '';
+        const from = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
+        const to = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+        const genres = selectedGenres.join(',');
+
+        const query = getQueryString({ sort, genres, from, to });
+        setSidebarQuery(query);
+    }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate]);
+
+    // search req loading done
     useEffect(() => {
         if (!isCatalogLoading) setIsSearchClicked(false);
     }, [isCatalogLoading]);
-
-    useEffect(() => {
-        const sort = UIselectedSort !== 'popularity.desc' ? UIselectedSort : '';
-        const from = UIreleaseStartDate ? moment(UIreleaseStartDate).format('YYYY-MM-DD') : '';
-        const to = UIreleaseEndDate ? moment(UIreleaseEndDate).format('YYYY-MM-DD') : '';
-        const genres = UIselectedGenres.join(',');
-
-        const query = Object.entries({ sort, genres, from, to })
-            .map(([key, value]) => (value ? `${key}=${value}` : ''))
-            .filter((i) => i)
-            .join('&');
-
-        setSidebarQuery(query);
-    }, [UIselectedSort, UIselectedGenres, UIreleaseStartDate, UIreleaseEndDate]);
 
     return (
         <>
@@ -157,7 +157,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
                         <Select
                             labelId="sort-select"
                             id="demo-simple-select"
-                            value={UIselectedSort}
+                            value={selectedSort}
                             onChange={handleSortChange}
                             disableUnderline
                             MenuProps={{
@@ -211,18 +211,16 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
                             margin="normal"
                             label="From"
                             format="MM/DD/yyyy"
-                            value={UIreleaseStartDate}
-                            onChange={(date: any, value?: string | null | undefined) => {
-                                setUIReleaseStartDate(
+                            value={releaseStartDate}
+                            onChange={(date: any) => {
+                                setReleaseStartDate(
                                     date ? moment(date).format('YYYY-MM-DD') : null
                                 );
                             }}
                             KeyboardButtonProps={{ 'aria-label': 'change date' }}
                             InputProps={{ disableUnderline: true }}
                             maxDate={
-                                UIreleaseEndDate
-                                    ? new Date(UIreleaseEndDate)
-                                    : new Date('2100-01-01')
+                                releaseEndDate ? new Date(releaseEndDate) : new Date('2100-01-01')
                             }
                         />
                         <KeyboardDatePicker
@@ -231,17 +229,15 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
                             margin="normal"
                             label="To"
                             format="MM/DD/yyyy"
-                            value={UIreleaseEndDate}
-                            onChange={(date: any, value?: string | null | undefined) => {
-                                setUIReleaseEndDate(
-                                    date ? moment(date).format('YYYY-MM-DD') : null
-                                );
+                            value={releaseEndDate}
+                            onChange={(date: any) => {
+                                setReleaseEndDate(date ? moment(date).format('YYYY-MM-DD') : null);
                             }}
                             KeyboardButtonProps={{ 'aria-label': 'change date' }}
                             InputProps={{ disableUnderline: true }}
                             minDate={
-                                UIreleaseStartDate
-                                    ? new Date(UIreleaseStartDate)
+                                releaseStartDate
+                                    ? new Date(releaseStartDate)
                                     : new Date('1900-01-01')
                             }
                         />
@@ -261,7 +257,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
                     variant="contained"
                     color="primary"
                     onClick={handleSearchClick}
-                    disabled={isCatalogLoading || currentQuery === `?${sidebarQuery}`}
+                    disabled={isCatalogLoading}
                 >
                     {!isSearchClicked ? 'Search' : <CircularProgress size={20} thickness={5} />}
                 </Button>
@@ -275,8 +271,6 @@ const mapStateToProps = (state: interfaces.TState) => ({
     loaders: state.loaders
 });
 
-const mapDispatchToProps = {
-    getCatalogTVShows: actions.getCatalogTVShows
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Sidebar));

@@ -16,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 
-import { actions, interfaces, types } from '../../../ducks';
+import { actions, interfaces } from '../../../ducks';
 
 // import KeywordsAutocomplete from './KeywordsAutocomplete';
 

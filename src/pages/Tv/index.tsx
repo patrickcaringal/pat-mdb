@@ -25,7 +25,7 @@ const TvShow: React.FC<TvShowProps> = ({ match }) => {
         const page = isCategoryForCatalog(tvShowCategory) ? PageType.Catalog : PageType.Detail;
 
         setPageType(page);
-    }, [match.params.id]);
+    }, [tvShowCategory]);
 
     if (pageType === PageType.Catalog) {
         return <TvShowCatalog />;

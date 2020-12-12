@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { parse as QSParse } from 'query-string';
-import * as _ from 'lodash';
 
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -55,6 +54,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogTVShows, history, location, 
     const { id: tvShowCategory } = match.params;
     const currentQuery = location.search;
 
+    // url query (sidebar & pagination) changes
     useEffect(() => {
         const {
             sort = 'popularity.desc',
@@ -81,7 +81,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogTVShows, history, location, 
         } as interfaces.IGetCatalogTVShowsPayload;
 
         getCatalogTVShows(payload);
-    }, [tvShowCategory, currentQuery]);
+    }, [currentQuery, getCatalogTVShows]);
 
     return (
         <Box display="flex" mx={4} my={3}>

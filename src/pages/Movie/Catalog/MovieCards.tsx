@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Pagination from '@material-ui/lab/Pagination';
 
-import { actions, interfaces, types } from '../../../ducks';
+import { actions, interfaces } from '../../../ducks';
 
 import Card, { CardSkeleton, CardFiller } from './Card';
 
@@ -39,7 +39,7 @@ const MovieCards: React.FC<MovieProps> = ({
     loaders,
     getCatalogMovies
 }) => {
-    const classes = useStyles();
+    // const classes = useStyles();
     const { movies = [], total_pages, page } = catalogMovies;
     const { isCatalogLoading } = loaders;
 
@@ -67,8 +67,8 @@ const MovieCards: React.FC<MovieProps> = ({
                               id,
                               poster: image,
                               title,
-                              genres: subtitle,
-                              release_date
+                              genres: subtitle
+                              //   release_date
                           } = movie;
 
                           return (

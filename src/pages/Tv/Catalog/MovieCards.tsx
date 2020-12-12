@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import Pagination from '@material-ui/lab/Pagination';
 
 import { actions, interfaces, types } from '../../../ducks';
+import { getQueryString } from '../../../utils/http';
 
 import Card, { CardSkeleton, CardFiller } from './Card';
 
@@ -18,31 +19,17 @@ interface IStateToProps {
     loaders: { [key: string]: boolean };
 }
 
-interface IDispatchToProps {
-    getCatalogTVShows: (
-        queries: interfaces.IGetCatalogTVShowsPayload
-    ) => interfaces.IGetCatalogTVShows;
-}
+interface IDispatchToProps {}
 
 interface MatchParams {
     id: string;
 }
 
-interface MovieProps extends IStateToProps, IDispatchToProps, RouteComponentProps<MatchParams> {
-    // selectedSort: string;
-    // selectedGenres: string[];
-    // releaseStartDate: any;
-    // releaseEndDate: any;
-}
+interface MovieProps extends IStateToProps, IDispatchToProps, RouteComponentProps<MatchParams> {}
 
 const MovieCards: React.FC<MovieProps> = ({
-    // selectedSort,
-    // selectedGenres,
-    // releaseStartDate,
-    // releaseEndDate,
     catalogTVShows,
     loaders,
-    getCatalogTVShows,
     history,
     location,
     match
@@ -52,21 +39,17 @@ const MovieCards: React.FC<MovieProps> = ({
     const [selectedPage, setSelectedPage] = useState<number>(1);
 
     const { id: tvShowCategory } = match.params;
-    const currentQuery = location.search;
+    const currentQuery = QSParse(location.search);
 
     const { tvShows = [], total_pages } = catalogTVShows;
     const { isCatalogLoading } = loaders;
     const paginationPages = (total_pages as unknown) as number;
 
     const handlePaginationChange = (page: number) => {
-        const currentQueryObj = QSParse(currentQuery);
+        const currentQueryObj = currentQuery;
         delete currentQueryObj.page;
 
-        const query = Object.entries(currentQueryObj)
-            .map(([key, value]) => (value ? `${key}=${value}` : ''))
-            .filter((i) => i)
-            .join('&');
-
+        const query = getQueryString(currentQueryObj as { [key: string]: string });
         const newQuery = query ? `?${query}&page=${page}` : `?page=${page}`;
 
         history.push({
@@ -76,10 +59,10 @@ const MovieCards: React.FC<MovieProps> = ({
     };
 
     useEffect(() => {
-        const { page = 1 } = QSParse(currentQuery);
+        const { page = 1 } = currentQuery;
 
         setSelectedPage(Number(page as number));
-    }, [tvShowCategory, currentQuery]);
+    }, [currentQuery.page]);
 
     return (
         <>
@@ -144,8 +127,6 @@ const mapStateToProps = (state: interfaces.TState) => ({
     loaders: state.loaders
 });
 
-const mapDispatchToProps = {
-    getCatalogTVShows: actions.getCatalogTVShows
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MovieCards));

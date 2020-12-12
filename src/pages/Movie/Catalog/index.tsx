@@ -61,7 +61,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, match }) => {
             'primary_release_date.gte': releaseStartDateInitValue,
             'primary_release_date.lte': releaseEndDateInitValue
         } as interfaces.IGetCatalogMoviesPayload);
-    }, [movieCategory]);
+    }, [movieCategory, getCatalogMovies]);
 
     return (
         <Box display="flex" mx={4} my={3}>
