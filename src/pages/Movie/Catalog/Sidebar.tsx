@@ -25,8 +25,10 @@ import { getQueryString } from '../../../utils/http';
 const sortOptions = {
     'popularity.desc': 'Popularity Descending',
     'popularity.asc': 'Popularity Ascending',
-    'first_air_date.desc': 'Air Date Descending',
-    'first_air_date.asc': 'Air Date Ascending'
+    'primary_release_date.desc': 'Release Date Descending',
+    'primary_release_date.asc': 'Release Date Ascending',
+    'original_title.asc': 'Title (A-Z)',
+    'original_title.desc': 'Title (Z-A)'
 };
 
 const genres = {
@@ -50,9 +52,7 @@ const genres = {
     '10752': 'War',
     '10770': 'TV Movie'
 };
-
 interface IStateToProps {
-    catalogMovies: interfaces.IMovieCatalog;
     loaders: { [key: string]: boolean };
 }
 
@@ -267,7 +267,6 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
-    catalogMovies: state.catalogMovies,
     loaders: state.loaders
 });
 

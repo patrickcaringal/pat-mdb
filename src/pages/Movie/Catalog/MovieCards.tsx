@@ -15,7 +15,7 @@ import Card, { CardSkeleton, CardFiller } from './Card';
 const useStyles = makeStyles({});
 
 interface IStateToProps {
-    catalogTVShows: interfaces.ITVShowCatalog;
+    catalogMovies: interfaces.IMovieCatalog;
     loaders: { [key: string]: boolean };
 }
 
@@ -27,21 +27,14 @@ interface MatchParams {
 
 interface MovieProps extends IStateToProps, IDispatchToProps, RouteComponentProps<MatchParams> {}
 
-const MovieCards: React.FC<MovieProps> = ({
-    catalogTVShows,
-    loaders,
-    history,
-    location,
-    match
-}) => {
+const MovieCards: React.FC<MovieProps> = ({ catalogMovies, loaders, history, location, match }) => {
     const classes = useStyles();
 
     const [selectedPage, setSelectedPage] = useState<number>(1);
 
-    const { id: tvShowCategory } = match.params;
     const currentQuery = QSParse(location.search);
 
-    const { tvShows = [], total_pages } = catalogTVShows;
+    const { movies = [], total_pages } = catalogMovies;
     const { isCatalogLoading } = loaders;
     const paginationPages = (total_pages as unknown) as number;
 
@@ -68,15 +61,15 @@ const MovieCards: React.FC<MovieProps> = ({
         <>
             <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
                 {!isCatalogLoading ? (
-                    tvShows.length ? (
-                        tvShows.map((tvShow) => {
+                    movies.length ? (
+                        movies.map((movie) => {
                             const {
                                 id,
                                 poster: image,
                                 title,
                                 genres: subtitle,
                                 release_date
-                            } = tvShow;
+                            } = movie;
 
                             return (
                                 <Card
@@ -123,7 +116,7 @@ const MovieCards: React.FC<MovieProps> = ({
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
-    catalogTVShows: state.catalogTVShows,
+    catalogMovies: state.catalogMovies,
     loaders: state.loaders
 });
 

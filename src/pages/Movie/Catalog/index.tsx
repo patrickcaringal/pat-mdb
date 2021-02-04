@@ -39,9 +39,9 @@ const genresList = {
 interface IStateToProps {}
 
 interface IDispatchToProps {
-    getCatalogTVShows: (
-        queries: interfaces.IGetCatalogTVShowsPayload
-    ) => interfaces.IGetCatalogTVShows;
+    getCatalogMovies: (
+        queries: interfaces.IGetCatalogMoviesPayload
+    ) => interfaces.IGetCatalogMovies;
 }
 
 interface IMatchParams {
@@ -50,8 +50,8 @@ interface IMatchParams {
 
 interface IMovieProps extends IStateToProps, IDispatchToProps, RouteComponentProps<IMatchParams> {}
 
-const Catalog: React.FC<IMovieProps> = ({ getCatalogTVShows, location, match }) => {
-    const { id: tvShowCategory } = match.params;
+const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, location, match }) => {
+    const { id: movieCategory } = match.params;
     const currentQuery = location.search;
 
     // url query (sidebar & pagination) changes
@@ -75,13 +75,13 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogTVShows, location, match }) 
         const payload = {
             sort_by: sort,
             with_genres: genres_id.join(','),
-            'air_date.gte': from,
-            'air_date.lte': to,
+            'primary_release_date.gte': from,
+            'primary_release_date.lte': to,
             page
-        } as interfaces.IGetCatalogTVShowsPayload;
+        } as interfaces.IGetCatalogMoviesPayload;
 
-        getCatalogTVShows(payload);
-    }, [currentQuery, getCatalogTVShows]);
+        getCatalogMovies(payload);
+    }, [currentQuery, getCatalogMovies]);
 
     return (
         <Box display="flex" mx={4} my={3}>
@@ -90,7 +90,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogTVShows, location, match }) 
                     variant="h5"
                     style={{ fontWeight: 600, marginBottom: 16, textTransform: 'capitalize' }}
                 >
-                    {convertStringChars(tvShowCategory, '-', ' ')}
+                    {convertStringChars(movieCategory, '-', ' ')}
                 </Typography>
 
                 <Grid container>
@@ -112,7 +112,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogTVShows, location, match }) 
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
-    getCatalogTVShows: actions.getCatalogTVShows
+    getCatalogMovies: actions.getCatalogMovies
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Catalog));

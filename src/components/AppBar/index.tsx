@@ -56,12 +56,14 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                             },
                             {
                                 label: 'Now Playing',
-                                rootLink: '/movie/popular',
+                                // add dates
+                                rootLink: '/movie/now-playing',
                                 linkTo: '/movie/now-playing'
                             },
                             {
                                 label: 'Upcoming',
-                                rootLink: '/movie/popular',
+                                // add dates
+                                rootLink: '/movie/upcoming',
                                 linkTo: '/movie/upcoming'
                             }
                         ]}
