@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import MomentUtils from '@date-io/moment';
 import moment from 'moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { parse as QSParse } from 'query-string';
 
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -17,16 +16,17 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 
-import { interfaces } from '../../../ducks';
-import { getQueryString } from '../../../utils/http';
+import { actions, interfaces } from '../../../ducks';
 
 // import KeywordsAutocomplete from './KeywordsAutocomplete';
 
 const sortOptions = {
     'popularity.desc': 'Popularity Descending',
     'popularity.asc': 'Popularity Ascending',
-    'first_air_date.desc': 'Air Date Descending',
-    'first_air_date.asc': 'Air Date Ascending'
+    'primary_release_date.desc': 'Release Date Descending',
+    'primary_release_date.asc': 'Release Date Ascending',
+    'original_title.asc': 'Title (A-Z)',
+    'original_title.desc': 'Title (Z-A)'
 };
 
 const genres = {
@@ -56,84 +56,97 @@ interface IStateToProps {
     loaders: { [key: string]: boolean };
 }
 
-interface IDispatchToProps {}
+interface IDispatchToProps {
+    getCatalogMovies: (
+        queries: interfaces.IGetCatalogMoviesPayload
+    ) => interfaces.IGetCatalogMovies;
+}
 
 interface IMatchParams {
     id: string;
 }
 
-interface ISidebarProps
-    extends IStateToProps,
-        IDispatchToProps,
-        RouteComponentProps<IMatchParams> {}
+interface ISidebarProps extends IStateToProps, IDispatchToProps, RouteComponentProps<IMatchParams> {
+    selectedSort: string;
+    selectedGenres: string[];
+    releaseStartDate: any;
+    releaseEndDate: any;
+    onSortChange: React.Dispatch<React.SetStateAction<string>>;
+    onSelectedGenres: React.Dispatch<React.SetStateAction<string[]>>;
+    onReleaseStartDateChange: React.Dispatch<any>;
+    onReleaseEndDateChange: React.Dispatch<any>;
+}
 
-const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match }) => {
-    const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
-    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-    const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
-    const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
-    const [sidebarQuery, setSidebarQuery] = useState<string>('');
+const Sidebar: React.FC<ISidebarProps> = ({
+    selectedSort,
+    selectedGenres,
+    releaseStartDate,
+    releaseEndDate,
+    onSortChange,
+    onSelectedGenres,
+    onReleaseStartDateChange,
+    onReleaseEndDateChange,
+    catalogMovies,
+    loaders,
+    getCatalogMovies
+}) => {
+    const [UIselectedSort, setUISelectedSort] = useState<string>('popularity.desc');
+    const [UIselectedGenres, setUISelectedGenres] = useState<string[]>([]);
+    const [UIreleaseStartDate, setUIReleaseStartDate] = useState<any>(null);
+    const [UIreleaseEndDate, setUIReleaseEndDate] = useState<any>(null);
 
     const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
 
-    const currentQuery = location.search;
+    const { page } = catalogMovies;
     const { isCatalogLoading } = loaders;
 
-    const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
+    const isGenreSelected = (genre: string) => UIselectedGenres.includes(genre);
 
     const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedSort(event.target.value as string);
+        setUISelectedSort(event.target.value as string);
     };
 
     const handleGenreChipClick = (genre: string) => {
         const selected = !isGenreSelected(genre)
-            ? [...selectedGenres, genre]
-            : selectedGenres.filter((g) => g !== genre);
+            ? [...UIselectedGenres, genre]
+            : UIselectedGenres.filter((g) => g !== genre);
 
-        setSelectedGenres(selected);
+        setUISelectedGenres(selected);
     };
 
     const handleSearchClick = () => {
-        window.scrollTo(0, 0);
-
-        // check if query changed
-        if (currentQuery === `?${sidebarQuery}`) return;
-
         setIsSearchClicked(true);
 
-        history.push({
-            pathname: location.pathname,
-            search: sidebarQuery && `?${sidebarQuery}`
-        });
+        const startDate = UIreleaseStartDate ? moment(UIreleaseStartDate).format('YYYY-MM-DD') : '';
+        const endDate = UIreleaseEndDate ? moment(UIreleaseEndDate).format('YYYY-MM-DD') : '';
+        const payload = {
+            sort_by: UIselectedSort,
+            with_genres: UIselectedGenres.join(','),
+            'primary_release_date.gte': startDate,
+            'primary_release_date.lte': endDate
+        };
+
+        getCatalogMovies(payload);
+
+        // update parent state only if search is triggered
+        onSortChange(UIselectedSort);
+        onSelectedGenres(UIselectedGenres);
+        onReleaseStartDateChange(UIreleaseStartDate);
+        onReleaseEndDateChange(UIreleaseEndDate);
     };
 
-    // url query (sidebar & pagination) changes
-    useEffect(() => {
-        const { sort = 'popularity.desc', genres = '', from = null, to = null } = QSParse(
-            currentQuery
-        );
-
-        setSelectedSort(sort as string);
-        setSelectedGenres((genres as string).split(',').filter((i) => i));
-        setReleaseStartDate(from);
-        setReleaseEndDate(to);
-    }, [currentQuery]);
-
-    // sidebar changes
-    useEffect(() => {
-        const sort = selectedSort !== 'popularity.desc' ? selectedSort : '';
-        const from = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
-        const to = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
-        const genres = selectedGenres.join(',');
-
-        const query = getQueryString({ sort, genres, from, to });
-        setSidebarQuery(query);
-    }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate]);
-
-    // search req loading done
     useEffect(() => {
         if (!isCatalogLoading) setIsSearchClicked(false);
     }, [isCatalogLoading]);
+
+    // resets sidebar state to default state (navigating through categories)
+    // resets sidebar state to parent's copy state (changed sidebar but navigated on pagination)
+    useEffect(() => {
+        setUISelectedSort(selectedSort);
+        setUISelectedGenres(selectedGenres);
+        setUIReleaseStartDate(releaseStartDate);
+        setUIReleaseEndDate(releaseEndDate);
+    }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate, page]);
 
     return (
         <>
@@ -157,7 +170,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
                         <Select
                             labelId="sort-select"
                             id="demo-simple-select"
-                            value={selectedSort}
+                            value={UIselectedSort}
                             onChange={handleSortChange}
                             disableUnderline
                             MenuProps={{
@@ -190,8 +203,8 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
                             <Chip
                                 key={key}
                                 label={value}
-                                onClick={() => handleGenreChipClick(value)}
-                                variant={isGenreSelected(value) ? 'default' : 'outlined'}
+                                onClick={() => handleGenreChipClick(key)}
+                                variant={isGenreSelected(key) ? 'default' : 'outlined'}
                                 size="small"
                                 style={{ margin: 4 }}
                             />
@@ -211,16 +224,14 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
                             margin="normal"
                             label="From"
                             format="MM/DD/yyyy"
-                            value={releaseStartDate}
-                            onChange={(date: any) => {
-                                setReleaseStartDate(
-                                    date ? moment(date).format('YYYY-MM-DD') : null
-                                );
-                            }}
+                            value={UIreleaseStartDate}
+                            onChange={setUIReleaseStartDate}
                             KeyboardButtonProps={{ 'aria-label': 'change date' }}
                             InputProps={{ disableUnderline: true }}
                             maxDate={
-                                releaseEndDate ? new Date(releaseEndDate) : new Date('2100-01-01')
+                                UIreleaseEndDate
+                                    ? new Date(UIreleaseEndDate)
+                                    : new Date('2100-01-01')
                             }
                         />
                         <KeyboardDatePicker
@@ -229,15 +240,13 @@ const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match })
                             margin="normal"
                             label="To"
                             format="MM/DD/yyyy"
-                            value={releaseEndDate}
-                            onChange={(date: any) => {
-                                setReleaseEndDate(date ? moment(date).format('YYYY-MM-DD') : null);
-                            }}
+                            value={UIreleaseEndDate}
+                            onChange={setUIReleaseEndDate}
                             KeyboardButtonProps={{ 'aria-label': 'change date' }}
                             InputProps={{ disableUnderline: true }}
                             minDate={
-                                releaseStartDate
-                                    ? new Date(releaseStartDate)
+                                UIreleaseStartDate
+                                    ? new Date(UIreleaseStartDate)
                                     : new Date('1900-01-01')
                             }
                         />
@@ -271,6 +280,8 @@ const mapStateToProps = (state: interfaces.TState) => ({
     loaders: state.loaders
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    getCatalogMovies: actions.getCatalogMovies
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Sidebar));

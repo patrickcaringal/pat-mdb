@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import { parse as QSParse } from 'query-string';
 
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -14,12 +14,34 @@ import { convertStringChars } from '../../../utils/helpers';
 import Sidebar from './Sidebar';
 import MovieCards from './MovieCards';
 
+const genresList = {
+    '12': 'Adventure',
+    '14': 'Fantasy',
+    '16': 'Animation',
+    '18': 'Drama',
+    '27': 'Horror',
+    '28': 'Action',
+    '35': 'Comedy',
+    '36': 'History',
+    '37': 'Western',
+    '53': 'Thriller',
+    '80': 'Crime',
+    '99': 'Documentary',
+    '878': 'Science Fiction',
+    '9648': 'Mystery',
+    '10402': 'Music',
+    '10749': 'Romance',
+    '10751': 'Family',
+    '10752': 'War',
+    '10770': 'TV Movie'
+};
+
 interface IStateToProps {}
 
 interface IDispatchToProps {
-    getCatalogMovies: (
-        queries: interfaces.IGetCatalogMoviesPayload
-    ) => interfaces.IGetCatalogMovies;
+    getCatalogTVShows: (
+        queries: interfaces.IGetCatalogTVShowsPayload
+    ) => interfaces.IGetCatalogTVShows;
 }
 
 interface IMatchParams {
@@ -28,40 +50,38 @@ interface IMatchParams {
 
 interface IMovieProps extends IStateToProps, IDispatchToProps, RouteComponentProps<IMatchParams> {}
 
-const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, match }) => {
-    const { id: movieCategory } = match.params;
+const Catalog: React.FC<IMovieProps> = ({ getCatalogTVShows, location, match }) => {
+    const { id: tvShowCategory } = match.params;
+    const currentQuery = location.search;
 
-    // parent copy of sidebar state, used by Movie component paginaation
-    const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
-    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-    const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
-    const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
-
-    // modify sidebar state on movie category navigate
+    // url query (sidebar & pagination) changes
     useEffect(() => {
-        let releaseStartDateInitValue = null;
-        let releaseEndDateInitValue = null;
+        const {
+            sort = 'popularity.desc',
+            genres: genres_word = '',
+            from = null,
+            to = null,
+            page = 1
+        } = QSParse(currentQuery);
 
-        if (movieCategory === 'now-playing') {
-            releaseStartDateInitValue = moment().subtract(1, 'months').format('YYYY-MM-DD');
-            releaseEndDateInitValue = moment().format('YYYY-MM-DD');
-        } else if (movieCategory === 'upcoming') {
-            releaseStartDateInitValue = moment().add(1, 'days').format('YYYY-MM-DD');
-            releaseEndDateInitValue = moment().add(1, 'months').format('YYYY-MM-DD');
-        }
+        const genres_id = (genres_word as string)
+            .split(',')
+            .filter((i) => i)
+            .map((i) => {
+                const [genreId] = Object.entries(genresList).find((g) => g[1] === i)!;
+                return genreId;
+            });
 
-        // set to default
-        setSelectedSort('popularity.desc');
-        setSelectedGenres([]);
-        // set to specific date defaults based on category
-        setReleaseStartDate(releaseStartDateInitValue);
-        setReleaseEndDate(releaseEndDateInitValue);
+        const payload = {
+            sort_by: sort,
+            with_genres: genres_id.join(','),
+            'air_date.gte': from,
+            'air_date.lte': to,
+            page
+        } as interfaces.IGetCatalogTVShowsPayload;
 
-        getCatalogMovies({
-            'primary_release_date.gte': releaseStartDateInitValue,
-            'primary_release_date.lte': releaseEndDateInitValue
-        } as interfaces.IGetCatalogMoviesPayload);
-    }, [movieCategory, getCatalogMovies]);
+        getCatalogTVShows(payload);
+    }, [currentQuery, getCatalogTVShows]);
 
     return (
         <Box display="flex" mx={4} my={3}>
@@ -70,32 +90,18 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, match }) => {
                     variant="h5"
                     style={{ fontWeight: 600, marginBottom: 16, textTransform: 'capitalize' }}
                 >
-                    {convertStringChars(movieCategory, '-', '')}
+                    {convertStringChars(tvShowCategory, '-', ' ')}
                 </Typography>
 
                 <Grid container>
                     {/* Sort & Filter sidebar */}
                     <Grid item xs={3}>
-                        <Sidebar
-                            selectedSort={selectedSort}
-                            selectedGenres={selectedGenres}
-                            releaseStartDate={releaseStartDate}
-                            releaseEndDate={releaseEndDate}
-                            onSortChange={setSelectedSort}
-                            onSelectedGenres={setSelectedGenres}
-                            onReleaseStartDateChange={setReleaseStartDate}
-                            onReleaseEndDateChange={setReleaseEndDate}
-                        />
+                        <Sidebar />
                     </Grid>
 
                     {/* Catalog */}
                     <Grid item xs={9}>
-                        <MovieCards
-                            selectedSort={selectedSort}
-                            selectedGenres={selectedGenres}
-                            releaseStartDate={releaseStartDate}
-                            releaseEndDate={releaseEndDate}
-                        />
+                        <MovieCards />
                     </Grid>
                 </Grid>
             </Container>
@@ -106,7 +112,7 @@ const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, match }) => {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
-    getCatalogMovies: actions.getCatalogMovies
+    getCatalogTVShows: actions.getCatalogTVShows
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Catalog));

@@ -1,88 +1,100 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { parse as QSParse } from 'query-string';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
 import Pagination from '@material-ui/lab/Pagination';
 
-import { actions, interfaces } from '../../../ducks';
+import { actions, interfaces, types } from '../../../ducks';
+import { getQueryString } from '../../../utils/http';
 
 import Card, { CardSkeleton, CardFiller } from './Card';
 
 const useStyles = makeStyles({});
 
 interface IStateToProps {
-    catalogMovies: interfaces.IMovieCatalog;
+    catalogTVShows: interfaces.ITVShowCatalog;
     loaders: { [key: string]: boolean };
 }
 
-interface IDispatchToProps {
-    getCatalogMovies: (
-        queries: interfaces.IGetCatalogMoviesPayload
-    ) => interfaces.IGetCatalogMovies;
+interface IDispatchToProps {}
+
+interface MatchParams {
+    id: string;
 }
 
-interface MovieProps extends IStateToProps, IDispatchToProps {
-    selectedSort: string;
-    selectedGenres: string[];
-    releaseStartDate: any;
-    releaseEndDate: any;
-}
+interface MovieProps extends IStateToProps, IDispatchToProps, RouteComponentProps<MatchParams> {}
 
 const MovieCards: React.FC<MovieProps> = ({
-    selectedSort,
-    selectedGenres,
-    releaseStartDate,
-    releaseEndDate,
-    catalogMovies,
+    catalogTVShows,
     loaders,
-    getCatalogMovies
+    history,
+    location,
+    match
 }) => {
-    // const classes = useStyles();
-    const { movies = [], total_pages, page } = catalogMovies;
-    const { isCatalogLoading } = loaders;
+    const classes = useStyles();
 
+    const [selectedPage, setSelectedPage] = useState<number>(1);
+
+    const { id: tvShowCategory } = match.params;
+    const currentQuery = QSParse(location.search);
+
+    const { tvShows = [], total_pages } = catalogTVShows;
+    const { isCatalogLoading } = loaders;
     const paginationPages = (total_pages as unknown) as number;
 
     const handlePaginationChange = (page: number) => {
-        const startDate = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
-        const endDate = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+        const currentQueryObj = currentQuery;
+        delete currentQueryObj.page;
 
-        getCatalogMovies({
-            sort_by: selectedSort,
-            with_genres: selectedGenres.join(','),
-            'primary_release_date.gte': startDate,
-            'primary_release_date.lte': endDate,
-            page
+        const query = getQueryString(currentQueryObj as { [key: string]: string });
+        const newQuery = query ? `?${query}&page=${page}` : `?page=${page}`;
+
+        history.push({
+            pathname: location.pathname,
+            search: newQuery
         });
     };
+
+    useEffect(() => {
+        const { page = 1 } = currentQuery;
+
+        setSelectedPage(Number(page as number));
+    }, [currentQuery.page]);
 
     return (
         <>
             <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
-                {!isCatalogLoading
-                    ? movies.map((movie) => {
-                          const {
-                              id,
-                              poster: image,
-                              title,
-                              genres: subtitle
-                              //   release_date
-                          } = movie;
+                {!isCatalogLoading ? (
+                    tvShows.length ? (
+                        tvShows.map((tvShow) => {
+                            const {
+                                id,
+                                poster: image,
+                                title,
+                                genres: subtitle,
+                                release_date
+                            } = tvShow;
 
-                          return (
-                              <Card
-                                  key={id}
-                                  image={image}
-                                  title={title}
-                                  subtitle={subtitle.join(', ')}
-                                  // subtitle={`${moment(release_date).format('MMM DD, YYYY')}`}
-                                  onClick={() => alert(`${id}`)}
-                              />
-                          );
-                      })
-                    : [...Array(12)].map(() => <CardSkeleton />)}
+                            return (
+                                <Card
+                                    key={id}
+                                    image={image}
+                                    title={title}
+                                    subtitle={subtitle.join(', ')}
+                                    // subtitle={`${moment(release_date).format('MMM DD, YYYY')}`}
+                                    onClick={() => alert(`${id}`)}
+                                />
+                            );
+                        })
+                    ) : (
+                        <h1>No data</h1>
+                    )
+                ) : (
+                    [...Array(12)].map(() => <CardSkeleton />)
+                )}
 
                 {/* fillers */}
                 {[...Array(4)].map(() => (
@@ -94,7 +106,7 @@ const MovieCards: React.FC<MovieProps> = ({
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <Pagination
                         count={paginationPages}
-                        page={(page as unknown) as number}
+                        page={selectedPage}
                         variant="outlined"
                         shape="rounded"
                         size="large"
@@ -111,12 +123,10 @@ const MovieCards: React.FC<MovieProps> = ({
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
-    catalogMovies: state.catalogMovies,
+    catalogTVShows: state.catalogTVShows,
     loaders: state.loaders
 });
 
-const mapDispatchToProps = {
-    getCatalogMovies: actions.getCatalogMovies
-};
+const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(MovieCards);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MovieCards));
