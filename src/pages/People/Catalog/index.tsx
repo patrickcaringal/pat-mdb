@@ -21,13 +21,15 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import { actions, interfaces } from '../../../ducks';
 
-// import { Popular as PopularPeople } from '../mockData';
-
 const useStyles = makeStyles({
+    searchForm: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row'
+    },
     cardCont: {
         width: 'calc(((100vw - 80px - 260px - 128px) / 4))',
-        maxWidth: 200,
-        marginLeft: 30,
+        maxWidth: 235,
         marginBottom: 30
     },
     cardImg: {
@@ -60,20 +62,34 @@ interface IDispatchToProps {
 
 interface IOwnProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
 
-const PeopleCatalog: React.FC<IOwnProps> = ({ catalogPeople, getCatalogPeople, location }) => {
+const PeopleCatalog: React.FC<IOwnProps> = ({
+    catalogPeople,
+    getCatalogPeople,
+    location,
+    history
+}) => {
     const classes = useStyles();
+    const currentQuery = location.search;
 
-    const searchTxt: string = QSParse(location.search).query as string;
-
-    const [searchQuery, setSearchQuery] = useState<string>(searchTxt);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     const { results: people = [], total_pages } = catalogPeople;
 
-    // console.log(JSON.stringify(people, null, 4));
-
     useEffect(() => {
-        getCatalogPeople({});
-    }, []);
+        const { query = '' } = QSParse(location.search);
+
+        setSearchQuery(query as string);
+        getCatalogPeople({ query: query as string });
+    }, [currentQuery, getCatalogPeople]);
+
+    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        history.push({
+            pathname: '/people/popular',
+            search: `?query=${searchQuery}`
+        });
+    };
 
     return (
         <Box display="flex" mx={4} my={3}>
@@ -85,18 +101,25 @@ const PeopleCatalog: React.FC<IOwnProps> = ({ catalogPeople, getCatalogPeople, l
                     Popular People
                 </Typography>
                 <Box mb={3} display="flex" bgcolor="#fff" boxShadow={1} borderRadius={4}>
-                    <FormControl variant="filled" fullWidth>
-                        <InputLabel>Search</InputLabel>
-                        <FilledInput
-                            value={searchQuery}
-                            disableUnderline
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            style={{ background: 'none' }}
-                        />
-                    </FormControl>
-                    <IconButton type="submit" aria-label="search">
-                        <SearchIcon />
-                    </IconButton>
+                    <form
+                        noValidate
+                        autoComplete="off"
+                        className={classes.searchForm}
+                        onSubmit={handleSearchSubmit}
+                    >
+                        <FormControl variant="filled" fullWidth>
+                            <InputLabel>Search</InputLabel>
+                            <FilledInput
+                                value={searchQuery}
+                                disableUnderline
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                style={{ background: 'none' }}
+                            />
+                        </FormControl>
+                        <IconButton type="submit" aria-label="search">
+                            <SearchIcon />
+                        </IconButton>
+                    </form>
                 </Box>
 
                 <Box
@@ -104,32 +127,28 @@ const PeopleCatalog: React.FC<IOwnProps> = ({ catalogPeople, getCatalogPeople, l
                     flexDirection="row"
                     flexWrap="wrap"
                     justifyContent="space-between"
-                    style={{ marginLeft: '-30px' }}
                 >
-                    {/* {[].map((p) => {
-                        const image = `https://image.tmdb.org/t/p/w185/${p.profile_path}`;
-                        const movies = p.known_for
-                            .map((m) => m.original_title || m.original_name)
-                            .join(', ');
+                    {people.map((person) => {
+                        const { name, poster, known_for } = person;
+                        const movies = known_for.join(', ');
 
                         return (
                             <Card className={classes.cardCont}>
                                 <CardMedia
                                     className={classes.cardImg}
-                                    image={image}
-                                    title={p.name}
+                                    image={poster}
+                                    title={name}
                                 />
                                 <CardContent className={classes.cardContent}>
-                                    <Typography className={classes.title}>{p.name}</Typography>
+                                    <Typography className={classes.title}>{name}</Typography>
                                     <Typography variant="body2" className={classes.subtitle} noWrap>
                                         {movies}
                                     </Typography>
                                 </CardContent>
                             </Card>
                         );
-                    })} */}
+                    })}
 
-                    <div className={classes.cardCont} />
                     <div className={classes.cardCont} />
                     <div className={classes.cardCont} />
                     <div className={classes.cardCont} />
