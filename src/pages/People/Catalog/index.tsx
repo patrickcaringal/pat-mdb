@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { parse as QSParse } from 'query-string';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,7 +19,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 
-import { Popular as PopularPeople } from './mockData';
+import { actions, interfaces } from '../../../ducks';
+
+// import { Popular as PopularPeople } from '../mockData';
 
 const useStyles = makeStyles({
     cardCont: {
@@ -44,14 +47,33 @@ const useStyles = makeStyles({
     }
 });
 
-interface PeopleCatalogProps extends RouteComponentProps {}
+interface IStateToProps {
+    catalogPeople: interfaces.IPeopleCatalog;
+    loaders: { [key: string]: boolean };
+}
 
-const PeopleCatalog: React.FC<PeopleCatalogProps> = ({ location }) => {
+interface IDispatchToProps {
+    getCatalogPeople: (
+        queries: interfaces.IGetCatalogPeoplePayload
+    ) => interfaces.IGetCatalogPeople;
+}
+
+interface IOwnProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
+
+const PeopleCatalog: React.FC<IOwnProps> = ({ catalogPeople, getCatalogPeople, location }) => {
     const classes = useStyles();
 
     const searchTxt: string = QSParse(location.search).query as string;
 
     const [searchQuery, setSearchQuery] = useState<string>(searchTxt);
+
+    const { results: people = [], total_pages } = catalogPeople;
+
+    // console.log(JSON.stringify(people, null, 4));
+
+    useEffect(() => {
+        getCatalogPeople({});
+    }, []);
 
     return (
         <Box display="flex" mx={4} my={3}>
@@ -84,7 +106,7 @@ const PeopleCatalog: React.FC<PeopleCatalogProps> = ({ location }) => {
                     justifyContent="space-between"
                     style={{ marginLeft: '-30px' }}
                 >
-                    {PopularPeople.map((p) => {
+                    {/* {[].map((p) => {
                         const image = `https://image.tmdb.org/t/p/w185/${p.profile_path}`;
                         const movies = p.known_for
                             .map((m) => m.original_title || m.original_name)
@@ -105,7 +127,7 @@ const PeopleCatalog: React.FC<PeopleCatalogProps> = ({ location }) => {
                                 </CardContent>
                             </Card>
                         );
-                    })}
+                    })} */}
 
                     <div className={classes.cardCont} />
                     <div className={classes.cardCont} />
@@ -118,4 +140,13 @@ const PeopleCatalog: React.FC<PeopleCatalogProps> = ({ location }) => {
     );
 };
 
-export default withRouter(PeopleCatalog);
+const mapStateToProps = (state: interfaces.TState) => ({
+    catalogPeople: state.catalogPeople,
+    loaders: state.loaders
+});
+
+const mapDispatchToProps = {
+    getCatalogPeople: actions.getCatalogPeople
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PeopleCatalog));

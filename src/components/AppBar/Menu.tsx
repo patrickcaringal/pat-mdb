@@ -35,7 +35,6 @@ export interface MenuProps extends RouteComponentProps {
 
 const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...rest }) => {
     const classes = useStyles({ menuSelected: location.pathname.includes(`/${value}/`) });
-    console.log(location.pathname);
 
     const [isMenuItemsOpen, setIsMenuItemsOpen] = useState<boolean>(false);
     const [isPointerOnMenuItems, setIsPointerOnMenuItems] = useState<boolean>(false);

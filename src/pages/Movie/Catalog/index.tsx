@@ -48,9 +48,9 @@ interface IMatchParams {
     id: string;
 }
 
-interface IMovieProps extends IStateToProps, IDispatchToProps, RouteComponentProps<IMatchParams> {}
+interface IOwnProps extends IStateToProps, IDispatchToProps, RouteComponentProps<IMatchParams> {}
 
-const Catalog: React.FC<IMovieProps> = ({ getCatalogMovies, location, match }) => {
+const Catalog: React.FC<IOwnProps> = ({ getCatalogMovies, location, match }) => {
     const { id: movieCategory } = match.params;
     const currentQuery = location.search;
 

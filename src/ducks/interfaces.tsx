@@ -24,6 +24,20 @@ export interface ITVShowCatalog {
     tvShows: IMedia[];
 }
 
+export interface IPerson {
+    id: string;
+    name: string;
+    known_for: string[];
+    poster: string;
+}
+
+export interface IPeopleCatalog {
+    page: boolean;
+    total_pages: boolean;
+    total_results: boolean;
+    results: IPerson[];
+}
+
 // Action
 export interface IGetPopularMedias {
     type: typeof constants.GET_POPULAR_MOVIES;
@@ -101,12 +115,32 @@ export interface IGetCatalogTVShowsFailed {
     payload: string;
 }
 
+export interface IGetCatalogPeoplePayload {
+    query?: string;
+}
+
+export interface IGetCatalogPeople {
+    type: typeof constants.GET_CATALOG_PEOPLE;
+    payload: IGetCatalogPeoplePayload;
+}
+
+export interface IGetCatalogPeopleSucceed {
+    type: typeof constants.GET_CATALOG_PEOPLE_SUCCEED;
+    payload: IPeopleCatalog;
+}
+
+export interface IGetCatalogPeopleFailed {
+    type: typeof constants.GET_CATALOG_PEOPLE_FAILED;
+    payload: string;
+}
+
 export type TState = {
     movies: string[];
     popularMedias: IMedia[];
     trendingMedias: IMedia[];
     catalogMovies: IMovieCatalog;
     catalogTVShows: ITVShowCatalog;
+    catalogPeople: IPeopleCatalog;
     // UI
     loaders: { [key: string]: boolean };
 };
@@ -123,4 +157,7 @@ export type TAction =
     | IGetCatalogMoviesFailed
     | IGetCatalogTVShows
     | IGetCatalogTVShowsSucceed
-    | IGetCatalogTVShowsFailed;
+    | IGetCatalogTVShowsFailed
+    | IGetCatalogPeople
+    | IGetCatalogPeopleSucceed
+    | IGetCatalogPeopleFailed;

@@ -7,6 +7,7 @@ export const initialState: interfaces.TState = {
     trendingMedias: [] as interfaces.IMedia[],
     catalogMovies: {} as interfaces.IMovieCatalog,
     catalogTVShows: {} as interfaces.ITVShowCatalog,
+    catalogPeople: {} as interfaces.IPeopleCatalog,
     // UI
     loaders: {}
 };
@@ -137,6 +138,38 @@ const reducer = (
             return {
                 ...state,
                 catalogTVShows: {} as interfaces.ITVShowCatalog,
+                loaders: {
+                    ...state.loaders,
+                    isCatalogLoading: false
+                }
+            };
+        }
+
+        case constants.GET_CATALOG_PEOPLE: {
+            return {
+                ...state,
+                loaders: {
+                    ...state.loaders,
+                    isCatalogLoading: true
+                }
+            };
+        }
+
+        case constants.GET_CATALOG_PEOPLE_SUCCEED: {
+            return {
+                ...state,
+                catalogPeople: action.payload,
+                loaders: {
+                    ...state.loaders,
+                    isCatalogLoading: false
+                }
+            };
+        }
+
+        case constants.GET_CATALOG_PEOPLE_FAILED: {
+            return {
+                ...state,
+                catalogPeople: {} as interfaces.IPeopleCatalog,
                 loaders: {
                     ...state.loaders,
                     isCatalogLoading: false

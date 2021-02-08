@@ -73,3 +73,22 @@ export const getCatalogTVShowsFailed = (payload: string): interfaces.IGetCatalog
     type: constants.GET_CATALOG_TV_SHOWS_FAILED,
     payload
 });
+
+export const getCatalogPeople = (
+    payload: interfaces.IGetCatalogPeoplePayload
+): interfaces.IGetCatalogPeople => ({
+    type: constants.GET_CATALOG_PEOPLE,
+    payload
+});
+
+export const getCatalogPeopleSucceed = (
+    payload: interfaces.IPeopleCatalog
+): interfaces.IGetCatalogPeopleSucceed => ({
+    type: constants.GET_CATALOG_PEOPLE_SUCCEED,
+    payload
+});
+
+export const getCatalogPeopleFailed = (payload: string): interfaces.IGetCatalogPeopleFailed => ({
+    type: constants.GET_CATALOG_PEOPLE_FAILED,
+    payload
+});

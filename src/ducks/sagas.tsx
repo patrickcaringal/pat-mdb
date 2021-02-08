@@ -62,9 +62,28 @@ function* getCatalogTVShows({ payload }: interfaces.IGetCatalogTVShows) {
     }
 }
 
+function* getCatalogPeople({ payload }: interfaces.IGetCatalogPeople) {
+    try {
+        const queryString = getQueryString((payload as unknown) as { [key: string]: string });
+
+        console.log('getCatalogPeople', queryString);
+        const { data }: { data: interfaces.IPeopleCatalog } = yield call(
+            http.get,
+            `people/discover?${queryString}`
+        );
+
+        yield delay(500);
+        yield put(actions.getCatalogPeopleSucceed(data));
+    } catch (error) {
+        console.log(error);
+        yield put(actions.getCatalogPeopleFailed('Error'));
+    }
+}
+
 export default function* rootSaga() {
     yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMedias)]);
     yield all([yield takeLatest(constants.GET_TRENDING_MEDIAS, getTrendingMedias)]);
     yield all([yield takeLatest(constants.GET_CATALOG_MOVIES, getCatalogMovies)]);
     yield all([yield takeLatest(constants.GET_CATALOG_TV_SHOWS, getCatalogTVShows)]);
+    yield all([yield takeLatest(constants.GET_CATALOG_PEOPLE, getCatalogPeople)]);
 }
