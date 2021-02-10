@@ -11,14 +11,14 @@ export interface IMedia {
 }
 
 export interface IMovieCatalog {
-    page: boolean;
+    page: number;
     total_pages: boolean;
     total_results: boolean;
     movies: IMedia[];
 }
 
 export interface ITVShowCatalog {
-    page: boolean;
+    page: number;
     total_pages: boolean;
     total_results: boolean;
     tvShows: IMedia[];
@@ -32,7 +32,7 @@ export interface IPerson {
 }
 
 export interface IPeopleCatalog {
-    page: boolean;
+    page: number;
     total_pages: boolean;
     total_results: boolean;
     results: IPerson[];
@@ -117,6 +117,7 @@ export interface IGetCatalogTVShowsFailed {
 
 export interface IGetCatalogPeoplePayload {
     query?: string;
+    page?: number;
 }
 
 export interface IGetCatalogPeople {

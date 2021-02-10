@@ -19,7 +19,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 
+import Pagination from '@material-ui/lab/Pagination';
+
 import { actions, interfaces } from '../../../ducks';
+import { getQueryString } from '../../../utils/http';
 
 const useStyles = makeStyles({
     searchForm: {
@@ -69,17 +72,27 @@ const PeopleCatalog: React.FC<IOwnProps> = ({
     history
 }) => {
     const classes = useStyles();
+
     const currentQuery = location.search;
 
+    const [selectedPage, setSelectedPage] = useState<number>(1);
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     const { results: people = [], total_pages } = catalogPeople;
+    const paginationPages = (total_pages as unknown) as number;
 
     useEffect(() => {
-        const { query = '' } = QSParse(location.search);
+        const { query = '', page = 1 } = QSParse(currentQuery);
 
         setSearchQuery(query as string);
-        getCatalogPeople({ query: query as string });
+        setSelectedPage(Number(page as number));
+
+        const payload = {
+            query: query as string,
+            page: Number(page as number)
+        } as interfaces.IGetCatalogPeoplePayload;
+
+        getCatalogPeople(payload);
     }, [currentQuery, getCatalogPeople]);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -88,6 +101,19 @@ const PeopleCatalog: React.FC<IOwnProps> = ({
         history.push({
             pathname: '/people/popular',
             search: `?query=${searchQuery}`
+        });
+    };
+
+    const handlePaginationChange = (page: number) => {
+        const currentQueryObj = QSParse(currentQuery);
+        delete currentQueryObj.page;
+
+        const query = getQueryString(currentQueryObj as { [key: string]: string });
+        const newQuery = query ? `?${query}&page=${page}` : `?page=${page}`;
+
+        history.push({
+            pathname: location.pathname,
+            search: newQuery
         });
     };
 
@@ -133,7 +159,7 @@ const PeopleCatalog: React.FC<IOwnProps> = ({
                         const movies = known_for.join(', ');
 
                         return (
-                            <Card className={classes.cardCont}>
+                            <Card key={person.id} className={classes.cardCont}>
                                 <CardMedia
                                     className={classes.cardImg}
                                     image={poster}
@@ -154,6 +180,23 @@ const PeopleCatalog: React.FC<IOwnProps> = ({
                     <div className={classes.cardCont} />
                     <div className={classes.cardCont} />
                 </Box>
+
+                {paginationPages > 1 && (
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Pagination
+                            count={paginationPages}
+                            page={selectedPage}
+                            variant="outlined"
+                            shape="rounded"
+                            size="large"
+                            // disabled={isCatalogLoading}
+                            onChange={(event: object, page: number) => {
+                                window.scrollTo(0, 0);
+                                handlePaginationChange(page);
+                            }}
+                        />
+                    </Box>
+                )}
             </Container>
         </Box>
     );
