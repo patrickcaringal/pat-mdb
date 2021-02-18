@@ -20,6 +20,7 @@ const reducer = (
         case constants.GET_POPULAR_MOVIES: {
             return {
                 ...state,
+                popularMedias: [] as interfaces.IMedia[],
                 loaders: {
                     ...state.loaders,
                     isPopularLoading: true
