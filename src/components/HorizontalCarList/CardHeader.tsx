@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Toggle from './Toggle';
+import Toggle from '../Toggle';
 
 interface IOwnProps {
     title: string;
@@ -16,7 +16,7 @@ interface IOwnProps {
 const useStyles = makeStyles((theme) => ({}));
 
 const Header: React.FC<IOwnProps> = ({ title, buttons, selected, onToggleChange }) => {
-    const classes = useStyles();
+    // const classes = useStyles();
 
     return (
         <>

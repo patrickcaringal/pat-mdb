@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import { actions, interfaces, types } from '../../ducks';
 
 import Card, { CardSkeleton } from './Card';
+import { CardList, CardHeader, H2x } from '../../components/HorizontalCarList';
 import HeaderComponent from './HeaderComponent';
 
 interface ICard {
@@ -47,17 +48,6 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getPopularMedias, h
         getPopularMedias(mediaType as types.media);
     }, [mediaType]);
 
-    const HeaderRender = useMemo(
-        () => (
-            <HeaderComponent
-                buttons={toggleButtons}
-                selected={mediaType}
-                onToggleChange={onMediaTypeChange}
-            />
-        ),
-        [mediaType]
-    );
-
     const mappedPopularMedia = useMemo(
         () =>
             data.map((i: interfaces.IMedia) => {
@@ -73,36 +63,56 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getPopularMedias, h
     );
 
     const handleCardClick = (id: string) => {
-        console.log('handleCardClick');
-        // history.push(`movie/${id}`);
+        history.push(`movie/${id}`);
     };
 
     return (
-        <Box display="flex" p={3}>
-            <Container disableGutters maxWidth="lg">
-                <Box display="flex" py={1}>
-                    <HeaderComponent
+        <>
+            <Box display="flex" p={3}>
+                <CardList items={mappedPopularMedia}>
+                    <CardHeader
+                        title="Popular"
                         buttons={toggleButtons}
                         selected={mediaType}
                         onToggleChange={onMediaTypeChange}
                     />
-                </Box>
-                <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                    {!isLoading && mappedPopularMedia.length
-                        ? mappedPopularMedia.map((i: ICard) => {
-                              const { id, ...rest } = i;
-                              return (
-                                  <Card
-                                      key={id}
-                                      {...rest}
-                                      //   onClick={() => onCardClick(`${id}`)}
-                                  />
-                              );
-                          })
-                        : [...Array(10)].map(() => <CardSkeleton />)}
-                </Box>
-            </Container>
-        </Box>
+                    <H2x />
+                </CardList>
+            </Box>
+
+            {/* <Box display="flex" p={3}>
+                <Container disableGutters maxWidth="lg">
+                    <Box display="flex" py={1}>
+                        <HeaderComponent
+                            title="Popular"
+                            buttons={toggleButtons}
+                            selected={mediaType}
+                            onToggleChange={onMediaTypeChange}
+                        />
+                    </Box>
+
+                    <Box
+                        display="flex"
+                        style={{ overflow: 'auto', border: '1px solid red' }}
+                        pt={1}
+                        pb={2}
+                    >
+                        {!isLoading && mappedPopularMedia.length
+                            ? mappedPopularMedia.map((i: ICard) => {
+                                  const { id, ...rest } = i;
+                                  return (
+                                      <Card
+                                          key={id}
+                                          {...rest}
+                                          onClick={() => handleCardClick(`${id}`)}
+                                      />
+                                  );
+                              })
+                            : [...Array(10)].map(() => <CardSkeleton />)}
+                    </Box>
+                </Container>
+            </Box> */}
+        </>
     );
 };
 
