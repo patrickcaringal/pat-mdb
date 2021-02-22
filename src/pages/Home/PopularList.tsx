@@ -3,13 +3,11 @@ import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
 
 import { actions, interfaces, types } from '../../ducks';
 
-import Card, { CardSkeleton } from './Card';
-import { CardList, CardHeader, H2x } from '../../components/HorizontalCarList';
-import HeaderComponent from './HeaderComponent';
+import { Card } from '../../components/Card';
+import { CardList, CardHeader, CardItems } from '../../components/HorizontalCarList';
 
 interface ICard {
     id: string;
@@ -62,6 +60,14 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getPopularMedias, h
         [data]
     );
 
+    const itemRender = useCallback(
+        (item: ICard) => {
+            const { id, ...rest } = item;
+            return <Card {...rest} onClick={() => {}} />;
+        },
+        [data]
+    );
+
     const handleCardClick = (id: string) => {
         history.push(`movie/${id}`);
     };
@@ -69,14 +75,14 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getPopularMedias, h
     return (
         <>
             <Box display="flex" p={3}>
-                <CardList items={mappedPopularMedia}>
+                <CardList<ICard> items={mappedPopularMedia}>
                     <CardHeader
                         title="Popular"
                         buttons={toggleButtons}
                         selected={mediaType}
                         onToggleChange={onMediaTypeChange}
                     />
-                    <H2x />
+                    <CardItems itemRender={itemRender} />
                 </CardList>
             </Box>
 

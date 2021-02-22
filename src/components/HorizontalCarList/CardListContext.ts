@@ -1,7 +1,6 @@
 import React, { createContext } from 'react';
-import { ICardItem } from './interfaces';
 
-const ItemsContext = createContext<ICardItem[]>([]);
+const ItemsContext = createContext<any>(null);
 
 export const ItemsProvider = ItemsContext.Provider;
 

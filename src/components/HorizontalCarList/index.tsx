@@ -1,5 +1,5 @@
 import CardList from './CardList';
 import CardHeader from './CardHeader';
-import H2x from './h2x';
+import CardItems from './CardItems';
 
-export { CardList, CardHeader, H2x };
+export { CardList, CardHeader, CardItems };
