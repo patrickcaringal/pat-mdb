@@ -2,14 +2,14 @@ import React, { ReactNode, useState, useEffect, useMemo, useCallback } from 'rea
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 
-import { ItemsProvider } from './CardListContext';
+import { ItemsProvider, LoaderProvider } from './CardListContext';
 
 import CardHeader from './CardHeader';
 import CardItems from './CardItems';
 
 interface IOwnProps<T> {
     items: T[];
-    // isLoading: boolean;
+    isLoading?: boolean;
     children: ReactNode;
 }
 
@@ -29,24 +29,28 @@ interface IOwnProps<T> {
 //     );
 // };
 
-function CardList<T>({ items, children }: IOwnProps<T>) {
+function CardList<T>({ items, isLoading, children }: IOwnProps<T>) {
+    const renders = React.useRef(0);
     return (
         <ItemsProvider value={items}>
-            <Container disableGutters maxWidth="lg">
-                <Box display="flex" flexDirection="column" flex="1">
-                    <Box display="flex" py={1}>
-                        {React.Children.toArray(children).find(
-                            (node: any) => node.type === CardHeader
-                        )}
-                    </Box>
+            <LoaderProvider value={isLoading}>
+                {renders.current++}
+                <Container disableGutters maxWidth="lg">
+                    <Box display="flex" flexDirection="column" flex="1">
+                        <Box display="flex" py={1}>
+                            {React.Children.toArray(children).find(
+                                (node: any) => node.type === CardHeader
+                            )}
+                        </Box>
 
-                    <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
-                        {React.Children.toArray(children).find(
-                            (node: any) => node.type === CardItems
-                        )}
+                        <Box display="flex" style={{ overflow: 'auto' }} pt={1} pb={2}>
+                            {React.Children.toArray(children).find(
+                                (node: any) => node.type === CardItems
+                            )}
+                        </Box>
                     </Box>
-                </Box>
-            </Container>
+                </Container>
+            </LoaderProvider>
         </ItemsProvider>
     );
 }
