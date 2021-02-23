@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Card from '@material-ui/core/Card';
+import MUICard from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -31,16 +30,14 @@ const useStyles = makeStyles({
     focusHighlight: {}
 });
 
-interface IStateToProps {
+interface IOwnProps {
     image: string;
     title: string;
     subtitle: string;
     onClick?: () => void;
 }
 
-interface MovieCardProps extends IStateToProps, RouteComponentProps {}
-
-const MovieCard: React.FC<MovieCardProps> = ({ image, title, subtitle, onClick = () => {} }) => {
+const Card: React.FC<IOwnProps> = ({ image, title, subtitle, onClick = () => {} }) => {
     const [isShown, setIsShown] = useState<boolean>(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
 
@@ -50,7 +47,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ image, title, subtitle, onClick =
     const [IOref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
 
     return (
-        <Card
+        <MUICard
             className={classes.cardCont}
             elevation={0}
             square
@@ -82,35 +79,8 @@ const MovieCard: React.FC<MovieCardProps> = ({ image, title, subtitle, onClick =
                     </Typography>
                 </CardContent>
             </CardActionArea>
-        </Card>
+        </MUICard>
     );
 };
 
-export default withRouter(MovieCard);
-
-export const CardSkeleton: React.FC = () => {
-    const classes = useStyles({ isHovered: false });
-
-    return (
-        <Card className={classes.cardCont} elevation={0} square>
-            <CardActionArea disableRipple disableTouchRipple>
-                <Skeleton
-                    variant="rect"
-                    animation="pulse"
-                    height={225}
-                    style={{ borderRadius: '8px' }}
-                />
-
-                <CardContent style={{ padding: '8px 0 0' }}>
-                    <Typography style={{ fontWeight: 600 }}>
-                        <Skeleton variant="text" />
-                    </Typography>
-                    <Typography variant="body2">
-                        <Skeleton variant="text" />
-                        <Skeleton variant="text" />
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Card>
-    );
-};
+export default Card;
