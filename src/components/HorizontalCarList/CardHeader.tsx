@@ -13,16 +13,15 @@ interface IOwnProps {
     onToggleChange: (value: string) => void;
 }
 
-const useStyles = makeStyles((theme) => ({}));
+// const useStyles = makeStyles((theme) => ({}));
 
 const Header: React.FC<IOwnProps> = ({ title, buttons, selected, onToggleChange }) => {
     // const classes = useStyles();
-
-    const renders = React.useRef(0);
+    // const renders = React.useRef(0);
 
     return (
         <>
-            {renders.current++}
+            {/* {renders.current++} */}
             <Typography variant="h5" style={{ fontWeight: 600, marginRight: 16 }}>
                 {title}
             </Typography>

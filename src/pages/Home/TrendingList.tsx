@@ -22,7 +22,7 @@ interface IStateToProps {
 }
 
 interface IDispatchToProps {
-    getMedias: (media: types.media) => interfaces.IGetPopularMedias;
+    getMedias: (media: types.media) => interfaces.IGetTrendingMedias;
 }
 
 interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
@@ -78,7 +78,7 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
         <Box display="flex" p={3}>
             <CardList<ICard> items={mappedPopularMedia} isLoading={isLoading}>
                 <CardHeader
-                    title="Popular"
+                    title="Trending"
                     buttons={toggleButtons}
                     selected={mediaType}
                     onToggleChange={onMediaTypeChange}
@@ -90,12 +90,12 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
-    data: state.popularMedias,
-    isLoading: state.loaders.isPopularLoading
+    data: state.trendingMedias,
+    isLoading: state.loaders.isTrendingLoading
 });
 
 const mapDispatchToProps = {
-    getMedias: actions.getPopularMedias
+    getMedias: actions.getTrendingMedias
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PopularList));

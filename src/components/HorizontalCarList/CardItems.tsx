@@ -9,12 +9,11 @@ interface IOwnProps {
 const CardItems: React.FC<IOwnProps> = ({ itemRender, skeletonRender = () => null }) => {
     const items = useContext(ItemsContext);
     const isLoading = useContext(LoaderContext);
-
-    const renders = React.useRef(0);
+    // const renders = React.useRef(0);
 
     return (
         <>
-            {renders.current++}
+            {/* {renders.current++} */}
             {isLoading ? skeletonRender() : items.map((item: any) => itemRender(item))}
         </>
     );
