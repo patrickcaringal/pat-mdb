@@ -38,14 +38,6 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
         []
     );
 
-    const onMediaTypeChange = useCallback((value: string) => {
-        setMediaType(value);
-    }, []);
-
-    useEffect(() => {
-        getMedias(mediaType as types.media);
-    }, [mediaType]);
-
     const mappedPopularMedia = useMemo(
         () =>
             data.map((i: interfaces.IMedia) => {
@@ -60,19 +52,29 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
         [data]
     );
 
+    // toggle button change
+    const onMediaTypeChange = useCallback((value: string) => {
+        setMediaType(value);
+    }, []);
+
+    useEffect(() => {
+        getMedias(mediaType as types.media);
+    }, [mediaType]);
+
+    // rendering
+    const handleCardClick = (id: string) => {
+        history.push(`movie/${id}`);
+    };
+
     const itemRender = useCallback(
         (item: ICard) => {
             const { id, ...rest } = item;
-            return <Card {...rest} onClick={() => {}} />;
+            return <Card {...rest} onClick={() => handleCardClick(id)} />;
         },
         [data, isLoading]
     );
 
     const skeletonRender = useCallback(() => <MultiCardSkeleton number={20} />, []);
-
-    const handleCardClick = (id: string) => {
-        history.push(`movie/${id}`);
-    };
 
     return (
         <Box display="flex" p={3}>

@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 interface IOwnProps extends RouteComponentProps {}
 
 const Banner: React.FC<IOwnProps> = ({ history }) => {
-    const renders = React.useRef(0);
+    // const renders = React.useRef(0);
 
     const classes = useStyles();
     const [searchQuery, setSearchQuery] = useState<string>('');
