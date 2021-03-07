@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import MomentUtils from '@date-io/moment';
@@ -16,6 +16,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
+
+import { Sidebar as FilterSidebar } from '../../../components/Sidebar';
 
 import { interfaces } from '../../../ducks';
 import { getQueryString } from '../../../utils/http';
@@ -53,7 +55,7 @@ const genres = {
     '10770': 'TV Movie'
 };
 interface IStateToProps {
-    loaders: { [key: string]: boolean };
+    // loaders: { [key: string]: boolean };
 }
 
 interface IDispatchToProps {}
@@ -66,208 +68,124 @@ interface ISidebarProps
     extends IStateToProps,
         IDispatchToProps,
         RouteComponentProps<IMatchParams> {}
+// loaders,
+const Sidebar: React.FC<ISidebarProps> = React.memo(
+    ({ history, location }) => {
+        const renders = React.useRef(0);
+        const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
+        const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+        const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
+        const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
+        const [sidebarQuery, setSidebarQuery] = useState<string>('');
 
-const Sidebar: React.FC<ISidebarProps> = ({ loaders, history, location, match }) => {
-    const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
-    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-    const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
-    const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
-    const [sidebarQuery, setSidebarQuery] = useState<string>('');
+        const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
 
-    const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
+        const currentQuery = location.search;
+        // const { isCatalogLoading } = loaders;
 
-    const currentQuery = location.search;
-    const { isCatalogLoading } = loaders;
+        const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
 
-    const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
+        // const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        //     setSelectedSort(event.target.value as string);
+        // };
 
-    const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedSort(event.target.value as string);
-    };
+        const handleSortChange = useCallback((event: React.ChangeEvent<{ value: unknown }>) => {
+            setSelectedSort(event.target.value as string);
+        }, []);
 
-    const handleGenreChipClick = (genre: string) => {
-        const selected = !isGenreSelected(genre)
-            ? [...selectedGenres, genre]
-            : selectedGenres.filter((g) => g !== genre);
+        const handleGenreChipClick = (genre: string) => {
+            const selected = !isGenreSelected(genre)
+                ? [...selectedGenres, genre]
+                : selectedGenres.filter((g) => g !== genre);
 
-        setSelectedGenres(selected);
-    };
+            setSelectedGenres(selected);
+        };
 
-    const handleSearchClick = () => {
-        window.scrollTo(0, 0);
+        const handleSearchClick = () => {
+            window.scrollTo(0, 0);
 
-        // check if query changed
-        if (currentQuery === `?${sidebarQuery}`) return;
+            // check if query changed
+            if (currentQuery === `?${sidebarQuery}`) return;
 
-        setIsSearchClicked(true);
+            setIsSearchClicked(true);
 
-        history.push({
-            pathname: location.pathname,
-            search: sidebarQuery && `?${sidebarQuery}`
-        });
-    };
+            history.push({
+                pathname: location.pathname,
+                search: sidebarQuery && `?${sidebarQuery}`
+            });
+        };
 
-    // url query (sidebar & pagination) changes
-    useEffect(() => {
-        const { sort = 'popularity.desc', genres = '', from = null, to = null } = QSParse(
-            currentQuery
+        // url query (sidebar & pagination) changes
+        useEffect(() => {
+            const { sort = 'popularity.desc', genres = '', from = null, to = null } = QSParse(
+                currentQuery
+            );
+
+            setSelectedSort(sort as string);
+            setSelectedGenres((prevState) => {
+                prevState.concat((genres as string).split(',').filter((i) => i));
+                return prevState;
+            });
+            setReleaseStartDate(from);
+            setReleaseEndDate(to);
+        }, [currentQuery]);
+
+        // useEffect(() => {
+        //     console.log('history');
+        // }, [history]);
+
+        useEffect(() => {
+            console.log('location', location.search);
+        }, [location]);
+
+        // useEffect(() => {
+        //     console.log('selectedSort');
+        // }, [selectedSort]);
+
+        useEffect(() => {
+            console.log('selectedGenres', selectedGenres);
+        }, [selectedGenres]);
+
+        // useEffect(() => {
+        //     console.log('releaseStartDate');
+        // }, [releaseStartDate]);
+
+        // useEffect(() => {
+        //     console.log('releaseEndDate');
+        // }, [releaseStartDate]);
+
+        // sidebar changes
+        // useEffect(() => {
+        //     const sort = selectedSort !== 'popularity.desc' ? selectedSort : '';
+        //     const from = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
+        //     const to = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+        //     const genres = selectedGenres.join(',');
+
+        //     const query = getQueryString({ sort, genres, from, to });
+        //     setSidebarQuery(query);
+        // }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate]);
+
+        // search req loading done
+        // useEffect(() => {
+        //     if (!isCatalogLoading) setIsSearchClicked(false);
+        // }, [isCatalogLoading]);
+
+        return (
+            <>
+                {renders.current++}
+                <FilterSidebar />
+            </>
         );
-
-        setSelectedSort(sort as string);
-        setSelectedGenres((genres as string).split(',').filter((i) => i));
-        setReleaseStartDate(from);
-        setReleaseEndDate(to);
-    }, [currentQuery]);
-
-    // sidebar changes
-    useEffect(() => {
-        const sort = selectedSort !== 'popularity.desc' ? selectedSort : '';
-        const from = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
-        const to = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
-        const genres = selectedGenres.join(',');
-
-        const query = getQueryString({ sort, genres, from, to });
-        setSidebarQuery(query);
-    }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate]);
-
-    // search req loading done
-    useEffect(() => {
-        if (!isCatalogLoading) setIsSearchClicked(false);
-    }, [isCatalogLoading]);
-
-    return (
-        <>
-            <Box
-                display="flex"
-                flexDirection="column"
-                bgcolor="#fff"
-                boxShadow={1}
-                borderRadius={4}
-                border="1px solid rgba(0, 0, 0, 0.12)"
-            >
-                <Box display="flex" flexDirection="column" p={2}>
-                    <Typography variant="h6">Filter & Sort</Typography>
-                </Box>
-
-                <Divider />
-
-                <Box display="flex" flexDirection="column" p={2}>
-                    <FormControl variant="filled">
-                        <InputLabel id="sort-select">Sort result by</InputLabel>
-                        <Select
-                            labelId="sort-select"
-                            id="demo-simple-select"
-                            value={selectedSort}
-                            onChange={handleSortChange}
-                            disableUnderline
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: 'bottom',
-                                    horizontal: 'left'
-                                },
-                                transformOrigin: {
-                                    vertical: 'top',
-                                    horizontal: 'left'
-                                },
-                                getContentAnchorEl: null
-                            }}
-                        >
-                            {Object.entries(sortOptions).map(([key, value]) => (
-                                <MenuItem value={key} key={key}>
-                                    {value}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Box>
-
-                <Divider />
-
-                <Box display="flex" flexDirection="column" p={2}>
-                    <Typography style={{ marginBottom: 8 }}>Genres</Typography>
-                    <Box display="flex" flexWrap="wrap">
-                        {Object.entries(genres).map(([key, value]) => (
-                            <Chip
-                                key={key}
-                                label={value}
-                                onClick={() => handleGenreChipClick(value)}
-                                variant={isGenreSelected(value) ? 'default' : 'outlined'}
-                                size="small"
-                                style={{ margin: 4 }}
-                            />
-                        ))}
-                    </Box>
-                </Box>
-
-                <Divider />
-
-                <Box display="flex" flexDirection="column" p={2}>
-                    <Typography>Release date</Typography>
-
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <KeyboardDatePicker
-                            id="start-release-date"
-                            inputVariant="filled"
-                            margin="normal"
-                            label="From"
-                            format="MM/DD/yyyy"
-                            value={releaseStartDate}
-                            onChange={(date: any) => {
-                                setReleaseStartDate(
-                                    date ? moment(date).format('YYYY-MM-DD') : null
-                                );
-                            }}
-                            KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                            InputProps={{ disableUnderline: true }}
-                            maxDate={
-                                releaseEndDate ? new Date(releaseEndDate) : new Date('2100-01-01')
-                            }
-                        />
-                        <KeyboardDatePicker
-                            id="end-release-date"
-                            inputVariant="filled"
-                            margin="normal"
-                            label="To"
-                            format="MM/DD/yyyy"
-                            value={releaseEndDate}
-                            onChange={(date: any) => {
-                                setReleaseEndDate(date ? moment(date).format('YYYY-MM-DD') : null);
-                            }}
-                            KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                            InputProps={{ disableUnderline: true }}
-                            minDate={
-                                releaseStartDate
-                                    ? new Date(releaseStartDate)
-                                    : new Date('1900-01-01')
-                            }
-                        />
-                    </MuiPickersUtilsProvider>
-                </Box>
-
-                {/* <Divider />
-                <Box display="flex" flexDirection="column" p={2}>
-                    <KeywordsAutocomplete />
-                </Box> */}
-
-                <Divider />
-            </Box>
-
-            <Box display="flex" flexDirection="column" mt={3}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSearchClick}
-                    disabled={isCatalogLoading}
-                >
-                    {!isSearchClicked ? 'Search' : <CircularProgress size={20} thickness={5} />}
-                </Button>
-            </Box>
-        </>
-    );
-};
+    },
+    (prevProps, nextProps) => {
+        return prevProps.location.search === nextProps.location.search;
+        // if (prevProps.location.search === nextProps.location.search) return true;
+        // return false;
+    }
+);
 
 const mapStateToProps = (state: interfaces.TState) => ({
-    loaders: state.loaders
+    // loaders: state.loaders
 });
 
 const mapDispatchToProps = {};

@@ -51,6 +51,8 @@ interface IMatchParams {
 interface IOwnProps extends IStateToProps, IDispatchToProps, RouteComponentProps<IMatchParams> {}
 
 const Catalog: React.FC<IOwnProps> = ({ getCatalogMovies, location, match }) => {
+    const renders = React.useRef(0);
+
     const { id: movieCategory } = match.params;
     const currentQuery = location.search;
 
@@ -90,16 +92,13 @@ const Catalog: React.FC<IOwnProps> = ({ getCatalogMovies, location, match }) => 
                     variant="h5"
                     style={{ fontWeight: 600, marginBottom: 16, textTransform: 'capitalize' }}
                 >
-                    {convertStringChars(movieCategory, '-', ' ')}
+                    {convertStringChars(movieCategory, '-', ' ')} {renders.current++}
                 </Typography>
 
                 <Grid container>
-                    {/* Sort & Filter sidebar */}
                     <Grid item xs={3}>
                         <Sidebar />
                     </Grid>
-
-                    {/* Catalog */}
                     <Grid item xs={9}>
                         <MovieCards />
                     </Grid>
