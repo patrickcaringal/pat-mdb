@@ -15,9 +15,13 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 
-import { Sidebar as FilterSidebar } from '../../../components/Sidebar';
+import {
+    Sidebar as FilterSidebar,
+    SidebarHeader,
+    SidebarDropdown
+} from '../../../components/Sidebar';
 
 import { interfaces } from '../../../ducks';
 import { getQueryString } from '../../../utils/http';
@@ -173,7 +177,15 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
         return (
             <>
                 {renders.current++}
-                <FilterSidebar />
+                <FilterSidebar>
+                    <SidebarHeader title="Filter & Sort" />
+                    <SidebarDropdown
+                        label="Sort result by"
+                        value={selectedSort}
+                        onChange={handleSortChange}
+                        options={sortOptions}
+                    />
+                </FilterSidebar>
             </>
         );
     },

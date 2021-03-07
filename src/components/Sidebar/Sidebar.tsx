@@ -17,7 +17,7 @@ function Sidebar({ children }: IOwnProps) {
             borderRadius={4}
             border="1px solid rgba(0, 0, 0, 0.12)"
         >
-            Sidebar
+            {children}
         </Box>
     );
 }
