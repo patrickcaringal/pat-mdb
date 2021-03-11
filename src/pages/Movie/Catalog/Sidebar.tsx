@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import MomentUtils from '@date-io/moment';
@@ -15,12 +15,14 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-// import Typography from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';
 
 import {
     Sidebar as FilterSidebar,
     SidebarHeader,
-    SidebarDropdown
+    SidebarDropdown,
+    SidebarChips,
+    SidebarChip
 } from '../../../components/Sidebar';
 
 import { interfaces } from '../../../ducks';
@@ -77,7 +79,8 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
     ({ history, location }) => {
         const renders = React.useRef(0);
         const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
-        const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+        // const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+        const [selectedGenres, setSelectedGenres] = useState<{ [key: string]: boolean }>({});
         const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
         const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
         const [sidebarQuery, setSidebarQuery] = useState<string>('');
@@ -87,7 +90,7 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
         const currentQuery = location.search;
         // const { isCatalogLoading } = loaders;
 
-        const isGenreSelected = (genre: string) => selectedGenres.includes(genre);
+        // const isGenreSelected = useMemo((genre: string) => selectedGenres.includes(genre), []);
 
         // const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         //     setSelectedSort(event.target.value as string);
@@ -98,11 +101,17 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
         }, []);
 
         const handleGenreChipClick = (genre: string) => {
-            const selected = !isGenreSelected(genre)
-                ? [...selectedGenres, genre]
-                : selectedGenres.filter((g) => g !== genre);
+            setSelectedGenres((prevState) => {
+                if (prevState[genre]) {
+                    delete prevState[genre];
+                    return { ...prevState };
+                }
 
-            setSelectedGenres(selected);
+                return {
+                    ...prevState,
+                    [genre]: true
+                };
+            });
         };
 
         const handleSearchClick = () => {
@@ -126,37 +135,13 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             );
 
             setSelectedSort(sort as string);
-            setSelectedGenres((prevState) => {
-                prevState.concat((genres as string).split(',').filter((i) => i));
-                return prevState;
-            });
+            // setSelectedGenres((prevState) => {
+            //     prevState.concat((genres as string).split(',').filter((i) => i));
+            //     return prevState;
+            // });
             setReleaseStartDate(from);
             setReleaseEndDate(to);
         }, [currentQuery]);
-
-        // useEffect(() => {
-        //     console.log('history');
-        // }, [history]);
-
-        useEffect(() => {
-            console.log('location', location.search);
-        }, [location]);
-
-        // useEffect(() => {
-        //     console.log('selectedSort');
-        // }, [selectedSort]);
-
-        useEffect(() => {
-            console.log('selectedGenres', selectedGenres);
-        }, [selectedGenres]);
-
-        // useEffect(() => {
-        //     console.log('releaseStartDate');
-        // }, [releaseStartDate]);
-
-        // useEffect(() => {
-        //     console.log('releaseEndDate');
-        // }, [releaseStartDate]);
 
         // sidebar changes
         // useEffect(() => {
@@ -174,6 +159,21 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
         //     if (!isCatalogLoading) setIsSearchClicked(false);
         // }, [isCatalogLoading]);
 
+        const chipRender = useCallback(
+            (item) => {
+                // console.log(selectedGenres);
+                const [key, value] = item;
+                return (
+                    <SidebarChip
+                        label={value}
+                        onClick={() => handleGenreChipClick(value)}
+                        isSelected={selectedGenres[value]}
+                    />
+                );
+            },
+            [selectedGenres]
+        );
+
         return (
             <>
                 {renders.current++}
@@ -185,14 +185,15 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
                         onChange={handleSortChange}
                         options={sortOptions}
                     />
+                    <SidebarChips label="Genres" options={genres} chipRender={chipRender} />
+
+                    <Divider />
                 </FilterSidebar>
             </>
         );
     },
     (prevProps, nextProps) => {
         return prevProps.location.search === nextProps.location.search;
-        // if (prevProps.location.search === nextProps.location.search) return true;
-        // return false;
     }
 );
 
