@@ -19,23 +19,9 @@ const Chip: React.FC<IOwnProps> = React.memo(
     ({ isSelected, label, onClick }) => {
         const renders = React.useRef(0);
 
-        // React.useEffect(() => {
-        //     console.log('\n\nisSelected');
-        // }, [isSelected]);
-        // React.useEffect(() => {
-        //     console.log('onClick');
-        // }, [onClick]);
-        // React.useEffect(() => {
-        //     console.log('label');
-        // }, [label]);
-
-        // React.useEffect(() => {
-        //     console.log('isSelected');
-        // }, [isSelected]);
-
         return (
             <MUIChip
-                label={`${label} ${renders.current++}`}
+                label={label}
                 onClick={onClick}
                 variant={isSelected ? 'default' : 'outlined'}
                 size="small"
@@ -48,5 +34,4 @@ const Chip: React.FC<IOwnProps> = React.memo(
     }
 );
 
-// export default Chip;
 export default Chip;
