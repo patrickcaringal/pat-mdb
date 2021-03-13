@@ -6,11 +6,19 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 
 interface IOwnProps {
     value: any;
-    onChange: (date: any) => void;
+    onChange?: (date: any) => void;
 }
 
 const DatePicker: React.FC<IOwnProps> = ({ value, onChange }) => {
     const renders = React.useRef(0);
+
+    React.useEffect(() => {
+        console.log('onChange');
+    }, [onChange]);
+
+    React.useEffect(() => {
+        console.log('value');
+    }, [value]);
 
     return (
         <>
@@ -25,7 +33,7 @@ const DatePicker: React.FC<IOwnProps> = ({ value, onChange }) => {
                     value={value}
                     onChange={(date: any) => {
                         // setReleaseStartDate(date ? moment(date).format('YYYY-MM-DD') : null);
-                        onChange(date ? moment(date).format('YYYY-MM-DD') : null);
+                        // onChange(date ? moment(date).format('YYYY-MM-DD') : null);
                     }}
                     KeyboardButtonProps={{ 'aria-label': 'change date' }}
                     InputProps={{ disableUnderline: true }}
@@ -37,5 +45,5 @@ const DatePicker: React.FC<IOwnProps> = ({ value, onChange }) => {
     );
 };
 
-export default DatePicker;
-// export default React.memo(DatePicker);
+// export default DatePicker;
+export default React.memo(DatePicker);

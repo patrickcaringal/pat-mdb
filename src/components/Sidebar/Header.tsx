@@ -5,6 +5,7 @@ import Divider from '@material-ui/core/Divider';
 
 interface IOwnProps {
     title: string;
+    children?: React.ReactNode;
 }
 
 const SidebarHeader: React.FC<IOwnProps> = ({ title }) => {

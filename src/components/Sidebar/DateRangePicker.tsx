@@ -4,54 +4,32 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 interface IOwnProps {
-    label: string;
-    children: ReactNode;
+    label?: string;
+    children?: ReactNode;
 }
 
 const DateRangePicker: React.FC<IOwnProps> = ({ label, children }) => {
+    // function DateRangePicker({ label, children }: IOwnProps) {
     const renders = React.useRef(0);
+
+    React.useEffect(() => {
+        console.log('label');
+    }, [label]);
+
+    React.useEffect(() => {
+        console.log('children');
+        console.log(children);
+    }, [children]);
 
     return (
         <>
             <Box display="flex" flexDirection="column" p={2}>
-                <Typography>{label}</Typography>
+                <Typography>
+                    {label} {renders.current++}
+                </Typography>
 
+                {/* {React.useMemo(() => children, [])} */}
                 {children}
-                {/* <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <KeyboardDatePicker
-                        id="start-release-date"
-                        inputVariant="filled"
-                        margin="normal"
-                        label="From"
-                        format="MM/DD/yyyy"
-                        value={releaseStartDate}
-                        onChange={(date: any) => {
-                            setReleaseStartDate(date ? moment(date).format('YYYY-MM-DD') : null);
-                        }}
-                        KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                        InputProps={{ disableUnderline: true }}
-                        maxDate={releaseEndDate ? new Date(releaseEndDate) : new Date('2100-01-01')}
-                    />
-                </MuiPickersUtilsProvider>
-
-                <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <KeyboardDatePicker
-                        id="end-release-date"
-                        inputVariant="filled"
-                        margin="normal"
-                        label="To"
-                        format="MM/DD/yyyy"
-                        value={releaseEndDate}
-                        onChange={(date: any) => {
-                            setReleaseEndDate(date ? moment(date).format('YYYY-MM-DD') : null);
-                        }}
-                        KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                        InputProps={{ disableUnderline: true }}
-                        minDate={
-                            releaseStartDate ? new Date(releaseStartDate) : new Date('1900-01-01')
-                        }
-                    />
-                </MuiPickersUtilsProvider> */}
             </Box>
 
             <Divider />
@@ -59,5 +37,5 @@ const DateRangePicker: React.FC<IOwnProps> = ({ label, children }) => {
     );
 };
 
-export default DateRangePicker;
-// export default React.memo(DateRangePicker);
+// export default DateRangePicker;
+export default React.memo(DateRangePicker);

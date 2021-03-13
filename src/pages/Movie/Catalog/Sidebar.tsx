@@ -116,6 +116,20 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             });
         };
 
+        const handleStartDateChange = useCallback(
+            (date: any) => {
+                setReleaseStartDate(date);
+            },
+            [releaseStartDate]
+        );
+
+        const handleEndDateChange = useCallback(
+            (date: any) => {
+                setReleaseEndDate(date);
+            },
+            [releaseEndDate]
+        );
+
         const handleSearchClick = () => {
             window.scrollTo(0, 0);
 
@@ -177,24 +191,38 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             [selectedGenres]
         );
 
+        const testchildren = useMemo(() => {
+            return <SidebarDatePicker value={releaseStartDate} onChange={handleStartDateChange} />;
+        }, []);
+
         return (
             <>
                 {renders.current++}
+                <SidebarDateRangePicker>
+                    {testchildren}
+                    {/* dsaads */}
+                    {/* <SidebarDatePicker value={releaseStartDate} onChange={handleStartDateChange} /> */}
+                    {/* <SidebarDatePicker value={releaseEndDate} onChange={handleEndDateChange} /> */}
+                </SidebarDateRangePicker>
                 <FilterSidebar>
-                    <SidebarHeader title="Filter & Sort" />
+                    <SidebarHeader title="Filter & Sort">
+                        <span>asds</span>
+                    </SidebarHeader>
                     <SidebarDropdown
                         label="Sort result by"
                         value={selectedSort}
                         onChange={handleSortChange}
                         options={sortOptions}
                     />
-                    <SidebarChips label="Genres" options={genres} chipRender={chipRender} />
+                    {/* <SidebarChips label="Genres" options={genres} chipRender={chipRender} /> */}
 
-                    <SidebarDateRangePicker label="Release date">
-                        {/* <span>asd</span> */}
-                        {/* TODO: continue date picker */}
-                        {/* <SidebarDatePicker value={releaseStartDate} onChange={} /> */}
-                    </SidebarDateRangePicker>
+                    {/* <SidebarDateRangePicker label="Release date">
+                        <SidebarDatePicker
+                            value={releaseStartDate}
+                            onChange={handleStartDateChange}
+                        />
+                        <SidebarDatePicker value={releaseEndDate} onChange={handleEndDateChange} />
+                    </SidebarDateRangePicker> */}
                     {/*
                     label
                     startDate
