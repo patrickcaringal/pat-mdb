@@ -191,19 +191,18 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             [selectedGenres]
         );
 
-        const testchildren = useMemo(() => {
+        const memoizedStartDatePicker = useMemo(() => {
             return <SidebarDatePicker value={releaseStartDate} onChange={handleStartDateChange} />;
-        }, []);
+        }, [releaseStartDate]);
+
+        const memoizedEndDatePicker = useMemo(() => {
+            return <SidebarDatePicker value={releaseEndDate} onChange={handleEndDateChange} />;
+        }, [releaseEndDate]);
 
         return (
             <>
                 {renders.current++}
-                <SidebarDateRangePicker>
-                    {testchildren}
-                    {/* dsaads */}
-                    {/* <SidebarDatePicker value={releaseStartDate} onChange={handleStartDateChange} /> */}
-                    {/* <SidebarDatePicker value={releaseEndDate} onChange={handleEndDateChange} /> */}
-                </SidebarDateRangePicker>
+
                 <FilterSidebar>
                     <SidebarHeader title="Filter & Sort">
                         <span>asds</span>
@@ -214,15 +213,12 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
                         onChange={handleSortChange}
                         options={sortOptions}
                     />
-                    {/* <SidebarChips label="Genres" options={genres} chipRender={chipRender} /> */}
+                    <SidebarChips label="Genres" options={genres} chipRender={chipRender} />
 
-                    {/* <SidebarDateRangePicker label="Release date">
-                        <SidebarDatePicker
-                            value={releaseStartDate}
-                            onChange={handleStartDateChange}
-                        />
-                        <SidebarDatePicker value={releaseEndDate} onChange={handleEndDateChange} />
-                    </SidebarDateRangePicker> */}
+                    <SidebarDateRangePicker label="Release date">
+                        {memoizedStartDatePicker}
+                        {memoizedEndDatePicker}
+                    </SidebarDateRangePicker>
                     {/*
                     label
                     startDate

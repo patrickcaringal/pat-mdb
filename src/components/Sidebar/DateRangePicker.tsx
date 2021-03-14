@@ -4,22 +4,21 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 interface IOwnProps {
-    label?: string;
+    label: string;
     children?: ReactNode;
 }
 
 const DateRangePicker: React.FC<IOwnProps> = ({ label, children }) => {
-    // function DateRangePicker({ label, children }: IOwnProps) {
     const renders = React.useRef(0);
 
-    React.useEffect(() => {
-        console.log('label');
-    }, [label]);
+    // React.useEffect(() => {
+    //     console.log('label');
+    // }, [label]);
 
-    React.useEffect(() => {
-        console.log('children');
-        console.log(children);
-    }, [children]);
+    // React.useEffect(() => {
+    //     console.log('children');
+    //     console.log(children);
+    // }, [children]);
 
     return (
         <>
@@ -28,7 +27,6 @@ const DateRangePicker: React.FC<IOwnProps> = ({ label, children }) => {
                     {label} {renders.current++}
                 </Typography>
 
-                {/* {React.useMemo(() => children, [])} */}
                 {children}
             </Box>
 
