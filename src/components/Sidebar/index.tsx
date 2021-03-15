@@ -4,7 +4,6 @@ import SidebarDropdown from './Dropdown';
 import SidebarChips from './Chips';
 import SidebarChip from './Chip';
 import SidebarDateRangePicker from './DateRangePicker';
-import SidebarDatePicker from './DatePicker';
 
 export {
     Sidebar,
@@ -12,6 +11,5 @@ export {
     SidebarDropdown,
     SidebarChips,
     SidebarChip,
-    SidebarDateRangePicker,
-    SidebarDatePicker
+    SidebarDateRangePicker
 };

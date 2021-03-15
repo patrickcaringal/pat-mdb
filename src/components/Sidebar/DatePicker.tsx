@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import moment from 'moment';
 import MomentUtils from '@date-io/moment';
 
@@ -7,22 +7,15 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 interface IOwnProps {
     value: any;
     onChange: (date: any) => void;
+    maxDate?: any;
+    minDate?: any;
 }
 
-const DatePicker: React.FC<IOwnProps> = ({ value, onChange }) => {
+const DatePicker: React.FC<IOwnProps> = ({ value, onChange, maxDate, minDate }) => {
     const renders = React.useRef(0);
-
-    React.useEffect(() => {
-        console.log('onChange');
-    }, [onChange]);
-
-    React.useEffect(() => {
-        console.log('value');
-    }, [value]);
-
     return (
         <>
-            {renders.current++}
+            {/* {renders.current++} */}
             <MuiPickersUtilsProvider utils={MomentUtils}>
                 <KeyboardDatePicker
                     // id="start-release-date"
@@ -36,13 +29,12 @@ const DatePicker: React.FC<IOwnProps> = ({ value, onChange }) => {
                     }}
                     KeyboardButtonProps={{ 'aria-label': 'change date' }}
                     InputProps={{ disableUnderline: true }}
-                    maxDate={new Date('2100-01-01')}
-                    // maxDate={releaseEndDate ? new Date(releaseEndDate) : new Date('2100-01-01')}
+                    maxDate={maxDate ? new Date(maxDate) : new Date('2100-01-01')}
+                    minDate={minDate ? new Date(minDate) : new Date('1900-01-01')}
                 />
             </MuiPickersUtilsProvider>
         </>
     );
 };
 
-// export default DatePicker;
-export default React.memo(DatePicker);
+export default DatePicker;

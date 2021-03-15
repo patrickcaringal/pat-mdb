@@ -23,8 +23,7 @@ import {
     SidebarDropdown,
     SidebarChips,
     SidebarChip,
-    SidebarDateRangePicker,
-    SidebarDatePicker
+    SidebarDateRangePicker
 } from '../../../components/Sidebar';
 
 import { interfaces } from '../../../ducks';
@@ -116,19 +115,13 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             });
         };
 
-        const handleStartDateChange = useCallback(
-            (date: any) => {
-                setReleaseStartDate(date);
-            },
-            [releaseStartDate]
-        );
+        const handleStartDateChange = useCallback((date: any) => {
+            setReleaseStartDate(date);
+        }, []);
 
-        const handleEndDateChange = useCallback(
-            (date: any) => {
-                setReleaseEndDate(date);
-            },
-            [releaseEndDate]
-        );
+        const handleEndDateChange = useCallback((date: any) => {
+            setReleaseEndDate(date);
+        }, []);
 
         const handleSearchClick = () => {
             window.scrollTo(0, 0);
@@ -191,22 +184,12 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             [selectedGenres]
         );
 
-        const memoizedStartDatePicker = useMemo(() => {
-            return <SidebarDatePicker value={releaseStartDate} onChange={handleStartDateChange} />;
-        }, [releaseStartDate]);
-
-        const memoizedEndDatePicker = useMemo(() => {
-            return <SidebarDatePicker value={releaseEndDate} onChange={handleEndDateChange} />;
-        }, [releaseEndDate]);
-
         return (
             <>
                 {renders.current++}
 
                 <FilterSidebar>
-                    <SidebarHeader title="Filter & Sort">
-                        <span>asds</span>
-                    </SidebarHeader>
+                    <SidebarHeader title="Filter & Sort" />
                     <SidebarDropdown
                         label="Sort result by"
                         value={selectedSort}
@@ -214,66 +197,13 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
                         options={sortOptions}
                     />
                     <SidebarChips label="Genres" options={genres} chipRender={chipRender} />
-
-                    <SidebarDateRangePicker label="Release date">
-                        {memoizedStartDatePicker}
-                        {memoizedEndDatePicker}
-                    </SidebarDateRangePicker>
-                    {/*
-                    label
-                    startDate
-                    onStartDateChange
-                    ?max
-                    */}
-                    {/* <Box display="flex" flexDirection="column" p={2}>
-                        <Typography>Release date</Typography>
-
-                        <MuiPickersUtilsProvider utils={MomentUtils}>
-                            <KeyboardDatePicker
-                                id="start-release-date"
-                                inputVariant="filled"
-                                margin="normal"
-                                label="From"
-                                format="MM/DD/yyyy"
-                                value={releaseStartDate}
-                                onChange={(date: any) => {
-                                    setReleaseStartDate(
-                                        date ? moment(date).format('YYYY-MM-DD') : null
-                                    );
-                                }}
-                                KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                                InputProps={{ disableUnderline: true }}
-                                maxDate={
-                                    releaseEndDate
-                                        ? new Date(releaseEndDate)
-                                        : new Date('2100-01-01')
-                                }
-                            />
-                        </MuiPickersUtilsProvider>
-
-                        <MuiPickersUtilsProvider utils={MomentUtils}>
-                            <KeyboardDatePicker
-                                id="end-release-date"
-                                inputVariant="filled"
-                                margin="normal"
-                                label="To"
-                                format="MM/DD/yyyy"
-                                value={releaseEndDate}
-                                onChange={(date: any) => {
-                                    setReleaseEndDate(
-                                        date ? moment(date).format('YYYY-MM-DD') : null
-                                    );
-                                }}
-                                KeyboardButtonProps={{ 'aria-label': 'change date' }}
-                                InputProps={{ disableUnderline: true }}
-                                minDate={
-                                    releaseStartDate
-                                        ? new Date(releaseStartDate)
-                                        : new Date('1900-01-01')
-                                }
-                            />
-                        </MuiPickersUtilsProvider>
-                    </Box> */}
+                    <SidebarDateRangePicker
+                        label="Release date"
+                        startDate={releaseStartDate}
+                        onStartDateChange={handleStartDateChange}
+                        endDate={releaseEndDate}
+                        onEndDateChange={handleEndDateChange}
+                    />
                 </FilterSidebar>
             </>
         );

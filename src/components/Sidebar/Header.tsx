@@ -5,17 +5,13 @@ import Divider from '@material-ui/core/Divider';
 
 interface IOwnProps {
     title: string;
-    children?: React.ReactNode;
 }
 
 const SidebarHeader: React.FC<IOwnProps> = ({ title }) => {
-    const renders = React.useRef(0);
     return (
         <>
             <Box display="flex" flexDirection="column" p={2}>
-                <Typography variant="h6">
-                    {title} {renders.current++}
-                </Typography>
+                <Typography variant="h6">{title}</Typography>
             </Box>
             <Divider />
         </>

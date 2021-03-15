@@ -1,33 +1,37 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
+import DatePicker from './DatePicker';
+
 interface IOwnProps {
     label: string;
-    children?: ReactNode;
+    startDate: any;
+    onStartDateChange: (date: any) => void;
+    endDate: any;
+    onEndDateChange: (date: any) => void;
 }
 
-const DateRangePicker: React.FC<IOwnProps> = ({ label, children }) => {
+const DateRangePicker: React.FC<IOwnProps> = ({
+    label,
+    startDate,
+    onStartDateChange,
+    endDate,
+    onEndDateChange
+}) => {
     const renders = React.useRef(0);
-
-    // React.useEffect(() => {
-    //     console.log('label');
-    // }, [label]);
-
-    // React.useEffect(() => {
-    //     console.log('children');
-    //     console.log(children);
-    // }, [children]);
 
     return (
         <>
             <Box display="flex" flexDirection="column" p={2}>
                 <Typography>
-                    {label} {renders.current++}
+                    {label}
+                    {/* {renders.current++} */}
                 </Typography>
 
-                {children}
+                <DatePicker value={startDate} onChange={onStartDateChange} maxDate={endDate} />
+                <DatePicker value={endDate} onChange={onEndDateChange} minDate={startDate} />
             </Box>
 
             <Divider />
