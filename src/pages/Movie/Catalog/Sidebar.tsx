@@ -80,7 +80,6 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
     ({ history, location }) => {
         const renders = React.useRef(0);
         const [selectedSort, setSelectedSort] = useState<string>('popularity.desc');
-        // const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
         const [selectedGenres, setSelectedGenres] = useState<{ [key: string]: boolean }>({});
         const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
         const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
@@ -90,12 +89,6 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
 
         const currentQuery = location.search;
         // const { isCatalogLoading } = loaders;
-
-        // const isGenreSelected = useMemo((genre: string) => selectedGenres.includes(genre), []);
-
-        // const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        //     setSelectedSort(event.target.value as string);
-        // };
 
         const handleSortChange = useCallback((event: React.ChangeEvent<{ value: unknown }>) => {
             setSelectedSort(event.target.value as string);
@@ -142,26 +135,30 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             const { sort = 'popularity.desc', genres = '', from = null, to = null } = QSParse(
                 currentQuery
             );
+            // console.log(genres);
+            const genreObj: { [key: string]: boolean } = {};
+
+            (genres as string).split(',').map((i) => {
+                genreObj[i] = true;
+            });
 
             setSelectedSort(sort as string);
-            // setSelectedGenres((prevState) => {
-            //     prevState.concat((genres as string).split(',').filter((i) => i));
-            //     return prevState;
-            // });
+            setSelectedGenres(genreObj);
             setReleaseStartDate(from);
             setReleaseEndDate(to);
         }, [currentQuery]);
 
         // sidebar changes
-        // useEffect(() => {
-        //     const sort = selectedSort !== 'popularity.desc' ? selectedSort : '';
-        //     const from = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
-        //     const to = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
-        //     const genres = selectedGenres.join(',');
+        useEffect(() => {
+            const sort = selectedSort !== 'popularity.desc' ? selectedSort : '';
+            const from = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
+            const to = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+            const genres = Object.keys(selectedGenres).join(',');
 
-        //     const query = getQueryString({ sort, genres, from, to });
-        //     setSidebarQuery(query);
-        // }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate]);
+            const query = getQueryString({ sort, genres, from, to });
+            console.log(query);
+            setSidebarQuery(query);
+        }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate]);
 
         // search req loading done
         // useEffect(() => {
@@ -205,6 +202,18 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
                         onEndDateChange={handleEndDateChange}
                     />
                 </FilterSidebar>
+
+                <Box display="flex" flexDirection="column" mt={3}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSearchClick}
+                        // disabled={isCatalogLoading}
+                    >
+                        Search
+                        {/* {!isSearchClicked ? 'Search' : <CircularProgress size={20} thickness={5} />} */}
+                    </Button>
+                </Box>
             </>
         );
     },
