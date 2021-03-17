@@ -94,17 +94,25 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             setSelectedSort(event.target.value as string);
         }, []);
 
+        const orderJSONkeys = (json: any) =>
+            Object.keys(json)
+                .sort()
+                .reduce((obj: any, key: any) => {
+                    obj[key] = json[key];
+                    return obj;
+                }, {});
+
         const handleGenreChipClick = (genre: string) => {
             setSelectedGenres((prevState) => {
                 if (prevState[genre]) {
                     delete prevState[genre];
-                    return { ...prevState };
+                    return orderJSONkeys({ ...prevState });
                 }
 
-                return {
+                return orderJSONkeys({
                     ...prevState,
                     [genre]: true
-                };
+                });
             });
         };
 
@@ -130,22 +138,29 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             });
         };
 
+        const genreDeepCompare = (genreObj: { [key: string]: boolean }) =>
+            Object.keys(genreObj).join(',') === Object.keys(selectedGenres).join(',');
+
         // url query (sidebar & pagination) changes
         useEffect(() => {
             const { sort = 'popularity.desc', genres = '', from = null, to = null } = QSParse(
                 currentQuery
             );
-            // console.log(genres);
-            const genreObj: { [key: string]: boolean } = {};
-
-            (genres as string).split(',').map((i) => {
-                genreObj[i] = true;
-            });
 
             setSelectedSort(sort as string);
-            setSelectedGenres(genreObj);
             setReleaseStartDate(from);
             setReleaseEndDate(to);
+
+            const genreObj: { [key: string]: boolean } = {};
+            (genres as string)
+                .split(',')
+                .filter((i) => i)
+                .map((i) => {
+                    genreObj[i] = true;
+                });
+
+            // genre deep compare
+            if (!genreDeepCompare(genreObj)) setSelectedGenres(genreObj);
         }, [currentQuery]);
 
         // sidebar changes
@@ -156,14 +171,8 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             const genres = Object.keys(selectedGenres).join(',');
 
             const query = getQueryString({ sort, genres, from, to });
-            console.log(query);
             setSidebarQuery(query);
         }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate]);
-
-        // search req loading done
-        // useEffect(() => {
-        //     if (!isCatalogLoading) setIsSearchClicked(false);
-        // }, [isCatalogLoading]);
 
         const chipRender = useCallback(
             (item) => {
