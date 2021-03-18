@@ -92,7 +92,7 @@ const Catalog: React.FC<IOwnProps> = ({ getCatalogMovies, location, match }) => 
                     variant="h5"
                     style={{ fontWeight: 600, marginBottom: 16, textTransform: 'capitalize' }}
                 >
-                    {convertStringChars(movieCategory, '-', ' ')} {renders.current++}
+                    {convertStringChars(movieCategory, '-', ' ')}
                 </Typography>
 
                 <Grid container>

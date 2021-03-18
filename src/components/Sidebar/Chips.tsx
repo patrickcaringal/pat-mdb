@@ -18,7 +18,8 @@ const Chips: React.FC<IOwnProps> = ({ label, chipRender, options }) => {
         <>
             <Box display="flex" flexDirection="column" p={2}>
                 <Typography style={{ marginBottom: 8 }}>
-                    {label} {renders.current++}
+                    {label}
+                    {renders.current++}
                 </Typography>
                 <Box display="flex" flexWrap="wrap">
                     {Object.entries(options).map((item) => chipRender(item))}

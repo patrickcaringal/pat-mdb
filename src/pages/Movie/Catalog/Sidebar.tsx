@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import MomentUtils from '@date-io/moment';
 import moment from 'moment';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { parse as QSParse } from 'query-string';
 
 import Button from '@material-ui/core/Button';
@@ -75,7 +73,7 @@ interface ISidebarProps
     extends IStateToProps,
         IDispatchToProps,
         RouteComponentProps<IMatchParams> {}
-// loaders,
+
 const Sidebar: React.FC<ISidebarProps> = React.memo(
     ({ history, location }) => {
         const renders = React.useRef(0);
@@ -83,11 +81,11 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
         const [selectedGenres, setSelectedGenres] = useState<{ [key: string]: boolean }>({});
         const [releaseStartDate, setReleaseStartDate] = useState<any>(null);
         const [releaseEndDate, setReleaseEndDate] = useState<any>(null);
-        const [sidebarQuery, setSidebarQuery] = useState<string>('');
 
-        const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
+        // const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
 
         const currentQuery = location.search;
+
         // const { isCatalogLoading } = loaders;
 
         const handleSortChange = useCallback((event: React.ChangeEvent<{ value: unknown }>) => {
@@ -127,10 +125,17 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
         const handleSearchClick = () => {
             window.scrollTo(0, 0);
 
+            const sort = selectedSort !== 'popularity.desc' ? selectedSort : '';
+            const from = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
+            const to = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
+            const genres = Object.keys(selectedGenres).join(',');
+
+            const sidebarQuery = getQueryString({ sort, genres, from, to });
+
             // check if query changed
             if (currentQuery === `?${sidebarQuery}`) return;
 
-            setIsSearchClicked(true);
+            // setIsSearchClicked(true);
 
             history.push({
                 pathname: location.pathname,
@@ -138,8 +143,9 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             });
         };
 
-        const genreDeepCompare = (genreObj: { [key: string]: boolean }) =>
-            Object.keys(genreObj).join(',') === Object.keys(selectedGenres).join(',');
+        const genreDeepCompare = (genreObj: { [key: string]: boolean }) => {
+            return Object.keys(genreObj).join(',') === Object.keys(selectedGenres).join(',');
+        };
 
         // url query (sidebar & pagination) changes
         useEffect(() => {
@@ -163,17 +169,6 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             if (!genreDeepCompare(genreObj)) setSelectedGenres(genreObj);
         }, [currentQuery]);
 
-        // sidebar changes
-        useEffect(() => {
-            const sort = selectedSort !== 'popularity.desc' ? selectedSort : '';
-            const from = releaseStartDate ? moment(releaseStartDate).format('YYYY-MM-DD') : '';
-            const to = releaseEndDate ? moment(releaseEndDate).format('YYYY-MM-DD') : '';
-            const genres = Object.keys(selectedGenres).join(',');
-
-            const query = getQueryString({ sort, genres, from, to });
-            setSidebarQuery(query);
-        }, [selectedSort, selectedGenres, releaseStartDate, releaseEndDate]);
-
         const chipRender = useCallback(
             (item) => {
                 const [key, value] = item;
@@ -190,10 +185,29 @@ const Sidebar: React.FC<ISidebarProps> = React.memo(
             [selectedGenres]
         );
 
+        // useEffect(() => {
+        //     console.log('selectedSort');
+        // }, [selectedSort]);
+
+        // useEffect(() => {
+        //     console.log('selectedGenres');
+        // }, [selectedGenres]);
+
+        // useEffect(() => {
+        //     console.log('releaseStartDate');
+        // }, [releaseStartDate]);
+
+        // useEffect(() => {
+        //     console.log('releaseEndDate');
+        // }, [releaseEndDate]);
+
+        // useEffect(() => {
+        //     console.log('currentQuery');
+        // }, [currentQuery]);
+
         return (
             <>
                 {renders.current++}
-
                 <FilterSidebar>
                     <SidebarHeader title="Filter & Sort" />
                     <SidebarDropdown

@@ -58,13 +58,13 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                                 label: 'Now Playing',
                                 // add dates
                                 rootLink: '/movie/now-playing',
-                                linkTo: '/movie/now-playing'
+                                linkTo: '/movie/now-playing?from=2020-12-12&to=to=2020-12-12'
                             },
                             {
                                 label: 'Upcoming',
                                 // add dates
                                 rootLink: '/movie/upcoming',
-                                linkTo: '/movie/upcoming'
+                                linkTo: '/movie/upcoming?from=2020-12-13&to=to=2021-01-13'
                             }
                         ]}
                     />

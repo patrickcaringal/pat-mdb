@@ -30,7 +30,7 @@ const Dropdown: React.FC<IOwnProps> = ({ label, value, onChange, options }) => {
                 <FormControl variant="filled">
                     <InputLabel id="sort-select">
                         {label}
-                        {/* {renders.current++} */}
+                        {renders.current++}
                     </InputLabel>
                     <Select
                         labelId="sort-select"
