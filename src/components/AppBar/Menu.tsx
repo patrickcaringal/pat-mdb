@@ -10,7 +10,7 @@ import MenuList from '@material-ui/core/MenuList';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 
-import { convertStringChars } from '../../utils/helpers';
+// import { convertStringChars } from '../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
     menu: {
