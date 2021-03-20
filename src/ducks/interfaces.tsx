@@ -11,11 +11,14 @@ export interface IMedia {
 }
 
 export interface IMediaDetail extends IMedia {
-    overview: string;
-    tagline: string;
-    runtime: number;
+    banner: string;
     budget: number;
+    overview: string;
     revenue: number;
+    runtime: number;
+    tagline: string;
+    vote_average: number;
+    vote_count: number;
 }
 
 export interface IMovieCatalog {
