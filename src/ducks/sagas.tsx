@@ -80,10 +80,28 @@ function* getCatalogPeople({ payload }: interfaces.IGetCatalogPeople) {
     }
 }
 
+function* getMovieDetail({ payload }: interfaces.IGetMovieDetail) {
+    try {
+        const { id: movieId } = payload;
+
+        const { data }: { data: interfaces.IMediaDetail } = yield call(
+            http.get,
+            `movie/${movieId}/details`
+        );
+
+        yield delay(500);
+        yield put(actions.getMovieDetailSucceed(data));
+    } catch (error) {
+        console.log(error);
+        yield put(actions.getMovieDetailFailed('Error'));
+    }
+}
+
 export default function* rootSaga() {
     yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMedias)]);
     yield all([yield takeLatest(constants.GET_TRENDING_MEDIAS, getTrendingMedias)]);
     yield all([yield takeLatest(constants.GET_CATALOG_MOVIES, getCatalogMovies)]);
     yield all([yield takeLatest(constants.GET_CATALOG_TV_SHOWS, getCatalogTVShows)]);
     yield all([yield takeLatest(constants.GET_CATALOG_PEOPLE, getCatalogPeople)]);
+    yield all([yield takeLatest(constants.GET_MOVIE_DETAIL, getMovieDetail)]);
 }

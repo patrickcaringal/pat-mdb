@@ -17,9 +17,11 @@ enum PageType {
 }
 
 const TvShow: React.FC<TvShowProps> = ({ match }) => {
-    const [pageType, setPageType] = useState<PageType>(PageType.Catalog);
-
     const { id: movieCategory } = match.params;
+
+    const [pageType, setPageType] = useState<PageType>(
+        isCategoryForCatalog(movieCategory) ? PageType.Catalog : PageType.Detail
+    );
 
     useEffect(() => {
         const page = isCategoryForCatalog(movieCategory) ? PageType.Catalog : PageType.Detail;

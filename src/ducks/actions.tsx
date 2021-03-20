@@ -92,3 +92,23 @@ export const getCatalogPeopleFailed = (payload: string): interfaces.IGetCatalogP
     type: constants.GET_CATALOG_PEOPLE_FAILED,
     payload
 });
+
+// Movie detail
+export const getMovieDetail = (
+    payload: interfaces.IGetMovieDetailPayload
+): interfaces.IGetMovieDetail => ({
+    type: constants.GET_MOVIE_DETAIL,
+    payload
+});
+
+export const getMovieDetailSucceed = (
+    payload: interfaces.IMediaDetail
+): interfaces.IGetMovieDetailSucceed => ({
+    type: constants.GET_MOVIE_DETAIL_SUCCEED,
+    payload
+});
+
+export const getMovieDetailFailed = (payload: string): interfaces.IGetMovieDetailFailed => ({
+    type: constants.GET_MOVIE_DETAIL_FAILED,
+    payload
+});

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
@@ -14,6 +15,8 @@ import Chip from '@material-ui/core/Chip';
 
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+
+import { actions, interfaces } from '../../../ducks';
 
 const useStyles = makeStyles({
     backdrop: {
@@ -99,14 +102,29 @@ const useStyles = makeStyles({
     }
 });
 
-interface MatchParams {
+interface ILocationState {
     id: string;
 }
 
-interface MovieDetailProps extends RouteComponentProps<MatchParams> {}
+interface IStateToProps {}
 
-const MoivieDetail: React.FC<MovieDetailProps> = ({ match }) => {
+interface IDispatchToProps {
+    getMovieDetail: (queries: interfaces.IGetMovieDetailPayload) => interfaces.IGetMovieDetail;
+}
+
+interface MovieDetailProps
+    extends IStateToProps,
+        IDispatchToProps,
+        RouteComponentProps<{}, {}, ILocationState> {}
+
+const MoivieDetail: React.FC<MovieDetailProps> = ({ getMovieDetail, location }) => {
     const classes = useStyles();
+
+    const { id: movieId } = location.state;
+
+    useEffect(() => {
+        getMovieDetail({ id: movieId });
+    }, []);
 
     return (
         <>
@@ -346,4 +364,10 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match }) => {
     );
 };
 
-export default withRouter(MoivieDetail);
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+    getMovieDetail: actions.getMovieDetail
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MoivieDetail));

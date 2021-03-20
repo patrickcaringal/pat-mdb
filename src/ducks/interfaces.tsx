@@ -10,6 +10,14 @@ export interface IMedia {
     release_date: string;
 }
 
+export interface IMediaDetail extends IMedia {
+    overview: string;
+    tagline: string;
+    runtime: number;
+    budget: number;
+    revenue: number;
+}
+
 export interface IMovieCatalog {
     page: number;
     total_pages: boolean;
@@ -135,6 +143,26 @@ export interface IGetCatalogPeopleFailed {
     payload: string;
 }
 
+// Movie detail
+export interface IGetMovieDetailPayload {
+    id: string;
+}
+
+export interface IGetMovieDetail {
+    type: typeof constants.GET_MOVIE_DETAIL;
+    payload: IGetMovieDetailPayload;
+}
+
+export interface IGetMovieDetailSucceed {
+    type: typeof constants.GET_MOVIE_DETAIL_SUCCEED;
+    payload: IMediaDetail;
+}
+
+export interface IGetMovieDetailFailed {
+    type: typeof constants.GET_MOVIE_DETAIL_FAILED;
+    payload: string;
+}
+
 export type TState = {
     movies: string[];
     popularMedias: IMedia[];
@@ -142,6 +170,7 @@ export type TState = {
     catalogMovies: IMovieCatalog;
     catalogTVShows: ITVShowCatalog;
     catalogPeople: IPeopleCatalog;
+    movieDetail: IMediaDetail;
     // UI
     loaders: { [key: string]: boolean };
 };
@@ -161,4 +190,7 @@ export type TAction =
     | IGetCatalogTVShowsFailed
     | IGetCatalogPeople
     | IGetCatalogPeopleSucceed
-    | IGetCatalogPeopleFailed;
+    | IGetCatalogPeopleFailed
+    | IGetMovieDetail
+    | IGetMovieDetailSucceed
+    | IGetMovieDetailFailed;

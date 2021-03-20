@@ -8,6 +8,7 @@ export const initialState: interfaces.TState = {
     catalogMovies: {} as interfaces.IMovieCatalog,
     catalogTVShows: {} as interfaces.ITVShowCatalog,
     catalogPeople: {} as interfaces.IPeopleCatalog,
+    movieDetail: {} as interfaces.IMediaDetail,
     // UI
     loaders: {}
 };
@@ -174,6 +175,39 @@ const reducer = (
                 loaders: {
                     ...state.loaders,
                     isCatalogLoading: false
+                }
+            };
+        }
+
+        // Movie detail
+        case constants.GET_MOVIE_DETAIL: {
+            return {
+                ...state,
+                loaders: {
+                    ...state.loaders
+                    // isCatalogLoading: true
+                }
+            };
+        }
+
+        case constants.GET_MOVIE_DETAIL_SUCCEED: {
+            return {
+                ...state,
+                movieDetail: action.payload,
+                loaders: {
+                    ...state.loaders
+                    // isCatalogLoading: false
+                }
+            };
+        }
+
+        case constants.GET_MOVIE_DETAIL_FAILED: {
+            return {
+                ...state,
+                movieDetail: {} as interfaces.IMediaDetail,
+                loaders: {
+                    ...state.loaders
+                    // isCatalogLoading: false
                 }
             };
         }
