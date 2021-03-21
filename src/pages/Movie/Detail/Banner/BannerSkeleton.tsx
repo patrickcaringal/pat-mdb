@@ -1,7 +1,6 @@
 import React from 'react';
-import { makeStyles, createMuiTheme } from '@material-ui/core/styles';
-
 import { ThemeProvider } from '@material-ui/core';
+import { makeStyles, createMuiTheme } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -90,17 +89,17 @@ const useStyles = makeStyles({
     }
 });
 
+const theme = createMuiTheme({
+    palette: {
+        type: 'dark'
+    }
+});
+
 const BannerSkeleton: React.FC = () => {
     const classes = useStyles();
 
     return (
-        <ThemeProvider
-            theme={createMuiTheme({
-                palette: {
-                    type: 'dark'
-                }
-            })}
-        >
+        <ThemeProvider theme={theme}>
             <Box display="flex" className={classes.backdrop} style={{ backgroundSize: 'cover' }}>
                 <Box display="flex" flex="1" className={classes.backdropOverlay}>
                     <Container disableGutters maxWidth="lg">

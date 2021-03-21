@@ -13,6 +13,7 @@ export interface IMedia {
 export interface IMediaDetail extends IMedia {
     banner: string;
     budget: number;
+    director: string[];
     overview: string;
     revenue: number;
     runtime: number;

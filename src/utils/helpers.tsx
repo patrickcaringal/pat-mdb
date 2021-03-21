@@ -15,3 +15,10 @@ export const formatNumWithComma = (num: number = 0): string => {
 export const formatDate = (date: string = new Date().toDateString()): string => {
     return moment(date).format('MMMM DD, YYYY');
 };
+
+export const formatHours = (num: number): string => {
+    const hours = Math.floor(num / 60);
+    const minutes = num % 60;
+
+    return `${hours}h ${minutes ? `${minutes}m` : ''}`;
+};

@@ -7,8 +7,10 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
-import { actions, interfaces } from '../../../ducks';
-import { formatNumWithComma, formatDate } from '../../../utils/helpers';
+import BannerSkeleton from './BannerSkeleton';
+
+import { interfaces } from '../../../../ducks';
+import { formatNumWithComma, formatDate, formatHours } from '../../../../utils/helpers';
 
 const useStyles = makeStyles({
     backdrop: {
@@ -24,70 +26,6 @@ const useStyles = makeStyles({
         width: 300,
         height: 450,
         borderRadius: 8
-    },
-    movieConent: {},
-    leftSidebar: {
-        width: 260,
-        minWidth: 260
-    },
-
-    cardCont: {
-        minWidth: 138,
-        marginRight: 14
-    },
-    cardImg: {
-        height: 175
-    },
-    cardContent: {
-        '&.MuiCardContent-root:last-child': {
-            paddingBottom: 16
-        }
-    },
-    title: {
-        fontWeight: 600
-    },
-    subtitle: {
-        color: '#696969'
-    },
-
-    recommendationCard: {
-        width: 120,
-        marginBottom: 16
-    },
-    recommendationCardImg: {
-        height: 195
-    },
-    recommendationCardContent: {
-        '&.MuiCardContent-root': {
-            padding: 10
-        }
-    },
-
-    mediaTab: {
-        '&.MuiTab-root': {
-            textTransform: 'none'
-        },
-        '&.Mui-selected': {
-            fontWeight: 600
-        }
-    },
-
-    photoCard: {
-        minWidth: 533,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    photoCardImg: {
-        height: 300
-    },
-
-    posterCard: {
-        minWidth: 200,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    posterCardImg: {
-        height: 300
     }
 });
 
@@ -106,6 +44,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
     const {
         banner,
         budget,
+        director,
         genres,
         overview,
         poster,
@@ -132,8 +71,12 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
                             <Typography variant="h3" style={{ fontWeight: 700 }}>
                                 {title}
                             </Typography>
-                            {/*  - 2h 4m */}
-                            <Typography>{genres?.join(', ')}</Typography>
+                            <Typography>
+                                <span>{genres?.join(', ')}</span>
+                                <span style={{ marginLeft: 12 }}>
+                                    &bull;&nbsp;&nbsp;{formatHours(runtime)}
+                                </span>
+                            </Typography>
 
                             <Box display="flex" flexDirection="column" mt={1} mb={2}>
                                 <Box display="flex" flexDirection="row" alignItems="center">
@@ -162,7 +105,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
                             <Box display="flex" flexWrap="wrap" mt={4}>
                                 <Box flex="4">
                                     <Typography style={{ fontWeight: 700 }}>Director</Typography>
-                                    <Typography>Joe Russo</Typography>
+                                    <Typography>{director?.join(', ')}</Typography>
                                 </Box>
                                 <Box flex="4">
                                     <Typography style={{ fontWeight: 700 }}>
