@@ -17,6 +17,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
 import { actions, interfaces } from '../../../ducks';
+import { formatNumWithComma, formatDate } from '../../../utils/helpers';
 
 const useStyles = makeStyles({
     backdrop: {
@@ -149,7 +150,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data }) => {
                                     </Typography>
                                     <Typography variant="h6">/&nbsp;10</Typography>
                                 </Box>
-                                <Typography>{vote_count} votes</Typography>
+                                <Typography>{formatNumWithComma(vote_count)} votes</Typography>
                             </Box>
 
                             <Typography
@@ -175,15 +176,15 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data }) => {
                                     <Typography style={{ fontWeight: 700 }}>
                                         Release date
                                     </Typography>
-                                    <Typography>April 24, 2019</Typography>
+                                    <Typography>{formatDate(release_date)}</Typography>
                                 </Box>
                                 <Box flex="4">
                                     <Typography style={{ fontWeight: 700 }}>Budget</Typography>
-                                    <Typography>{budget}</Typography>
+                                    <Typography>${formatNumWithComma(budget)}</Typography>
                                 </Box>
                                 <Box flex="4">
                                     <Typography style={{ fontWeight: 700 }}>Revenue</Typography>
-                                    <Typography>{revenue}</Typography>
+                                    <Typography>${formatNumWithComma(revenue)}</Typography>
                                 </Box>
                             </Box>
                         </Box>
