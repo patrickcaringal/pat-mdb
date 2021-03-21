@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,15 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-
-import Chip from '@material-ui/core/Chip';
-
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
 
 import { actions, interfaces } from '../../../ducks';
 import { formatNumWithComma, formatDate } from '../../../utils/helpers';
@@ -102,6 +93,7 @@ const useStyles = makeStyles({
 
 interface IStateToProps {
     data: interfaces.IMediaDetail;
+    isLoading: boolean;
 }
 
 interface IDispatchToProps {
@@ -110,7 +102,7 @@ interface IDispatchToProps {
 
 interface MovieDetailProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
 
-const MoivieDetail: React.FC<MovieDetailProps> = ({ data }) => {
+const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
     const {
         banner,
         budget,
@@ -128,7 +120,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data }) => {
 
     const classes = useStyles({ bannerBg: banner });
 
-    return (
+    return !isLoading ? (
         <Box display="flex" className={classes.backdrop} style={{ backgroundSize: 'cover' }}>
             <Box display="flex" flex="1" className={classes.backdropOverlay}>
                 <Container disableGutters maxWidth="lg">
@@ -192,12 +184,14 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data }) => {
                 </Container>
             </Box>
         </Box>
+    ) : (
+        <BannerSkeleton />
     );
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
-    data: state.movieDetail
-    // isLoading: state.loaders.isPopularLoading
+    data: state.movieDetail,
+    isLoading: state.loaders.isMovieDetailLoading
 });
 
 const mapDispatchToProps = {};

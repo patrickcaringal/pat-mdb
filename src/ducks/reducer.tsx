@@ -184,8 +184,8 @@ const reducer = (
             return {
                 ...state,
                 loaders: {
-                    ...state.loaders
-                    // isCatalogLoading: true
+                    ...state.loaders,
+                    isMovieDetailLoading: true
                 }
             };
         }
@@ -195,8 +195,8 @@ const reducer = (
                 ...state,
                 movieDetail: action.payload,
                 loaders: {
-                    ...state.loaders
-                    // isCatalogLoading: false
+                    ...state.loaders,
+                    isMovieDetailLoading: false
                 }
             };
         }
@@ -206,8 +206,8 @@ const reducer = (
                 ...state,
                 movieDetail: {} as interfaces.IMediaDetail,
                 loaders: {
-                    ...state.loaders
-                    // isCatalogLoading: false
+                    ...state.loaders,
+                    isMovieDetailLoading: false
                 }
             };
         }

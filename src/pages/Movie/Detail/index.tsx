@@ -104,7 +104,7 @@ const useStyles = makeStyles({
     }
 });
 
-interface ILocationState {
+interface MatchParams {
     id: string;
 }
 
@@ -117,12 +117,12 @@ interface IDispatchToProps {
 interface MovieDetailProps
     extends IStateToProps,
         IDispatchToProps,
-        RouteComponentProps<{}, {}, ILocationState> {}
+        RouteComponentProps<MatchParams> {}
 
-const MoivieDetail: React.FC<MovieDetailProps> = ({ getMovieDetail, location }) => {
+const MoivieDetail: React.FC<MovieDetailProps> = ({ match, getMovieDetail, location }) => {
     const classes = useStyles();
 
-    const { id: movieId } = location.state;
+    const { id: movieId } = match.params;
 
     useEffect(() => {
         getMovieDetail({ id: movieId });

@@ -63,12 +63,7 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
 
     // rendering
     const handleCardClick = (id: string) => {
-        // history.push(`movie/${id}`);
-
-        history.push({
-            pathname: `movie/${id}`,
-            state: { id }
-        });
+        history.push(`movie/${id}`);
     };
 
     const itemRender = useCallback(
