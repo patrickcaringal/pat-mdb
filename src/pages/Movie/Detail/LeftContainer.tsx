@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
@@ -11,7 +12,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
-// import { actions, interfaces } from '../../../ducks';
+import { actions, interfaces } from '../../../ducks';
 
 const useStyles = makeStyles({
     movieConent: {},
@@ -81,7 +82,18 @@ const useStyles = makeStyles({
     }
 });
 
-const LeftContainer: React.FC = () => {
+interface IStateToProps {
+    cast: interfaces.ICast[];
+    isLoading: boolean;
+}
+
+interface IDispatchToProps {
+    // getMovieDetail: (queries: interfaces.IGetMovieDetailPayload) => interfaces.IGetMovieDetail;
+}
+
+interface LeftContainerProps extends IStateToProps, IDispatchToProps {}
+
+const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) => {
     const classes = useStyles();
 
     return (
@@ -99,22 +111,24 @@ const LeftContainer: React.FC = () => {
                     pb={2}
                     style={{ width: '100%', overflow: 'auto' }}
                 >
-                    {[...Array(8)].map((i) => (
-                        <Card className={classes.cardCont}>
-                            <CardMedia
-                                className={classes.cardImg}
-                                // https://image.tmdb.org/t/p/w138_and_h175_face/wZkK15LnloSAhzs1jxI3AZbR6f0.jpg
-                                image="https://image.tmdb.org/t/p/w185/2TGPhdpRC5wjdFEJqnLYiN5kbwg.jpg"
-                                title="title"
-                            />
-                            <CardContent className={classes.cardContent}>
-                                <Typography className={classes.title}>Úrsula Corberó</Typography>
-                                <Typography variant="body2" className={classes.subtitle}>
-                                    Tokyo
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    ))}
+                    {cast.map((person: interfaces.ICast) => {
+                        const { character, name, poster } = person;
+                        return (
+                            <Card className={classes.cardCont}>
+                                <CardMedia
+                                    className={classes.cardImg}
+                                    image={poster}
+                                    title="title"
+                                />
+                                <CardContent className={classes.cardContent}>
+                                    <Typography className={classes.title}>{name}</Typography>
+                                    <Typography variant="body2" className={classes.subtitle}>
+                                        {character}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        );
+                    })}
                 </Box>
             </Box>
 
@@ -170,4 +184,11 @@ const LeftContainer: React.FC = () => {
     );
 };
 
-export default LeftContainer;
+const mapStateToProps = (state: interfaces.TState) => ({
+    cast: state.movieDetail.cast,
+    isLoading: state.loaders.isMovieDetailLoading
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LeftContainer);

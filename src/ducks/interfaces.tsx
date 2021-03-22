@@ -10,9 +10,16 @@ export interface IMedia {
     release_date: string;
 }
 
+export interface ICast {
+    character: string;
+    name: string;
+    poster: string;
+}
+
 export interface IMediaDetail extends IMedia {
     banner: string;
     budget: number;
+    cast: ICast[];
     director: string[];
     overview: string;
     revenue: number;
