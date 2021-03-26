@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box';
 
 import { actions, interfaces, types } from '../../ducks';
 
-import { Card, MultiCardSkeleton } from '../../components/Card';
+import { BaselessCard, MultiCardSkeleton } from '../../components/Card';
 import { CardList, CardHeader, CardItems } from '../../components/HorizontalCarList';
 
 interface ICard {
@@ -69,7 +69,7 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
     const itemRender = useCallback(
         (item: ICard) => {
             const { id, ...rest } = item;
-            return <Card {...rest} onClick={() => handleCardClick(id)} />;
+            return <BaselessCard {...rest} onClick={() => handleCardClick(id)} />;
         },
         [data, isLoading]
     );

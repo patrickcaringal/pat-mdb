@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
-import Card from '@material-ui/core/Card';
+import Card2 from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 
@@ -13,6 +13,9 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
 import { actions, interfaces } from '../../../ducks';
+
+import { Card, MultiCardSkeleton } from '../../../components/Card';
+import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
 
 const useStyles = makeStyles({
     movieConent: {},
@@ -82,6 +85,13 @@ const useStyles = makeStyles({
     }
 });
 
+interface ICard {
+    id: string;
+    image: string;
+    title: string;
+    subtitle: string;
+}
+
 interface IStateToProps {
     cast: interfaces.ICast[];
     isLoading: boolean;
@@ -96,40 +106,37 @@ interface LeftContainerProps extends IStateToProps, IDispatchToProps {}
 const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) => {
     const classes = useStyles();
 
+    const mappedPopularMedia = useMemo(
+        () =>
+            cast.map((i: interfaces.ICast) => {
+                const { poster: image, name: title, character: subtitle } = i;
+                return {
+                    id: title,
+                    image,
+                    title,
+                    subtitle
+                };
+            }),
+        [cast]
+    );
+
+    const itemRender = useCallback(
+        (item: ICard) => {
+            const { id, ...rest } = item;
+            return <Card {...rest} />;
+        },
+        [cast]
+    );
+
+    const skeletonRender = useCallback(() => <MultiCardSkeleton number={20} />, []);
+
     return (
         <>
-            <Box>
-                <Typography variant="h5" style={{ fontWeight: 600 }}>
-                    Cast
-                </Typography>
-
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    mt={2}
-                    mb={4}
-                    pb={2}
-                    style={{ width: '100%', overflow: 'auto' }}
-                >
-                    {cast.map((person: interfaces.ICast) => {
-                        const { character, name, poster } = person;
-                        return (
-                            <Card className={classes.cardCont}>
-                                <CardMedia
-                                    className={classes.cardImg}
-                                    image={poster}
-                                    title="title"
-                                />
-                                <CardContent className={classes.cardContent}>
-                                    <Typography className={classes.title}>{name}</Typography>
-                                    <Typography variant="body2" className={classes.subtitle}>
-                                        {character}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        );
-                    })}
-                </Box>
+            <Box display="flex">
+                <CardList<ICard> items={mappedPopularMedia} isLoading={isLoading}>
+                    <CardHeader title="Cast" />
+                    <CardItems itemRender={itemRender} skeletonRender={skeletonRender} />
+                </CardList>
             </Box>
 
             <Box>
@@ -169,13 +176,13 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) =
                                 ))} */}
 
                         {[...Array(8)].map((i) => (
-                            <Card className={classes.photoCard}>
+                            <Card2 className={classes.photoCard}>
                                 <CardMedia
                                     className={classes.photoCardImg}
                                     image="https://image.tmdb.org/t/p/w533_and_h300_bestv2/xGexTKCJDkl12dTW4YCBDXWb1AD.jpg"
                                     title="title"
                                 />
-                            </Card>
+                            </Card2>
                         ))}
                     </Box>
                 </Box>

@@ -3,9 +3,10 @@ import CardSkeleton from './CardSkeleton';
 
 interface IOwnProps {
     number: number;
+    type?: 'normal' | 'baseless';
 }
 
-const MultiCardSkeleton: React.FC<IOwnProps> = ({ number }) => {
+const MultiCardSkeleton: React.FC<IOwnProps> = ({ type = 'normal', number }) => {
     return (
         <>
             {[...Array(number)].map(() => (

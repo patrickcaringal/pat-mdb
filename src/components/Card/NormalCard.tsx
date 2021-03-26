@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import MUICard from '@material-ui/core/Card';
+import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,22 +12,29 @@ import useIntersect from '../../customhooks/useIntersect';
 
 const useStyles = makeStyles({
     cardCont: {
-        minWidth: '150px',
-        background: 'transparent',
-        marginRight: '30px'
+        minWidth: 138,
+        marginRight: 14
     },
     cardImg: {
-        height: '225px',
-        borderRadius: '8px',
-        boxShadow: ({ isHovered }: { isHovered: boolean }) =>
-            isHovered ? '0 8px 16px 0 rgba(0,0,0,0.2)' : 'none'
+        height: 175
     },
     actionArea: {
         '&:hover $focusHighlight': {
             opacity: 0
         }
     },
-    focusHighlight: {}
+    focusHighlight: {},
+    cardContent: {
+        '&.MuiCardContent-root:last-child': {
+            paddingBottom: 16
+        }
+    },
+    title: {
+        fontWeight: 600
+    },
+    subtitle: {
+        color: '#696969'
+    }
 });
 
 interface IOwnProps {
@@ -37,24 +44,16 @@ interface IOwnProps {
     onClick?: () => void;
 }
 
-const Card: React.FC<IOwnProps> = ({ image, title, subtitle, onClick = () => {} }) => {
+const NormalCard: React.FC<IOwnProps> = ({ image, title, subtitle, onClick = () => {} }) => {
     const [isShown, setIsShown] = useState<boolean>(false);
-    const [isHovered, setIsHovered] = useState<boolean>(false);
 
-    const classes = useStyles({ isHovered });
+    const classes = useStyles();
 
     const IOOptions = { rootMargin: '0px 300px 0px 0px' };
     const [IOref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
 
     return (
-        <MUICard
-            className={classes.cardCont}
-            elevation={0}
-            square
-            {...({ ref: IOref } as any)}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
+        <Card className={classes.cardCont} {...({ ref: IOref } as any)}>
             <CardActionArea
                 classes={{
                     root: classes.actionArea,
@@ -70,17 +69,17 @@ const Card: React.FC<IOwnProps> = ({ image, title, subtitle, onClick = () => {} 
                     <Skeleton variant="rect" animation="pulse" className={classes.cardImg} />
                 )}
 
-                <CardContent style={{ padding: '8px 0 0' }}>
-                    <Typography noWrap style={{ fontWeight: 600 }}>
+                <CardContent className={classes.cardContent}>
+                    <Typography noWrap className={classes.title}>
                         {title}
                     </Typography>
-                    <Typography variant="body2" style={{ color: '#696969' }}>
+                    <Typography variant="body2" className={classes.subtitle}>
                         {subtitle}
                     </Typography>
                 </CardContent>
             </CardActionArea>
-        </MUICard>
+        </Card>
     );
 };
 
-export default Card;
+export default NormalCard;

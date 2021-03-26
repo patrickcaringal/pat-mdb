@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Container from '@material-ui/core/Container';
+
 import Banner from './Banner';
 import PopularList from './PopularList';
 import TrendingList from './TrendingList';
@@ -7,8 +9,10 @@ import TrendingList from './TrendingList';
 const Home: React.FC = () => (
     <>
         <Banner />
-        <PopularList />
-        <TrendingList />
+        <Container disableGutters maxWidth="lg">
+            <PopularList />
+            <TrendingList />
+        </Container>
     </>
 );
 
