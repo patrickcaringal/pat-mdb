@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -7,41 +6,22 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const useStyles = makeStyles({
-    cardCont: {
-        minWidth: '150px',
-        background: 'transparent',
-        marginRight: '30px'
-    },
-    cardImg: {
-        height: '225px',
-        borderRadius: '8px',
-        boxShadow: ({ isHovered }: { isHovered: boolean }) =>
-            isHovered ? '0 8px 16px 0 rgba(0,0,0,0.2)' : 'none'
-    },
-    actionArea: {
-        '&:hover $focusHighlight': {
-            opacity: 0
-        }
-    },
-    focusHighlight: {}
-});
+import { cardUseStyles as useStyles } from './styles';
 
-const CardSkeleton: React.FC = () => {
-    const classes = useStyles({ isHovered: false });
+interface IOwnProps {
+    style?: { width?: number; imgHeight?: number; marginRight?: number };
+}
+
+const CardSkeleton: React.FC<IOwnProps> = ({ style = {} }) => {
+    const classes = useStyles(style);
 
     return (
-        <Card className={classes.cardCont} elevation={0} square>
+        <Card className={classes.cardCont}>
             <CardActionArea disableRipple disableTouchRipple>
-                <Skeleton
-                    variant="rect"
-                    animation="pulse"
-                    height={225}
-                    style={{ borderRadius: '8px' }}
-                />
+                <Skeleton variant="rect" animation="pulse" className={classes.cardImg} />
 
-                <CardContent style={{ padding: '8px 0 0' }}>
-                    <Typography style={{ fontWeight: 600 }}>
+                <CardContent className={classes.cardContent}>
+                    <Typography>
                         <Skeleton variant="text" />
                     </Typography>
                     <Typography variant="body2">

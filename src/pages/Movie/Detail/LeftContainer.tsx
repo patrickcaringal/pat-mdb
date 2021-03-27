@@ -7,14 +7,13 @@ import Typography from '@material-ui/core/Typography';
 
 import Card2 from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
 
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
 import { actions, interfaces } from '../../../ducks';
 
-import { Card, MultiCardSkeleton } from '../../../components/Card';
+import { Card, CardSkeleton } from '../../../components/Card';
 import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
 
 const useStyles = makeStyles({
@@ -103,6 +102,8 @@ interface IDispatchToProps {
 
 interface LeftContainerProps extends IStateToProps, IDispatchToProps {}
 
+const cardStyle = { width: 138, imgHeight: 175, marginRight: 14 };
+
 const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) => {
     const classes = useStyles();
 
@@ -123,12 +124,15 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) =
     const itemRender = useCallback(
         (item: ICard) => {
             const { id, ...rest } = item;
-            return <Card {...rest} />;
+            return <Card {...rest} style={cardStyle} />;
         },
         [cast]
     );
 
-    const skeletonRender = useCallback(() => <MultiCardSkeleton number={20} />, []);
+    const skeletonRender = useCallback(
+        () => [...Array(20)].map(() => <CardSkeleton style={cardStyle} />),
+        []
+    );
 
     return (
         <>

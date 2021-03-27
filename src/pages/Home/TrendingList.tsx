@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box';
 
 import { actions, interfaces, types } from '../../ducks';
 
-import { BaselessCard, MultiCardSkeleton } from '../../components/Card';
+import { Card, CardSkeleton } from '../../components/Card';
 import { CardList, CardHeader, CardItems } from '../../components/HorizontalCarList';
 
 interface ICard {
@@ -26,6 +26,8 @@ interface IDispatchToProps {
 }
 
 interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
+
+const cardStyle = { width: 150, imgHeight: 225, marginRight: 16 };
 
 const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history }) => {
     const [mediaType, setMediaType] = useState('movie');
@@ -69,12 +71,15 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
     const itemRender = useCallback(
         (item: ICard) => {
             const { id, ...rest } = item;
-            return <BaselessCard {...rest} onClick={() => handleCardClick(id)} />;
+            return <Card {...rest} onClick={() => handleCardClick(id)} style={cardStyle} />;
         },
         [data, isLoading]
     );
 
-    const skeletonRender = useCallback(() => <MultiCardSkeleton number={20} />, []);
+    const skeletonRender = useCallback(
+        () => [...Array(20)].map(() => <CardSkeleton style={cardStyle} />),
+        []
+    );
 
     return (
         <Box display="flex" p={3}>

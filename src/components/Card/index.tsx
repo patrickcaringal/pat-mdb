@@ -1,6 +1,4 @@
-import BaselessCard from './BaselessCard';
-import Card from './NormalCard';
+import Card from './Card';
 import CardSkeleton from './CardSkeleton';
-import MultiCardSkeleton from './MultiCardSkeleton';
 
-export { BaselessCard, Card, CardSkeleton, MultiCardSkeleton };
+export { Card, CardSkeleton };

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -9,45 +8,23 @@ import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import useIntersect from '../../customhooks/useIntersect';
+import { cardUseStyles as useStyles } from './styles';
+import { ICardProps } from './interfaces';
 
-const useStyles = makeStyles({
-    cardCont: {
-        minWidth: 138,
-        marginRight: 14
-    },
-    cardImg: {
-        height: 175
-    },
-    actionArea: {
-        '&:hover $focusHighlight': {
-            opacity: 0
-        }
-    },
-    focusHighlight: {},
-    cardContent: {
-        '&.MuiCardContent-root:last-child': {
-            paddingBottom: 16
-        }
-    },
-    title: {
-        fontWeight: 600
-    },
-    subtitle: {
-        color: '#696969'
-    }
-});
-
-interface IOwnProps {
-    image: string;
-    title: string;
-    subtitle: string;
-    onClick?: () => void;
+interface IOwnProps extends ICardProps {
+    style?: { width?: number; imgHeight?: number; marginRight?: number };
 }
 
-const NormalCard: React.FC<IOwnProps> = ({ image, title, subtitle, onClick = () => {} }) => {
+const CardComp: React.FC<IOwnProps> = ({
+    image,
+    title,
+    subtitle,
+    onClick = () => {},
+    style = {}
+}) => {
     const [isShown, setIsShown] = useState<boolean>(false);
 
-    const classes = useStyles();
+    const classes = useStyles(style);
 
     const IOOptions = { rootMargin: '0px 300px 0px 0px' };
     const [IOref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
@@ -82,4 +59,4 @@ const NormalCard: React.FC<IOwnProps> = ({ image, title, subtitle, onClick = () 
     );
 };
 
-export default NormalCard;
+export default CardComp;

@@ -1,6 +1,5 @@
-import React, { ReactNode, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { ReactNode } from 'react';
 import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
 
 import { ItemsProvider, LoaderProvider } from './CardListContext';
 
