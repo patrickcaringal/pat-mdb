@@ -13,7 +13,7 @@ import Tabs from '@material-ui/core/Tabs';
 
 import { actions, interfaces } from '../../../ducks';
 
-import { Card, CardSkeleton } from '../../../components/Card';
+import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
 import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
 
 const useStyles = makeStyles({
@@ -84,13 +84,6 @@ const useStyles = makeStyles({
     }
 });
 
-interface ICard {
-    id: string;
-    image: string;
-    title: string;
-    subtitle: string;
-}
-
 interface IStateToProps {
     cast: interfaces.ICast[];
     isLoading: boolean;
@@ -122,9 +115,8 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) =
     );
 
     const itemRender = useCallback(
-        (item: ICard) => {
-            const { id, ...rest } = item;
-            return <Card {...rest} style={cardStyle} />;
+        (item: CardInterfaces.ICard) => {
+            return <Card {...item} style={cardStyle} />;
         },
         [cast]
     );
@@ -137,7 +129,7 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) =
     return (
         <>
             <Box display="flex">
-                <CardList<ICard> items={mappedPopularMedia} isLoading={isLoading}>
+                <CardList<CardInterfaces.ICard> items={mappedPopularMedia} isLoading={isLoading}>
                     <CardHeader title="Cast" />
                     <CardItems itemRender={itemRender} skeletonRender={skeletonRender} />
                 </CardList>

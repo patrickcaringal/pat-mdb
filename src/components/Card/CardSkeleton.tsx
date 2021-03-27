@@ -6,11 +6,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 
+import { IStyle } from './interfaces';
 import { cardUseStyles as useStyles } from './styles';
 
-interface IOwnProps {
-    style?: { width?: number; imgHeight?: number; marginRight?: number };
-}
+interface IOwnProps extends IStyle {}
 
 const CardSkeleton: React.FC<IOwnProps> = ({ style = {} }) => {
     const classes = useStyles(style);

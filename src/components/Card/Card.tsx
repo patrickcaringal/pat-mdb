@@ -7,13 +7,12 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import useIntersect from '../../customhooks/useIntersect';
+import { ICard, IStyle } from './interfaces';
 import { cardUseStyles as useStyles } from './styles';
-import { ICardProps } from './interfaces';
 
-interface IOwnProps extends ICardProps {
-    style?: { width?: number; imgHeight?: number; marginRight?: number };
-}
+import useIntersect from '../../customhooks/useIntersect';
+
+interface IOwnProps extends ICard, IStyle {}
 
 const CardComp: React.FC<IOwnProps> = ({
     image,

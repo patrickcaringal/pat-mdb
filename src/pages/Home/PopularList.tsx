@@ -6,15 +6,8 @@ import Box from '@material-ui/core/Box';
 
 import { actions, interfaces, types } from '../../ducks';
 
-import { Card, CardSkeleton } from '../../components/Card';
+import { Card, CardSkeleton, CardInterfaces } from '../../components/Card';
 import { CardList, CardHeader, CardItems } from '../../components/HorizontalCarList';
-
-interface ICard {
-    id: string;
-    image: string;
-    title: string;
-    subtitle: string;
-}
 
 interface IStateToProps {
     data: interfaces.IMedia[];
@@ -69,9 +62,8 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
     };
 
     const itemRender = useCallback(
-        (item: ICard) => {
-            const { id, ...rest } = item;
-            return <Card {...rest} onClick={() => handleCardClick(id)} style={cardStyle} />;
+        (item: CardInterfaces.ICard) => {
+            return <Card {...item} onClick={() => handleCardClick(item.id)} style={cardStyle} />;
         },
         [data, isLoading]
     );
@@ -83,7 +75,7 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
 
     return (
         <Box display="flex" p={3}>
-            <CardList<ICard> items={mappedPopularMedia} isLoading={isLoading}>
+            <CardList<CardInterfaces.ICard> items={mappedPopularMedia} isLoading={isLoading}>
                 <CardHeader
                     title="Popular"
                     buttons={toggleButtons}
