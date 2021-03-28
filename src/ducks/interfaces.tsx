@@ -22,6 +22,10 @@ export interface IMediaDetail extends IMedia {
     cast: ICast[];
     director: string[];
     overview: string;
+    production_companies: {
+        name: string;
+        logo: string;
+    }[];
     recommendations: IMedia[];
     revenue: number;
     runtime: number;

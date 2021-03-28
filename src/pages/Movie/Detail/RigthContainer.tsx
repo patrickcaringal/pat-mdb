@@ -2,8 +2,10 @@ import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
+import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 // import Card from '@material-ui/core/Card';
 // import CardMedia from '@material-ui/core/CardMedia';
@@ -14,6 +16,8 @@ import Chip from '@material-ui/core/Chip';
 import { actions, interfaces } from '../../../ducks';
 
 import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
+
+import { formatNumWithComma, formatDate, formatHours } from '../../../utils/helpers';
 
 const useStyles = makeStyles({
     recommendationCard: {
@@ -36,10 +40,19 @@ const useStyles = makeStyles({
         '&.Mui-selected': {
             fontWeight: 600
         }
+    },
+    detailsCont: {
+        '& .MuiTypography-body2:not(.MuiTypography-gutterBottom)': {
+            fontWeight: 700
+        },
+        '& .MuiTypography-gutterBottom': {
+            marginBottom: '0.75em'
+        }
     }
 });
 
 interface IStateToProps {
+    data: interfaces.IMediaDetail;
     recommendations: interfaces.IMedia[];
     isLoading: boolean;
 }
@@ -50,8 +63,10 @@ interface IDispatchToProps {
 
 interface IOwnProps extends IStateToProps, IDispatchToProps {}
 
-const RightContainer: React.FC<IOwnProps> = ({ recommendations = [] }) => {
+const RightContainer: React.FC<IOwnProps> = ({ data }) => {
     const classes = useStyles();
+
+    const { budget, production_companies = [], recommendations = [], revenue } = data;
 
     const mappedRecommendations = useMemo(
         () =>
@@ -69,22 +84,56 @@ const RightContainer: React.FC<IOwnProps> = ({ recommendations = [] }) => {
 
     return (
         <>
-            <Box>
-                <Typography style={{ fontWeight: 700 }}>Keywords</Typography>
-                <Box display="flex" flexWrap="wrap" mt={2} mb={3}>
-                    {[...Array(16)].map((i) => (
+            <Box mb={3} pt={1} className={classes.detailsCont}>
+                <Typography variant="body2">Production Companies</Typography>
+                <Box display="flex" flexDirection="row" flexWrap="wrap" mx={-1} mb={1}>
+                    {production_companies.map((company) => {
+                        return (
+                            <Box
+                                p={1}
+                                m={1}
+                                display="flex"
+                                alignItems="center"
+                                width={40}
+                                boxShadow={2}
+                                boxSizing="content-box"
+                            >
+                                <img
+                                    alt={company.name}
+                                    src={company.logo}
+                                    style={{ width: 'inherit' }}
+                                />
+                            </Box>
+                        );
+                    })}
+                </Box>
+
+                <Typography variant="body2">Budget</Typography>
+                <Typography variant="body2" gutterBottom>
+                    ${formatNumWithComma(budget)}
+                </Typography>
+
+                <Typography variant="body2">Revenue</Typography>
+                <Typography variant="body2" gutterBottom>
+                    ${formatNumWithComma(revenue)}
+                </Typography>
+
+                <Typography variant="body2">Keywords</Typography>
+                <Box display="flex" flexWrap="wrap" mt={1}>
+                    {[...Array(8)].map((i) => (
                         <Chip
-                            // key={key}
                             label="Keyword"
                             onClick={() => {}}
-                            // variant={isGenreSelected(key) ? 'default' : 'outlined'}
                             size="small"
                             style={{ margin: 4 }}
                         />
                     ))}
                 </Box>
             </Box>
-            <Box>
+
+            <Divider />
+
+            <Box mt={3} mb={2}>
                 <Typography style={{ fontWeight: 700 }}>You may also like</Typography>
                 <Box
                     display="flex"
@@ -126,6 +175,7 @@ const RightContainer: React.FC<IOwnProps> = ({ recommendations = [] }) => {
 };
 
 const mapStateToProps = (state: interfaces.TState) => ({
+    data: state.movieDetail,
     recommendations: state.movieDetail.recommendations,
     isLoading: state.loaders.isMovieDetailLoading
 });
