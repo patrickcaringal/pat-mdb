@@ -1,44 +1,21 @@
-import React, { ReactNode } from 'react';
+import React, { useMemo } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
+// import Card from '@material-ui/core/Card';
+// import CardMedia from '@material-ui/core/CardMedia';
+// import CardContent from '@material-ui/core/CardContent';
 
 import Chip from '@material-ui/core/Chip';
 
-// import { actions, interfaces } from '../../../ducks';
+import { actions, interfaces } from '../../../ducks';
+
+import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
 
 const useStyles = makeStyles({
-    movieConent: {},
-    leftSidebar: {
-        width: 260,
-        minWidth: 260
-        // border: '1px solid red'
-    },
-
-    cardCont: {
-        minWidth: 138,
-        marginRight: 14
-    },
-    cardImg: {
-        height: 175
-    },
-    cardContent: {
-        '&.MuiCardContent-root:last-child': {
-            paddingBottom: 16
-        }
-    },
-    title: {
-        fontWeight: 600
-    },
-    subtitle: {
-        color: '#696969'
-    },
-
     recommendationCard: {
         width: 120,
         marginBottom: 16
@@ -59,36 +36,43 @@ const useStyles = makeStyles({
         '&.Mui-selected': {
             fontWeight: 600
         }
-    },
-
-    photoCard: {
-        minWidth: 533,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    photoCardImg: {
-        height: 300
-    },
-
-    posterCard: {
-        minWidth: 200,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    posterCardImg: {
-        height: 300
     }
 });
 
-const LeftContainer: React.FC = () => {
+interface IStateToProps {
+    recommendations: interfaces.IMedia[];
+    isLoading: boolean;
+}
+
+interface IDispatchToProps {
+    // getMovieDetail: (queries: interfaces.IGetMovieDetailPayload) => interfaces.IGetMovieDetail;
+}
+
+interface IOwnProps extends IStateToProps, IDispatchToProps {}
+
+const RightContainer: React.FC<IOwnProps> = ({ recommendations = [] }) => {
     const classes = useStyles();
+
+    const mappedRecommendations = useMemo(
+        () =>
+            recommendations?.map((i: interfaces.IMedia) => {
+                const { id, poster: image, title, genres: subtitle } = i;
+                return {
+                    id: title,
+                    image,
+                    title,
+                    subtitle: subtitle.join(', ')
+                };
+            }),
+        [recommendations]
+    );
 
     return (
         <>
             <Box>
                 <Typography style={{ fontWeight: 700 }}>Keywords</Typography>
                 <Box display="flex" flexWrap="wrap" mt={2} mb={3}>
-                    {[...Array(8)].map((i) => (
+                    {[...Array(16)].map((i) => (
                         <Chip
                             // key={key}
                             label="Keyword"
@@ -106,33 +90,34 @@ const LeftContainer: React.FC = () => {
                     display="flex"
                     flexDirection="row"
                     flexWrap="wrap"
-                    justifyContent="space-around"
+                    justifyContent="space-between"
                     mt={2}
                 >
-                    {[...Array(4)].map((i) => (
-                        <Card className={classes.recommendationCard}>
-                            <CardMedia
-                                className={classes.recommendationCardImg}
-                                image="https://image.tmdb.org/t/p/w130_and_h195_bestv2/1GEp7DDQhIHlw0vgBdQGiF4WhgS.jpg"
-                                title="yeah"
-                            />
-                            <CardContent className={classes.recommendationCardContent}>
-                                <Typography
-                                    variant="caption"
-                                    display="block"
-                                    className={classes.title}
-                                >
-                                    Úrsula Corberó Úrsula Corberó
-                                </Typography>
-                                <Typography
-                                    variant="caption"
-                                    display="block"
-                                    className={classes.subtitle}
-                                >
-                                    Tokyo
-                                </Typography>
-                            </CardContent>
-                        </Card>
+                    {mappedRecommendations?.map((i) => (
+                        <Card {...i} style={{ width: 140, imgHeight: 210, marginBottom: 16 }} />
+                        // <Card className={classes.recommendationCard}>
+                        //     <CardMedia
+                        //         className={classes.recommendationCardImg}
+                        //         image="https://image.tmdb.org/t/p/w130_and_h195_bestv2/1GEp7DDQhIHlw0vgBdQGiF4WhgS.jpg"
+                        //         title="yeah"
+                        //     />
+                        //     <CardContent className={classes.recommendationCardContent}>
+                        //         <Typography
+                        //             variant="caption"
+                        //             display="block"
+                        //             // className={classes.title}
+                        //         >
+                        //             Úrsula Corberó Úrsula Corberó
+                        //         </Typography>
+                        //         <Typography
+                        //             variant="caption"
+                        //             display="block"
+                        //             // className={classes.subtitle}
+                        //         >
+                        //             Tokyo
+                        //         </Typography>
+                        //     </CardContent>
+                        // </Card>
                     ))}
                 </Box>
             </Box>
@@ -140,4 +125,11 @@ const LeftContainer: React.FC = () => {
     );
 };
 
-export default LeftContainer;
+const mapStateToProps = (state: interfaces.TState) => ({
+    recommendations: state.movieDetail.recommendations,
+    isLoading: state.loaders.isMovieDetailLoading
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RightContainer);

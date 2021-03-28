@@ -7,5 +7,5 @@ export interface ICard {
 }
 
 export interface IStyle {
-    style?: { width?: number; imgHeight?: number; marginRight?: number };
+    style?: { width?: number; imgHeight?: number; marginRight?: number; marginBottom?: number };
 }

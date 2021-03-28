@@ -3,7 +3,9 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 export const cardUseStyles = makeStyles<Theme, { [key: string]: any }>({
     cardCont: {
         minWidth: (props) => props?.width || 138,
-        marginRight: (props) => props?.marginRight || 0
+        width: (props) => props?.width || 138,
+        marginRight: (props) => props?.marginRight || 0,
+        marginBottom: (props) => props?.marginBottom || 0
     },
     cardImg: {
         height: (props) => props?.imgHeight || 175

@@ -17,45 +17,6 @@ import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
 import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
 
 const useStyles = makeStyles({
-    movieConent: {},
-    leftSidebar: {
-        width: 260,
-        minWidth: 260
-        // border: '1px solid red'
-    },
-
-    cardCont: {
-        minWidth: 138,
-        marginRight: 14
-    },
-    cardImg: {
-        height: 175
-    },
-    cardContent: {
-        '&.MuiCardContent-root:last-child': {
-            paddingBottom: 16
-        }
-    },
-    title: {
-        fontWeight: 600
-    },
-    subtitle: {
-        color: '#696969'
-    },
-
-    recommendationCard: {
-        width: 120,
-        marginBottom: 16
-    },
-    recommendationCardImg: {
-        height: 195
-    },
-    recommendationCardContent: {
-        '&.MuiCardContent-root': {
-            padding: 10
-        }
-    },
-
     mediaTab: {
         '&.MuiTab-root': {
             textTransform: 'none'
@@ -64,7 +25,6 @@ const useStyles = makeStyles({
             fontWeight: 600
         }
     },
-
     photoCard: {
         minWidth: 533,
         borderRadius: 0,
@@ -128,7 +88,7 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) =
 
     return (
         <>
-            <Box display="flex">
+            <Box display="flex" mb={4}>
                 <CardList<CardInterfaces.ICard> items={mappedPopularMedia} isLoading={isLoading}>
                     <CardHeader title="Cast" />
                     <CardItems itemRender={itemRender} skeletonRender={skeletonRender} />

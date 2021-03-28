@@ -11,68 +11,9 @@ import RigthContainer from './RigthContainer';
 const useStyles = makeStyles({
     movieConent: {},
     leftSidebar: {
-        width: 260,
-        minWidth: 260
+        width: 300,
+        minWidth: 300
         // border: '1px solid red'
-    },
-
-    cardCont: {
-        minWidth: 138,
-        marginRight: 14
-    },
-    cardImg: {
-        height: 175
-    },
-    cardContent: {
-        '&.MuiCardContent-root:last-child': {
-            paddingBottom: 16
-        }
-    },
-    title: {
-        fontWeight: 600
-    },
-    subtitle: {
-        color: '#696969'
-    },
-
-    recommendationCard: {
-        width: 120,
-        marginBottom: 16
-    },
-    recommendationCardImg: {
-        height: 195
-    },
-    recommendationCardContent: {
-        '&.MuiCardContent-root': {
-            padding: 10
-        }
-    },
-
-    mediaTab: {
-        '&.MuiTab-root': {
-            textTransform: 'none'
-        },
-        '&.Mui-selected': {
-            fontWeight: 600
-        }
-    },
-
-    photoCard: {
-        minWidth: 533,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    photoCardImg: {
-        height: 300
-    },
-
-    posterCard: {
-        minWidth: 200,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    posterCardImg: {
-        height: 300
     }
 });
 
@@ -94,12 +35,13 @@ const BodyContainer: React.FC<BodyContainerProps> = ({ children }) => {
                     className={classes.movieConent}
                 >
                     {/* Main */}
-                    <Box display="flex" flexDirection="column" flex="1" overflow="hidden" mr={3}>
+                    <Box display="flex" flexDirection="column" flex="1" overflow="hidden" mr={6}>
                         {React.Children.toArray(children).find(
                             (node: any) => node.type === LeftContainer
                         )}
                     </Box>
 
+                    {/* <Box style={{ background: '#ccc', width: 1.5 }} mx={4} /> */}
                     {/* Left sidebar */}
                     <Box display="flex" className={classes.leftSidebar}>
                         <Box display="flex" flexDirection="column">
