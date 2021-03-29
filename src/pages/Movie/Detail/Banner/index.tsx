@@ -1,55 +1,34 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
 import BannerSkeleton from './BannerSkeleton';
+import { bannerUseStyles as useStyles } from './styles';
 
 import { interfaces } from '../../../../ducks';
 import { formatNumWithComma, formatDate, formatHours } from '../../../../utils/helpers';
-
-const useStyles = makeStyles({
-    backdrop: {
-        background: ({ bannerBg }: { bannerBg: string }) =>
-            `url(${bannerBg}) no-repeat  right -200px top`,
-        color: '#fff'
-    },
-    backdropOverlay: {
-        background:
-            'linear-gradient(to right, rgba(14.12%, 14.51%, 16.86%, 1.00) 150px, rgba(22.35%, 22.35%, 22.35%, 0.84) 100%)'
-    },
-    poster: {
-        width: 300,
-        height: 450,
-        borderRadius: 8
-    }
-});
 
 interface IStateToProps {
     data: interfaces.IMediaDetail;
     isLoading: boolean;
 }
 
-interface IDispatchToProps {
-    // getMovieDetail: (queries: interfaces.IGetMovieDetailPayload) => interfaces.IGetMovieDetail;
-}
+interface IDispatchToProps {}
 
 interface MovieDetailProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
 
 const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
     const {
         banner,
-        budget,
         director,
         genres,
         overview,
         poster,
         release_date,
-        revenue,
         runtime,
         tagline,
         title,
@@ -68,19 +47,16 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
                             <img src={poster} alt="PAT MDb" className={classes.poster} />
                         </Box>
                         <Box display="flex" flex="1" flexDirection="column" pl={5}>
-                            <Typography variant="h3" style={{ fontWeight: 700 }}>
+                            <Typography variant="h3" className={classes.boldText}>
                                 {title}
                             </Typography>
                             <Typography>
                                 <span>{genres?.join(', ')}</span>
-                                <span style={{ marginLeft: 12 }}>
-                                    &bull;&nbsp;&nbsp;{formatHours(runtime)}
-                                </span>
                             </Typography>
 
                             <Box display="flex" flexDirection="column" mt={1} mb={2}>
                                 <Box display="flex" flexDirection="row" alignItems="center">
-                                    <Typography variant="h4" style={{ fontWeight: 700 }}>
+                                    <Typography variant="h4" className={classes.boldText}>
                                         {vote_average}&nbsp;
                                     </Typography>
                                     <Typography variant="h6">/&nbsp;10</Typography>
@@ -88,38 +64,27 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
                                 <Typography>{formatNumWithComma(vote_count)} votes</Typography>
                             </Box>
 
-                            <Typography
-                                style={{
-                                    fontStyle: 'italic',
-                                    fontWeight: 600,
-                                    marginBottom: 6
-                                }}
-                            >
-                                {tagline}
-                            </Typography>
-                            <Typography variant="h6" style={{ fontWeight: 700, marginBottom: 6 }}>
+                            <Typography className={classes.tagline}>{tagline}</Typography>
+
+                            <Typography variant="h6" className={classes.boldText}>
                                 Overview
                             </Typography>
                             <Typography>{overview}</Typography>
 
-                            <Box display="flex" flexWrap="wrap" mt={4}>
-                                <Box flex="4">
-                                    <Typography style={{ fontWeight: 700 }}>Director</Typography>
+                            <Box display="flex" mt={4}>
+                                <Box flex="1">
+                                    <Typography className={classes.boldText}>Director</Typography>
                                     <Typography>{director?.join(', ')}</Typography>
                                 </Box>
-                                <Box flex="4">
-                                    <Typography style={{ fontWeight: 700 }}>
+                                <Box flex="1">
+                                    <Typography className={classes.boldText}>
                                         Release date
                                     </Typography>
                                     <Typography>{formatDate(release_date)}</Typography>
                                 </Box>
-                                <Box flex="4">
-                                    <Typography style={{ fontWeight: 700 }}>Budget</Typography>
-                                    <Typography>${formatNumWithComma(budget)}</Typography>
-                                </Box>
-                                <Box flex="4">
-                                    <Typography style={{ fontWeight: 700 }}>Revenue</Typography>
-                                    <Typography>${formatNumWithComma(revenue)}</Typography>
+                                <Box flex="2">
+                                    <Typography className={classes.boldText}>Runtime</Typography>
+                                    <Typography>{formatHours(runtime)}</Typography>
                                 </Box>
                             </Box>
                         </Box>

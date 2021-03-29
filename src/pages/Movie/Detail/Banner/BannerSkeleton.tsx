@@ -1,93 +1,13 @@
 import React from 'react';
 import { ThemeProvider } from '@material-ui/core';
-import { makeStyles, createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
+import Skeleton from '@material-ui/lab/Skeleton';
 import Typography from '@material-ui/core/Typography';
 
-import Skeleton from '@material-ui/lab/Skeleton';
-
-const useStyles = makeStyles({
-    backdrop: {
-        // background: ({ bannerBg }: { bannerBg: string }) =>
-        //     `url(${bannerBg}) no-repeat  right -200px top`,
-        color: '#fff'
-    },
-    backdropOverlay: {
-        background:
-            'linear-gradient(to right, rgba(14.12%, 14.51%, 16.86%, 1.00) 150px, rgba(22.35%, 22.35%, 22.35%, 0.84) 100%)'
-    },
-    poster: {
-        width: 300,
-        height: 450,
-        borderRadius: 8
-    },
-    movieConent: {},
-    leftSidebar: {
-        width: 260,
-        minWidth: 260
-    },
-
-    cardCont: {
-        minWidth: 138,
-        marginRight: 14
-    },
-    cardImg: {
-        height: 175
-    },
-    cardContent: {
-        '&.MuiCardContent-root:last-child': {
-            paddingBottom: 16
-        }
-    },
-    title: {
-        fontWeight: 600
-    },
-    subtitle: {
-        color: '#696969'
-    },
-
-    recommendationCard: {
-        width: 120,
-        marginBottom: 16
-    },
-    recommendationCardImg: {
-        height: 195
-    },
-    recommendationCardContent: {
-        '&.MuiCardContent-root': {
-            padding: 10
-        }
-    },
-
-    mediaTab: {
-        '&.MuiTab-root': {
-            textTransform: 'none'
-        },
-        '&.Mui-selected': {
-            fontWeight: 600
-        }
-    },
-
-    photoCard: {
-        minWidth: 533,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    photoCardImg: {
-        height: 300
-    },
-
-    posterCard: {
-        minWidth: 200,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    posterCardImg: {
-        height: 300
-    }
-});
+import { bannerUseStyles as useStyles } from './styles';
 
 const theme = createMuiTheme({
     palette: {
@@ -96,7 +16,7 @@ const theme = createMuiTheme({
 });
 
 const BannerSkeleton: React.FC = () => {
-    const classes = useStyles();
+    const classes = useStyles({ bannerBg: '' });
 
     return (
         <ThemeProvider theme={theme}>
@@ -126,14 +46,12 @@ const BannerSkeleton: React.FC = () => {
                                     </Typography>
                                 </Box>
 
-                                <Typography style={{ marginBottom: 6 }}>
+                                <Typography className={classes.tagline}>
                                     <Skeleton variant="text" width="30%" />
                                 </Typography>
-                                <Typography
-                                    variant="h6"
-                                    style={{ fontWeight: 700, marginBottom: 6 }}
-                                >
-                                    Overview
+
+                                <Typography variant="h6">
+                                    <Skeleton variant="text" width={120} />
                                 </Typography>
                                 <Typography>
                                     <Skeleton variant="text" />
@@ -141,34 +59,18 @@ const BannerSkeleton: React.FC = () => {
                                     <Skeleton variant="text" width="80%" />
                                 </Typography>
 
-                                <Box display="flex" flexWrap="wrap" mt={4}>
-                                    <Box flex="4">
-                                        <Typography style={{ fontWeight: 700 }}>
-                                            Director
-                                        </Typography>
-                                        <Typography>
-                                            <Skeleton variant="text" width={120} />
-                                        </Typography>
+                                <Box display="flex" mt={4}>
+                                    <Box flex="1">
+                                        <Skeleton variant="text" width={120} />
+                                        <Skeleton variant="text" width={120} />
                                     </Box>
-                                    <Box flex="4">
-                                        <Typography style={{ fontWeight: 700 }}>
-                                            Release date
-                                        </Typography>
-                                        <Typography>
-                                            <Skeleton variant="text" width={120} />
-                                        </Typography>
+                                    <Box flex="1">
+                                        <Skeleton variant="text" width={120} />
+                                        <Skeleton variant="text" width={120} />
                                     </Box>
-                                    <Box flex="4">
-                                        <Typography style={{ fontWeight: 700 }}>Budget</Typography>
-                                        <Typography>
-                                            <Skeleton variant="text" width={120} />
-                                        </Typography>
-                                    </Box>
-                                    <Box flex="4">
-                                        <Typography style={{ fontWeight: 700 }}>Revenue</Typography>
-                                        <Typography>
-                                            <Skeleton variant="text" width={120} />
-                                        </Typography>
+                                    <Box flex="2">
+                                        <Skeleton variant="text" width={120} />
+                                        <Skeleton variant="text" width={120} />
                                     </Box>
                                 </Box>
                             </Box>
