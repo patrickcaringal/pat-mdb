@@ -82,7 +82,14 @@ const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history 
                     selected={mediaType}
                     onToggleChange={onMediaTypeChange}
                 />
-                <CardItems itemRender={itemRender} skeletonRender={skeletonRender} />
+                <CardItems
+                    itemRender={itemRender}
+                    skeletonRender={skeletonRender}
+                    // Box props
+                    display="flex"
+                    py={2}
+                    overflow="auto"
+                />
             </CardList>
         </Box>
     );

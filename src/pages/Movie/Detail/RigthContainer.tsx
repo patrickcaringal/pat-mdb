@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -10,7 +10,8 @@ import Chip from '@material-ui/core/Chip';
 
 import { actions, interfaces } from '../../../ducks';
 
-import { Card } from '../../../components/Card';
+import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
+import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
 
 import { formatNumWithComma } from '../../../utils/helpers';
 
@@ -58,6 +59,8 @@ interface IDispatchToProps {
 
 interface IOwnProps extends IStateToProps, IDispatchToProps {}
 
+const cardStyle = { width: 140, imgHeight: 210, marginBottom: 16 };
+
 const RightContainer: React.FC<IOwnProps> = ({ data }) => {
     const classes = useStyles();
 
@@ -74,6 +77,14 @@ const RightContainer: React.FC<IOwnProps> = ({ data }) => {
                     subtitle: subtitle.join(', ')
                 };
             }),
+        [recommendations]
+    );
+
+    const itemRender = useCallback(
+        (item: CardInterfaces.ICard) => {
+            // return <Card {...item} style={cardStyle} />;
+            return <Card {...item} style={cardStyle} />;
+        },
         [recommendations]
     );
 
@@ -129,17 +140,32 @@ const RightContainer: React.FC<IOwnProps> = ({ data }) => {
             <Divider />
 
             <Box mt={3} mb={2}>
-                <Typography style={{ fontWeight: 700 }}>You may also like</Typography>
+                {/* <Typography style={{ fontWeight: 700 }}>You may also like</Typography> */}
                 <Box
                     display="flex"
                     flexDirection="row"
-                    flexWrap="wrap"
-                    justifyContent="space-between"
-                    mt={2}
+                    // flexWrap="wrap"
+                    // justifyContent="space-between"
+                    // mt={2}
                 >
-                    {mappedRecommendations?.map((i) => (
+                    {/* {mappedRecommendations?.map((i) => (
                         <Card {...i} style={{ width: 140, imgHeight: 210, marginBottom: 16 }} />
-                    ))}
+                    ))} */}
+                    <CardList<CardInterfaces.ICard>
+                        items={mappedRecommendations}
+                        // isLoading={isLoading}
+                    >
+                        <CardHeader title="You may also like" />
+                        <CardItems
+                            itemRender={itemRender}
+                            // Box props
+                            display="flex"
+                            py={2}
+                            flexWrap="wrap"
+                            justifyContent="space-between"
+                        />
+                        {/*  skeletonRender={skeletonRender} */}
+                    </CardList>
                 </Box>
             </Box>
         </>

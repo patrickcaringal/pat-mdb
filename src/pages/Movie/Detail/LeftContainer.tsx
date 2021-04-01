@@ -14,9 +14,9 @@ import Tabs from '@material-ui/core/Tabs';
 import { actions, interfaces } from '../../../ducks';
 
 import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
-import MovieCard from './MovieCard';
-
 import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
+
+import MovieCard from './MovieCard';
 
 const useStyles = makeStyles({
     mediaTab: {
@@ -96,7 +96,14 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
             <Box display="flex" mb={4}>
                 <CardList<CardInterfaces.ICard> items={mappedPopularMedia} isLoading={isLoading}>
                     <CardHeader title="Cast" />
-                    <CardItems itemRender={itemRender} skeletonRender={skeletonRender} />
+                    <CardItems
+                        itemRender={itemRender}
+                        skeletonRender={skeletonRender}
+                        // Box props
+                        display="flex"
+                        py={2}
+                        overflow="auto"
+                    />
                 </CardList>
             </Box>
 
