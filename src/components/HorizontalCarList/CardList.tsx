@@ -19,14 +19,16 @@ function CardList<T>({ items, isLoading, children }: IOwnProps<T>) {
             <LoaderProvider value={isLoading}>
                 {/* {renders.current++} */}
                 <Box display="flex" flexDirection="column" width="100%">
+                    {React.Children.toArray(children).find((node: any) => node.type === CardHeader)}
+
+                    {React.Children.toArray(children).find((node: any) => node.type === CardItems)}
+                    {/*
                     <Box display="flex" py={1}>
                         {React.Children.toArray(children).find(
                             (node: any) => node.type === CardHeader
                         )}
                     </Box>
-
-                    {React.Children.toArray(children).find((node: any) => node.type === CardItems)}
-                    {/* <Box display="flex" py={2} flexWrap="wrap" justifyContent="space-between">
+                    <Box display="flex" py={2} flexWrap="wrap" justifyContent="space-between">
                         {React.Children.toArray(children).find(
                             (node: any) => node.type === CardItems
                         )}

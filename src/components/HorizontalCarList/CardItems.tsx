@@ -14,7 +14,6 @@ const CardItems: React.FC<IOwnProps> = ({ itemRender, skeletonRender = () => nul
     // const renders = React.useRef(0);
 
     return (
-        // display="flex" py={2} flexWrap="wrap" justifyContent="space-between"
         <Box {...rest}>
             {/* {renders.current++} */}
             {isLoading ? skeletonRender() : items.map((item: any) => itemRender(item))}

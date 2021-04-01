@@ -53,15 +53,13 @@ interface IStateToProps {
     isLoading: boolean;
 }
 
-interface IDispatchToProps {
-    // getMovieDetail: (queries: interfaces.IGetMovieDetailPayload) => interfaces.IGetMovieDetail;
-}
+interface IDispatchToProps {}
 
 interface IOwnProps extends IStateToProps, IDispatchToProps {}
 
 const cardStyle = { width: 140, imgHeight: 210, marginBottom: 16 };
 
-const RightContainer: React.FC<IOwnProps> = ({ data }) => {
+const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
     const classes = useStyles();
 
     const { budget, production_companies = [], recommendations = [], revenue } = data;
@@ -86,6 +84,11 @@ const RightContainer: React.FC<IOwnProps> = ({ data }) => {
             return <Card {...item} style={cardStyle} />;
         },
         [recommendations]
+    );
+
+    const skeletonRender = useCallback(
+        () => [...Array(20)].map(() => <CardSkeleton style={cardStyle} />),
+        []
     );
 
     return (
@@ -140,31 +143,24 @@ const RightContainer: React.FC<IOwnProps> = ({ data }) => {
             <Divider />
 
             <Box mt={3} mb={2}>
-                {/* <Typography style={{ fontWeight: 700 }}>You may also like</Typography> */}
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    // flexWrap="wrap"
-                    // justifyContent="space-between"
-                    // mt={2}
-                >
+                <Box display="flex" flexDirection="row">
                     {/* {mappedRecommendations?.map((i) => (
                         <Card {...i} style={{ width: 140, imgHeight: 210, marginBottom: 16 }} />
                     ))} */}
                     <CardList<CardInterfaces.ICard>
                         items={mappedRecommendations}
-                        // isLoading={isLoading}
+                        isLoading={isLoading}
                     >
-                        <CardHeader title="You may also like" />
+                        <CardHeader title="You may also like" titleVariant="body1" />
                         <CardItems
                             itemRender={itemRender}
+                            skeletonRender={skeletonRender}
                             // Box props
                             display="flex"
                             py={2}
                             flexWrap="wrap"
                             justifyContent="space-between"
                         />
-                        {/*  skeletonRender={skeletonRender} */}
                     </CardList>
                 </Box>
             </Box>
