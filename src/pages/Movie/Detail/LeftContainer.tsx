@@ -14,6 +14,8 @@ import Tabs from '@material-ui/core/Tabs';
 import { actions, interfaces } from '../../../ducks';
 
 import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
+import MovieCard from './MovieCard';
+
 import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
 
 const useStyles = makeStyles({
@@ -46,6 +48,7 @@ const useStyles = makeStyles({
 
 interface IStateToProps {
     cast: interfaces.ICast[];
+    collection: interfaces.IMedia[];
     isLoading: boolean;
 }
 
@@ -57,8 +60,10 @@ interface LeftContainerProps extends IStateToProps, IDispatchToProps {}
 
 const cardStyle = { width: 138, imgHeight: 175, marginRight: 14 };
 
-const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) => {
+const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [], isLoading }) => {
     const classes = useStyles();
+
+    // console.log(JSON.stringify(collection, null, 4));
 
     const mappedPopularMedia = useMemo(
         () =>
@@ -93,6 +98,19 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) =
                     <CardHeader title="Cast" />
                     <CardItems itemRender={itemRender} skeletonRender={skeletonRender} />
                 </CardList>
+            </Box>
+
+            <Box display="flex" flexDirection="column" mb={4}>
+                {[...new Array(3)].map(() => {
+                    return (
+                        <MovieCard
+                            image="https://via.placeholder.com/94x141/767c77/fabea7"
+                            title="Movie title"
+                            subtitle="July 10, 2020"
+                            description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet quae quibusdam nam veniam laborum iusto magnam inventore voluptate officia voluptatibus! Sit, vel omnis enim ex sunt dolores officiis velit molestiae."
+                        />
+                    );
+                })}
             </Box>
 
             <Box>
@@ -149,6 +167,7 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], isLoading }) =
 
 const mapStateToProps = (state: interfaces.TState) => ({
     cast: state.movieDetail.cast,
+    collection: (state.movieDetail?.collection as interfaces.IMedia[]) || [],
     isLoading: state.loaders.isMovieDetailLoading
 });
 

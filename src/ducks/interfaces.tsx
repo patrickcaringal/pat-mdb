@@ -6,6 +6,7 @@ export interface IMedia {
     id: string;
     title: string;
     genres: string[];
+    overview?: string;
     poster: string;
     release_date: string;
 }
@@ -20,8 +21,8 @@ export interface IMediaDetail extends IMedia {
     banner: string;
     budget: number;
     cast: ICast[];
+    collection?: IMedia[];
     director: string[];
-    overview: string;
     production_companies: {
         name: string;
         logo: string;

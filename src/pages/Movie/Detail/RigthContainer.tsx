@@ -10,9 +10,9 @@ import Chip from '@material-ui/core/Chip';
 
 import { actions, interfaces } from '../../../ducks';
 
-import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
+import { Card } from '../../../components/Card';
 
-import { formatNumWithComma, formatDate, formatHours } from '../../../utils/helpers';
+import { formatNumWithComma } from '../../../utils/helpers';
 
 const useStyles = makeStyles({
     recommendationCard: {
@@ -139,29 +139,6 @@ const RightContainer: React.FC<IOwnProps> = ({ data }) => {
                 >
                     {mappedRecommendations?.map((i) => (
                         <Card {...i} style={{ width: 140, imgHeight: 210, marginBottom: 16 }} />
-                        // <Card className={classes.recommendationCard}>
-                        //     <CardMedia
-                        //         className={classes.recommendationCardImg}
-                        //         image="https://image.tmdb.org/t/p/w130_and_h195_bestv2/1GEp7DDQhIHlw0vgBdQGiF4WhgS.jpg"
-                        //         title="yeah"
-                        //     />
-                        //     <CardContent className={classes.recommendationCardContent}>
-                        //         <Typography
-                        //             variant="caption"
-                        //             display="block"
-                        //             // className={classes.title}
-                        //         >
-                        //             Úrsula Corberó Úrsula Corberó
-                        //         </Typography>
-                        //         <Typography
-                        //             variant="caption"
-                        //             display="block"
-                        //             // className={classes.subtitle}
-                        //         >
-                        //             Tokyo
-                        //         </Typography>
-                        //     </CardContent>
-                        // </Card>
                     ))}
                 </Box>
             </Box>
