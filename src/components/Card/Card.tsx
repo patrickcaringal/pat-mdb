@@ -18,12 +18,14 @@ const CardComp: React.FC<IOwnProps> = ({
     image,
     title,
     subtitle,
+    description = '',
+    variant = 'vertical',
     onClick = () => {},
     style = {}
 }) => {
     const [isShown, setIsShown] = useState<boolean>(false);
 
-    const classes = useStyles(style);
+    const classes = useStyles({ ...style, variant });
 
     const IOOptions = { rootMargin: '0px 300px 0px 0px' };
     const [IOref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
@@ -44,16 +46,27 @@ const CardComp: React.FC<IOwnProps> = ({
                 ) : (
                     <Skeleton variant="rect" animation="pulse" className={classes.cardImg} />
                 )}
+            </CardActionArea>
 
-                <CardContent className={classes.cardContent}>
-                    <Typography noWrap className={classes.title}>
+            <CardContent className={classes.cardContent}>
+                <div>
+                    <Typography
+                        variant={variant === 'vertical' ? 'body1' : 'h6'}
+                        noWrap
+                        className={classes.title}
+                    >
                         {title}
                     </Typography>
-                    <Typography variant="body2" className={classes.subtitle}>
+                    <Typography
+                        variant={variant === 'vertical' ? 'body2' : 'body1'}
+                        color="textSecondary"
+                    >
                         {subtitle}
                     </Typography>
-                </CardContent>
-            </CardActionArea>
+                </div>
+
+                {!!description && <Typography className="line-clamp">{description}</Typography>}
+            </CardContent>
         </Card>
     );
 };

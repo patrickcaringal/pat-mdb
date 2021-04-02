@@ -12,6 +12,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
 import { actions, interfaces } from '../../../ducks';
+import { formatDate } from '../../../utils/helpers';
 
 import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
 import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
@@ -59,20 +60,20 @@ interface IDispatchToProps {
 interface LeftContainerProps extends IStateToProps, IDispatchToProps {}
 
 const cardStyle = {
-    cardContainer: {
-        minWidth: 138,
-        width: 138,
-        marginRight: 14
-    },
+    cardContainer: { minWidth: 138, width: 138, marginRight: 14 },
     cardImage: { height: 175 }
+};
+
+const verticalCardStyle = {
+    cardContainer: { marginBottom: 18 },
+    cardImage: { height: 141, width: 94 },
+    cardContent: { paddingBottom: '10px !important', paddingTop: 10 }
 };
 
 const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [], isLoading }) => {
     const classes = useStyles();
 
-    // console.log(JSON.stringify(collection, null, 4));
-
-    const mappedPopularMedia = useMemo(
+    const mappedCastItems = useMemo(
         () =>
             cast.map((i: interfaces.ICast) => {
                 const { poster: image, name: title, character: subtitle } = i;
@@ -86,7 +87,7 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
         [cast]
     );
 
-    const itemRender = useCallback(
+    const castItemRender = useCallback(
         (item: CardInterfaces.ICard) => {
             return <Card {...item} style={cardStyle} />;
         },
@@ -98,34 +99,65 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
         []
     );
 
+    const mappedCollectionItems = useMemo(
+        () =>
+            collection.map((i: interfaces.IMedia) => {
+                const {
+                    id,
+                    poster: image,
+                    title,
+                    release_date: subtitle,
+                    overview: description
+                } = i;
+
+                return {
+                    id,
+                    image,
+                    title,
+                    subtitle: formatDate(subtitle),
+                    description
+                };
+            }),
+        [collection]
+    );
+
+    const collectionItemRender = useCallback(
+        (item: CardInterfaces.ICard) => {
+            return <Card {...item} variant="horizontal" style={verticalCardStyle} />;
+        },
+        [cast]
+    );
+
     return (
         <>
             <Box display="flex" mb={4}>
-                <CardList<CardInterfaces.ICard> items={mappedPopularMedia} isLoading={isLoading}>
+                <CardList<CardInterfaces.ICard> items={mappedCastItems} isLoading={isLoading}>
                     <CardHeader title="Cast" />
                     <CardItems
-                        itemRender={itemRender}
+                        itemRender={castItemRender}
                         skeletonRender={skeletonRender}
                         // Box props
                         display="flex"
+                        flexDirection="row"
+                        overflow="auto"
                         pt={1}
                         pb={2}
-                        overflow="auto"
                     />
                 </CardList>
             </Box>
 
-            <Box display="flex" flexDirection="column" mb={4}>
-                {[...new Array(3)].map(() => {
-                    return (
-                        <MovieCard
-                            image="https://via.placeholder.com/94x141/767c77/fabea7"
-                            title="Movie title"
-                            subtitle="July 10, 2020"
-                            description="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet quae quibusdam nam veniam laborum iusto magnam inventore voluptate officia voluptatibus! Sit, vel omnis enim ex sunt dolores officiis velit molestiae."
-                        />
-                    );
-                })}
+            <Box display="flex" mb={4}>
+                <CardList<CardInterfaces.ICard> items={mappedCollectionItems} isLoading={isLoading}>
+                    <CardHeader title="Collections" />
+                    <CardItems
+                        itemRender={collectionItemRender}
+                        // skeletonRender={skeletonRender}
+                        // Box props
+                        display="flex"
+                        flexDirection="column"
+                        pt={1}
+                    />
+                </CardList>
             </Box>
 
             <Box>

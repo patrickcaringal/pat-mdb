@@ -3,6 +3,8 @@ export interface ICard {
     image: string;
     title: string;
     subtitle: string;
+    description?: string;
+    variant?: 'horizontal' | 'vertical';
     onClick?: () => void;
 }
 
@@ -12,6 +14,9 @@ export interface IStyle {
             [key: string]: any;
         };
         cardImage?: {
+            [key: string]: any;
+        };
+        cardContent?: {
             [key: string]: any;
         };
     };
