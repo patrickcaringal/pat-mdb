@@ -58,7 +58,14 @@ interface IDispatchToProps {
 
 interface LeftContainerProps extends IStateToProps, IDispatchToProps {}
 
-const cardStyle = { width: 138, imgHeight: 175, marginRight: 14 };
+const cardStyle = {
+    cardContainer: {
+        minWidth: 138,
+        width: 138,
+        marginRight: 14
+    },
+    cardImage: { height: 175 }
+};
 
 const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [], isLoading }) => {
     const classes = useStyles();
@@ -101,7 +108,8 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
                         skeletonRender={skeletonRender}
                         // Box props
                         display="flex"
-                        py={2}
+                        pt={1}
+                        pb={2}
                         overflow="auto"
                     />
                 </CardList>

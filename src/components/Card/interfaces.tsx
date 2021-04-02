@@ -7,5 +7,12 @@ export interface ICard {
 }
 
 export interface IStyle {
-    style?: { width?: number; imgHeight?: number; marginRight?: number; marginBottom?: number };
+    style?: {
+        cardContainer?: {
+            [key: string]: any;
+        };
+        cardImage?: {
+            [key: string]: any;
+        };
+    };
 }

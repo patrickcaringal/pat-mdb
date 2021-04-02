@@ -1,15 +1,16 @@
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 export const cardUseStyles = makeStyles<Theme, { [key: string]: any }>({
-    cardCont: {
-        minWidth: (props) => props?.width || 138,
-        width: (props) => props?.width || 138,
-        marginRight: (props) => props?.marginRight || 0,
-        marginBottom: (props) => props?.marginBottom || 0
-    },
-    cardImg: {
-        height: (props) => props?.imgHeight || 175
-    },
+    cardCont: (props) => ({
+        minWidth: 138,
+        width: 138,
+        ...props.cardContainer
+    }),
+    cardImg: (props) => ({
+        height: 175,
+        ...props.cardImage
+    }),
+
     actionArea: {
         '&:hover $focusHighlight': {
             opacity: 0

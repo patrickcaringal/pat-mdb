@@ -14,19 +14,26 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import useIntersect from '../../../customhooks/useIntersect';
 
 const useStyles = makeStyles({
-    root: {
+    cardCont: {
         display: 'flex',
-        marginBottom: 18
-    },
-    cover: {
-        width: 94,
+        flexDirection: 'row',
+        marginBottom: 18,
         height: 141
     },
-    content: {
+    cardImg: {
+        width: 94
+        // height: 141
+    },
+    cardContent: {
         display: 'flex',
         flexDirection: 'column',
         flex: '1',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        paddingBottom: 10,
+        paddingTop: 10
+    },
+    title: {
+        fontWeight: 600
     }
 });
 
@@ -46,15 +53,15 @@ const MovieCard: React.FC<IMediaCard> = ({ image, title, subtitle, description }
     const [IOref] = useIntersect(IOOptions, (shown: boolean) => setIsShown(shown));
 
     return (
-        <Card className={classes.root} {...({ ref: IOref } as any)}>
+        <Card className={classes.cardCont} {...({ ref: IOref } as any)}>
             {isShown ? (
-                <CardMedia className={classes.cover} image={image} title={title} />
+                <CardMedia className={classes.cardImg} image={image} title={title} />
             ) : (
-                <Skeleton variant="rect" animation="pulse" className={classes.cover} />
+                <Skeleton variant="rect" animation="pulse" className={classes.cardImg} />
             )}
-            <CardContent className={classes.content} style={{ paddingBottom: 10, paddingTop: 10 }}>
+            <CardContent className={classes.cardContent}>
                 <Box>
-                    <Typography variant="h6" style={{ fontWeight: 600 }}>
+                    <Typography variant="h6" className={classes.title}>
                         {title}
                     </Typography>
                     <Typography color="textSecondary">{subtitle}</Typography>

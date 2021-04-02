@@ -57,7 +57,14 @@ interface IDispatchToProps {}
 
 interface IOwnProps extends IStateToProps, IDispatchToProps {}
 
-const cardStyle = { width: 140, imgHeight: 210, marginBottom: 16 };
+const cardStyle = {
+    cardContainer: {
+        minWidth: 140,
+        width: 140,
+        marginBottom: 16
+    },
+    cardImage: { height: 210 }
+};
 
 const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
     const classes = useStyles();
@@ -80,7 +87,6 @@ const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
 
     const itemRender = useCallback(
         (item: CardInterfaces.ICard) => {
-            // return <Card {...item} style={cardStyle} />;
             return <Card {...item} style={cardStyle} />;
         },
         [recommendations]

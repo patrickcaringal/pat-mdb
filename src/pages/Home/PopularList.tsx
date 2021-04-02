@@ -20,7 +20,14 @@ interface IDispatchToProps {
 
 interface HomeProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
 
-const cardStyle = { width: 150, imgHeight: 225, marginRight: 16 };
+const cardStyle = {
+    cardContainer: {
+        minWidth: 150,
+        width: 150,
+        marginRight: 16
+    },
+    cardImage: { height: 225 }
+};
 
 const PopularList: React.FC<HomeProps> = ({ isLoading, data, getMedias, history }) => {
     const [mediaType, setMediaType] = useState('movie');
