@@ -17,8 +17,6 @@ import { formatDate } from '../../../utils/helpers';
 import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
 import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
 
-import MovieCard from './MovieCard';
-
 const useStyles = makeStyles({
     mediaTab: {
         '&.MuiTab-root': {
@@ -64,7 +62,7 @@ const cardStyle = {
     cardImage: { height: 175 }
 };
 
-const verticalCardStyle = {
+const horizontalCardStyle = {
     cardContainer: { marginBottom: 18 },
     cardImage: { height: 141, width: 94 },
     cardContent: { paddingBottom: '10px !important', paddingTop: 10 }
@@ -123,9 +121,17 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
 
     const collectionItemRender = useCallback(
         (item: CardInterfaces.ICard) => {
-            return <Card {...item} variant="horizontal" style={verticalCardStyle} />;
+            return <Card {...item} variant="horizontal" style={horizontalCardStyle} />;
         },
-        [cast]
+        [collection]
+    );
+
+    const collectionSkeletonRender = useCallback(
+        () =>
+            [...Array(3)].map(() => (
+                <CardSkeleton variant="horizontal" style={horizontalCardStyle} />
+            )),
+        []
     );
 
     return (
@@ -151,7 +157,7 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
                     <CardHeader title="Collections" />
                     <CardItems
                         itemRender={collectionItemRender}
-                        // skeletonRender={skeletonRender}
+                        skeletonRender={collectionSkeletonRender}
                         // Box props
                         display="flex"
                         flexDirection="column"
@@ -160,7 +166,7 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
                 </CardList>
             </Box>
 
-            <Box>
+            {/* <Box>
                 <Typography variant="h5" style={{ fontWeight: 600 }}>
                     Media
                 </Typography>
@@ -185,17 +191,6 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
                         pb={2}
                         style={{ width: '100%', overflow: 'auto' }}
                     >
-                        {/* Poster */}
-                        {/* {[...Array(8)].map((i) => (
-                                    <Card className={classes.posterCard}>
-                                        <CardMedia
-                                            className={classes.posterCardImg}
-                                            image="https://image.tmdb.org/t/p/w220_and_h330_face/4LjPjtfaxEn2W61ORPeytr5Qq7j.jpg"
-                                            title="title"
-                                        />
-                                    </Card>
-                                ))} */}
-
                         {[...Array(8)].map((i) => (
                             <Card2 className={classes.photoCard}>
                                 <CardMedia
@@ -207,7 +202,7 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
                         ))}
                     </Box>
                 </Box>
-            </Box>
+            </Box> */}
         </>
     );
 };

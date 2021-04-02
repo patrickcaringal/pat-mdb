@@ -71,7 +71,7 @@ const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
 
     const { budget, production_companies = [], recommendations = [], revenue } = data;
 
-    const mappedRecommendations = useMemo(
+    const mappedRecommendationItems = useMemo(
         () =>
             recommendations?.map((i: interfaces.IMedia) => {
                 const { id, poster: image, title, genres: subtitle } = i;
@@ -85,7 +85,7 @@ const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
         [recommendations]
     );
 
-    const itemRender = useCallback(
+    const recommendationItemRender = useCallback(
         (item: CardInterfaces.ICard) => {
             return <Card {...item} style={cardStyle} />;
         },
@@ -150,16 +150,13 @@ const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
 
             <Box mt={3} mb={2}>
                 <Box display="flex" flexDirection="row">
-                    {/* {mappedRecommendations?.map((i) => (
-                        <Card {...i} style={{ width: 140, imgHeight: 210, marginBottom: 16 }} />
-                    ))} */}
                     <CardList<CardInterfaces.ICard>
-                        items={mappedRecommendations}
+                        items={mappedRecommendationItems}
                         isLoading={isLoading}
                     >
                         <CardHeader title="You may also like" titleVariant="body1" />
                         <CardItems
-                            itemRender={itemRender}
+                            itemRender={recommendationItemRender}
                             skeletonRender={skeletonRender}
                             // Box props
                             display="flex"
