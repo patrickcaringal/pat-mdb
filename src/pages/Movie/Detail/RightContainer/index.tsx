@@ -1,51 +1,19 @@
 import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
 
 import Chip from '@material-ui/core/Chip';
 
-import { actions, interfaces } from '../../../ducks';
+import { useStyles, cardStyle } from './styles';
+import Skeleton from './Skeleton';
+import { Card, CardInterfaces } from '../../../../components/Card';
+import { CardList, CardHeader, CardItems } from '../../../../components/HorizontalCarList';
 
-import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
-import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
-
-import { formatNumWithComma } from '../../../utils/helpers';
-
-const useStyles = makeStyles({
-    recommendationCard: {
-        width: 120,
-        marginBottom: 16
-    },
-    recommendationCardImg: {
-        height: 195
-    },
-    recommendationCardContent: {
-        '&.MuiCardContent-root': {
-            padding: 10
-        }
-    },
-
-    mediaTab: {
-        '&.MuiTab-root': {
-            textTransform: 'none'
-        },
-        '&.Mui-selected': {
-            fontWeight: 600
-        }
-    },
-    detailsCont: {
-        '& .MuiTypography-body2:not(.MuiTypography-gutterBottom)': {
-            fontWeight: 700
-        },
-        '& .MuiTypography-gutterBottom': {
-            marginBottom: '0.75em'
-        }
-    }
-});
+import { actions, interfaces } from '../../../../ducks';
+import { formatNumWithComma } from '../../../../utils/helpers';
 
 interface IStateToProps {
     data: interfaces.IMediaDetail;
@@ -56,15 +24,6 @@ interface IStateToProps {
 interface IDispatchToProps {}
 
 interface IOwnProps extends IStateToProps, IDispatchToProps {}
-
-const cardStyle = {
-    cardContainer: {
-        minWidth: 140,
-        width: 140,
-        marginBottom: 16
-    },
-    cardImage: { height: 210 }
-};
 
 const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
     const classes = useStyles();
@@ -92,10 +51,9 @@ const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
         [recommendations]
     );
 
-    const skeletonRender = useCallback(
-        () => [...Array(20)].map(() => <CardSkeleton style={cardStyle} />),
-        []
-    );
+    if (isLoading) {
+        return <Skeleton />;
+    }
 
     return (
         <>
@@ -150,14 +108,10 @@ const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
 
             <Box mt={3} mb={2}>
                 <Box display="flex" flexDirection="row">
-                    <CardList<CardInterfaces.ICard>
-                        items={mappedRecommendationItems}
-                        isLoading={isLoading}
-                    >
+                    <CardList<CardInterfaces.ICard> items={mappedRecommendationItems}>
                         <CardHeader title="You may also like" titleVariant="body1" />
                         <CardItems
                             itemRender={recommendationItemRender}
-                            skeletonRender={skeletonRender}
                             // Box props
                             display="flex"
                             py={2}

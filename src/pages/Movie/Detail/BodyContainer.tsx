@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import LeftContainer from './LeftContainer';
-import RigthContainer from './RigthContainer';
+import RightContainer from './RightContainer';
 
 // import { actions, interfaces } from '../../../ducks';
 
@@ -46,7 +46,7 @@ const BodyContainer: React.FC<BodyContainerProps> = ({ children }) => {
                     <Box display="flex" className={classes.leftSidebar}>
                         <Box display="flex" flexDirection="column">
                             {React.Children.toArray(children).find(
-                                (node: any) => node.type === RigthContainer
+                                (node: any) => node.type === RightContainer
                             )}
                         </Box>
                     </Box>
