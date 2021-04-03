@@ -153,7 +153,11 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
             </Box>
 
             <Box display="flex" mb={4}>
-                <CardList<CardInterfaces.ICard> items={mappedCollectionItems} isLoading={isLoading}>
+                <CardList<CardInterfaces.ICard>
+                    items={mappedCollectionItems}
+                    isLoading={isLoading}
+                    hideOnBlankItems
+                >
                     <CardHeader title="Collections" />
                     <CardItems
                         itemRender={collectionItemRender}
@@ -165,7 +169,6 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
                     />
                 </CardList>
             </Box>
-
             {/* <Box>
                 <Typography variant="h5" style={{ fontWeight: 600 }}>
                     Media

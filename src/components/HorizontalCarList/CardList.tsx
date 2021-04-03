@@ -10,10 +10,13 @@ interface IOwnProps<T> {
     items: T[];
     isLoading?: boolean;
     children: ReactNode;
+    hideOnBlankItems?: boolean;
 }
 
-function CardList<T>({ items, isLoading, children }: IOwnProps<T>) {
+function CardList<T>({ items, isLoading, children, hideOnBlankItems = false }: IOwnProps<T>) {
     // const renders = React.useRef(0);
+    if (hideOnBlankItems && !isLoading && items.length === 0) return null;
+
     return (
         <ItemsProvider value={items}>
             <LoaderProvider value={isLoading}>
@@ -22,17 +25,6 @@ function CardList<T>({ items, isLoading, children }: IOwnProps<T>) {
                     {React.Children.toArray(children).find((node: any) => node.type === CardHeader)}
 
                     {React.Children.toArray(children).find((node: any) => node.type === CardItems)}
-                    {/*
-                    <Box display="flex" py={1}>
-                        {React.Children.toArray(children).find(
-                            (node: any) => node.type === CardHeader
-                        )}
-                    </Box>
-                    <Box display="flex" py={2} flexWrap="wrap" justifyContent="space-between">
-                        {React.Children.toArray(children).find(
-                            (node: any) => node.type === CardItems
-                        )}
-                    </Box> */}
                 </Box>
             </LoaderProvider>
         </ItemsProvider>

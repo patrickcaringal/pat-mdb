@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Box from '@material-ui/core/Box';
 
-import Typography, { TypographyProps, TypographyClassKey } from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
+import Typography from '@material-ui/core/Typography';
+
+import { LoaderContext } from './CardListContext';
 import Toggle from '../Toggle';
 
 interface IOwnProps {
@@ -23,18 +26,29 @@ const Header: React.FC<IOwnProps> = ({
     onToggleChange = () => {}
 }) => {
     // const renders = React.useRef(0);
+    const isLoading = useContext(LoaderContext);
 
     return (
         <Box display="flex" py={1}>
             {/* {renders.current++} */}
-            {buttons?.length ? (
+            {isLoading && (
+                <Typography variant={titleVariant}>
+                    <Skeleton variant="text" width={140} />
+                </Typography>
+            )}
+
+            {/* has buttons */}
+            {!isLoading && buttons.length !== 0 && (
                 <>
                     <Typography variant="h5" style={{ fontWeight: 600, marginRight: 16 }}>
                         {title}
                     </Typography>
                     <Toggle buttons={buttons} selected={selected} onToggleChange={onToggleChange} />
                 </>
-            ) : (
+            )}
+
+            {/* no buttons */}
+            {!isLoading && buttons.length === 0 && (
                 <Typography variant={titleVariant} style={{ fontWeight: 600 }}>
                     {title}
                 </Typography>
