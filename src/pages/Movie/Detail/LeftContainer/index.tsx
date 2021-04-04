@@ -1,49 +1,20 @@
 import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
+// import Card2 from '@material-ui/core/Card';
+// import CardMedia from '@material-ui/core/CardMedia';
+// import Tab from '@material-ui/core/Tab';
+// import Tabs from '@material-ui/core/Tabs';
 
-import Card2 from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
+import { useStyles, cardStyle, horizontalCardStyle } from './styles';
+import Skeleton from './Skeleton';
+import { actions, interfaces } from '../../../../ducks';
+import { formatDate } from '../../../../utils/helpers';
 
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-
-import { actions, interfaces } from '../../../ducks';
-import { formatDate } from '../../../utils/helpers';
-
-import { Card, CardSkeleton, CardInterfaces } from '../../../components/Card';
-import { CardList, CardHeader, CardItems } from '../../../components/HorizontalCarList';
-
-const useStyles = makeStyles({
-    mediaTab: {
-        '&.MuiTab-root': {
-            textTransform: 'none'
-        },
-        '&.Mui-selected': {
-            fontWeight: 600
-        }
-    },
-    photoCard: {
-        minWidth: 533,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    photoCardImg: {
-        height: 300
-    },
-
-    posterCard: {
-        minWidth: 200,
-        borderRadius: 0,
-        marginRight: 14
-    },
-    posterCardImg: {
-        height: 300
-    }
-});
+import { Card, CardInterfaces } from '../../../../components/Card';
+import { CardList, CardHeader, CardItems } from '../../../../components/HorizontalCarList';
 
 interface IStateToProps {
     cast: interfaces.ICast[];
@@ -51,22 +22,9 @@ interface IStateToProps {
     isLoading: boolean;
 }
 
-interface IDispatchToProps {
-    // getMovieDetail: (queries: interfaces.IGetMovieDetailPayload) => interfaces.IGetMovieDetail;
-}
+interface IDispatchToProps {}
 
 interface LeftContainerProps extends IStateToProps, IDispatchToProps {}
-
-const cardStyle = {
-    cardContainer: { minWidth: 138, width: 138, marginRight: 14 },
-    cardImage: { height: 175 }
-};
-
-const horizontalCardStyle = {
-    cardContainer: { marginBottom: 18 },
-    cardImage: { height: 141, width: 94 },
-    cardContent: { paddingBottom: '10px !important', paddingTop: 10 }
-};
 
 const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [], isLoading }) => {
     const classes = useStyles();
@@ -90,11 +48,6 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
             return <Card {...item} style={cardStyle} />;
         },
         [cast]
-    );
-
-    const skeletonRender = useCallback(
-        () => [...Array(20)].map(() => <CardSkeleton style={cardStyle} />),
-        []
     );
 
     const mappedCollectionItems = useMemo(
@@ -126,22 +79,18 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
         [collection]
     );
 
-    const collectionSkeletonRender = useCallback(
-        () =>
-            [...Array(3)].map(() => (
-                <CardSkeleton variant="horizontal" style={horizontalCardStyle} />
-            )),
-        []
-    );
+    console.log('Patr');
+    if (isLoading) {
+        return <Skeleton />;
+    }
 
     return (
         <>
             <Box display="flex" mb={4}>
-                <CardList<CardInterfaces.ICard> items={mappedCastItems} isLoading={isLoading}>
+                <CardList<CardInterfaces.ICard> items={mappedCastItems}>
                     <CardHeader title="Cast" />
                     <CardItems
                         itemRender={castItemRender}
-                        skeletonRender={skeletonRender}
                         // Box props
                         display="flex"
                         flexDirection="row"
@@ -153,15 +102,10 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
             </Box>
 
             <Box display="flex" mb={4}>
-                <CardList<CardInterfaces.ICard>
-                    items={mappedCollectionItems}
-                    isLoading={isLoading}
-                    hideOnBlankItems
-                >
+                <CardList<CardInterfaces.ICard> items={mappedCollectionItems} hideOnBlankItems>
                     <CardHeader title="Collections" />
                     <CardItems
                         itemRender={collectionItemRender}
-                        skeletonRender={collectionSkeletonRender}
                         // Box props
                         display="flex"
                         flexDirection="column"

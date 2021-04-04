@@ -15,7 +15,7 @@ interface IOwnProps<T> {
 
 function CardList<T>({ items, isLoading, children, hideOnBlankItems = false }: IOwnProps<T>) {
     // const renders = React.useRef(0);
-    if (hideOnBlankItems && !isLoading && items.length === 0) return null;
+    // if (hideOnBlankItems && !isLoading && items.length === 0) return null;
 
     return (
         <ItemsProvider value={items}>

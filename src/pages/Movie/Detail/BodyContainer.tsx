@@ -6,14 +6,11 @@ import Container from '@material-ui/core/Container';
 import LeftContainer from './LeftContainer';
 import RightContainer from './RightContainer';
 
-// import { actions, interfaces } from '../../../ducks';
-
 const useStyles = makeStyles({
     movieConent: {},
     leftSidebar: {
         width: 300,
         minWidth: 300
-        // border: '1px solid red'
     }
 });
 
