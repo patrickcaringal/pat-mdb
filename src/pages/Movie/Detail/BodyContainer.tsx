@@ -6,12 +6,29 @@ import Container from '@material-ui/core/Container';
 import LeftContainer from './LeftContainer';
 import RightContainer from './RightContainer';
 
-const useStyles = makeStyles({
-    movieConent: {},
-    leftSidebar: {
-        width: 300,
-        minWidth: 300
-    }
+const useStyles = makeStyles((theme) => {
+    return {
+        content: {
+            display: 'flex',
+            flexDirection: 'row',
+            marginTop: theme.spacing(4),
+            marginLeft: theme.spacing(4),
+            marginRight: theme.spacing(4)
+        },
+        left: {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            overflow: 'hidden',
+            marginRight: theme.spacing(6)
+        },
+        right: {
+            display: 'flex',
+            flexDirection: 'column',
+            width: 300,
+            minWidth: 300
+        }
+    };
 });
 
 interface BodyContainerProps {
@@ -24,28 +41,19 @@ const BodyContainer: React.FC<BodyContainerProps> = ({ children }) => {
     return (
         <>
             <Container disableGutters maxWidth="lg">
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    mt={4}
-                    mx={4}
-                    className={classes.movieConent}
-                >
-                    {/* Main */}
-                    <Box display="flex" flexDirection="column" flex="1" overflow="hidden" mr={6}>
+                <Box className={classes.content}>
+                    {/* right panel */}
+                    <Box className={classes.left}>
                         {React.Children.toArray(children).find(
                             (node: any) => node.type === LeftContainer
                         )}
                     </Box>
 
-                    {/* <Box style={{ background: '#ccc', width: 1.5 }} mx={4} /> */}
-                    {/* Left sidebar */}
-                    <Box display="flex" className={classes.leftSidebar}>
-                        <Box display="flex" flexDirection="column">
-                            {React.Children.toArray(children).find(
-                                (node: any) => node.type === RightContainer
-                            )}
-                        </Box>
+                    {/* left panel */}
+                    <Box className={classes.right}>
+                        {React.Children.toArray(children).find(
+                            (node: any) => node.type === RightContainer
+                        )}
                     </Box>
                 </Box>
             </Container>

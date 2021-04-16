@@ -24,11 +24,13 @@ interface MovieDetailProps extends IStateToProps, IDispatchToProps, RouteCompone
 const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
     const {
         banner,
+        budget,
         director,
         genres,
         overview,
         poster,
         release_date,
+        revenue,
         runtime,
         tagline,
         title,
@@ -51,7 +53,9 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
                                 {title}
                             </Typography>
                             <Typography>
-                                <span>{genres?.join(', ')}</span>
+                                <span>{formatDate(release_date)}</span>
+                                <span>&#8226;{genres?.join(', ')}</span>
+                                <span>&#8226;{formatHours(runtime)}</span>
                             </Typography>
 
                             <Box display="flex" flexDirection="column" mt={1} mb={2}>
@@ -77,14 +81,12 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ data, isLoading }) => {
                                     <Typography>{director?.join(', ')}</Typography>
                                 </Box>
                                 <Box flex="1">
-                                    <Typography className={classes.boldText}>
-                                        Release date
-                                    </Typography>
-                                    <Typography>{formatDate(release_date)}</Typography>
+                                    <Typography className={classes.boldText}>Budget</Typography>
+                                    <Typography>${formatNumWithComma(budget)}</Typography>
                                 </Box>
                                 <Box flex="2">
-                                    <Typography className={classes.boldText}>Runtime</Typography>
-                                    <Typography>{formatHours(runtime)}</Typography>
+                                    <Typography className={classes.boldText}>Revenue</Typography>
+                                    <Typography> ${formatNumWithComma(revenue)}</Typography>
                                 </Box>
                             </Box>
                         </Box>

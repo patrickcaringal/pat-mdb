@@ -28,7 +28,7 @@ interface IOwnProps extends IStateToProps, IDispatchToProps {}
 const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
     const classes = useStyles();
 
-    const { budget, production_companies = [], recommendations = [], revenue } = data;
+    const { production_companies = [], recommendations = [] } = data;
 
     const mappedRecommendationItems = useMemo(
         () =>
@@ -80,16 +80,6 @@ const RightContainer: React.FC<IOwnProps> = ({ data, isLoading }) => {
                         );
                     })}
                 </Box>
-
-                <Typography variant="body2">Budget</Typography>
-                <Typography variant="body2" gutterBottom>
-                    ${formatNumWithComma(budget)}
-                </Typography>
-
-                <Typography variant="body2">Revenue</Typography>
-                <Typography variant="body2" gutterBottom>
-                    ${formatNumWithComma(revenue)}
-                </Typography>
 
                 <Typography variant="body2">Keywords</Typography>
                 <Box display="flex" flexWrap="wrap" mt={1}>

@@ -79,40 +79,27 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ cast = [], collection = [
         [collection]
     );
 
-    console.log('Patr');
     if (isLoading) {
         return <Skeleton />;
     }
 
     return (
         <>
-            <Box display="flex" mb={4}>
-                <CardList<CardInterfaces.ICard> items={mappedCastItems}>
-                    <CardHeader title="Cast" />
-                    <CardItems
-                        itemRender={castItemRender}
-                        // Box props
-                        display="flex"
-                        flexDirection="row"
-                        overflow="auto"
-                        pt={1}
-                        pb={2}
-                    />
-                </CardList>
-            </Box>
+            {/* casts */}
+            <CardList<CardInterfaces.ICard> items={mappedCastItems} className={classes.containers}>
+                <CardHeader title="Cast" />
+                <CardItems itemRender={castItemRender} className={classes.castList} />
+            </CardList>
 
-            <Box display="flex" mb={4}>
-                <CardList<CardInterfaces.ICard> items={mappedCollectionItems} hideOnBlankItems>
-                    <CardHeader title="Collections" />
-                    <CardItems
-                        itemRender={collectionItemRender}
-                        // Box props
-                        display="flex"
-                        flexDirection="column"
-                        pt={1}
-                    />
-                </CardList>
-            </Box>
+            {/* collections */}
+            <CardList<CardInterfaces.ICard>
+                items={mappedCollectionItems}
+                hideOnBlankItems
+                className={classes.containers}
+            >
+                <CardHeader title="Collections" />
+                <CardItems itemRender={collectionItemRender} className={classes.collectionList} />
+            </CardList>
             {/* <Box>
                 <Typography variant="h5" style={{ fontWeight: 600 }}>
                     Media
