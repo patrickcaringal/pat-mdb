@@ -44,6 +44,7 @@
     /* font-family: 'Source Sans Pro', Arial, sans-serif; */
     /* font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; */
     /* font-weight: 400; */
+    overflow: overlay;
 }
 
 .line-clamp {

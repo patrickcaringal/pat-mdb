@@ -15,10 +15,10 @@ import landingImg from '../../asset/img/landing-bg.jpg';
 
 const useStyles = makeStyles((theme) => ({
     bannerGrid: {
-        minHeight: '300px',
-        height: 'calc(100vh / 2.5)',
-        maxHeight: '360px',
-        background: `linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.75)), url(${landingImg}) repeat`,
+        // minHeight: '300px',
+        height: 680,
+        // maxHeight: '360px',
+        background: `linear-gradient(rgba(31, 36, 33, 0.9), rgba(73, 160, 120, 0.8)), url(${landingImg}) repeat`,
         backgroundSize: 'contain',
         backgroundPosition: 'center'
     },
@@ -70,13 +70,12 @@ const Banner: React.FC<IOwnProps> = ({ history }) => {
     return (
         <Box
             className={classes.bannerGrid}
-            height="100%"
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
         >
-            <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
+            {/* <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
                 <Typography variant="h3" component="h2" className={classes.bannerHeader}>
                     Discover lots of movies and TV series.
                 </Typography>
@@ -105,7 +104,7 @@ const Banner: React.FC<IOwnProps> = ({ history }) => {
                         <SearchIcon />
                     </IconButton>
                 </Paper>
-            </form>
+            </form> */}
         </Box>
     );
 };

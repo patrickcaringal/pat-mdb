@@ -18,12 +18,16 @@ const useStyles = makeStyles((theme) => ({
             background: 'none'
         },
         width: 150,
-        color: '#fff',
+        color: '#DCE1DE',
         fontWeight: ({ menuSelected }: { menuSelected: boolean }) =>
             menuSelected ? 'bold' : 'normal'
     },
     menuItemCont: {
         marginLeft: 100
+    },
+    popover: {
+        background: '#1F2421',
+        color: '#DCE1DE'
     }
 }));
 
@@ -37,32 +41,14 @@ const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...re
     const classes = useStyles({ menuSelected: location.pathname.includes(`/${value}/`) });
 
     const [isMenuItemsOpen, setIsMenuItemsOpen] = useState<boolean>(false);
-    const [isPointerOnMenuItems, setIsPointerOnMenuItems] = useState<boolean>(false);
+    // const [isPointerOnMenuItems, setIsPointerOnMenuItems] = useState<boolean>(false);
 
     const anchorRef = useRef(null);
-    const pointerRef = useRef(isPointerOnMenuItems);
-    pointerRef.current = isPointerOnMenuItems;
+    // const pointerRef = useRef(isPointerOnMenuItems);
+    // pointerRef.current = isPointerOnMenuItems;
 
     const handlePopoverOpen = () => {
         setIsMenuItemsOpen(true);
-    };
-
-    const handleTriggerPointerLeave = () => {
-        setTimeout(() => {
-            if (pointerRef.current) {
-                return;
-            }
-            setIsMenuItemsOpen(false);
-        }, 100);
-    };
-
-    const handleMenuPointerEnter = () => {
-        setIsPointerOnMenuItems(true);
-    };
-
-    const handleMenuPointerLeave = () => {
-        setIsPointerOnMenuItems(false);
-        setIsMenuItemsOpen(false);
     };
 
     const handleClose = (event: React.MouseEvent<EventTarget>) => {
@@ -79,8 +65,6 @@ const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...re
                 disableRipple
                 disableFocusRipple
                 onClick={handlePopoverOpen}
-                onMouseEnter={handlePopoverOpen}
-                onMouseLeave={handleTriggerPointerLeave}
                 {...rest}
             >
                 {label}
@@ -90,8 +74,6 @@ const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...re
                 anchorEl={anchorRef.current}
                 transition
                 disablePortal
-                onMouseEnter={handleMenuPointerEnter}
-                onMouseLeave={handleMenuPointerLeave}
                 className={classes.menuItemCont}
             >
                 {({ TransitionProps, placement }) => (
@@ -101,7 +83,7 @@ const Menu: React.FC<MenuProps> = ({ label, value, options = [], location, ...re
                             transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'
                         }}
                     >
-                        <Paper>
+                        <Paper className={classes.popover}>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList id="menu-list-grow">
                                     {options.map((i) => (

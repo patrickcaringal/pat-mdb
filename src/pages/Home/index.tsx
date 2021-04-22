@@ -10,8 +10,8 @@ const Home: React.FC = () => (
     <>
         <Banner />
         <Container disableGutters maxWidth="lg">
-            <PopularList />
-            <TrendingList />
+            {/* <PopularList />
+            <TrendingList /> */}
         </Container>
     </>
 );

@@ -29,11 +29,11 @@ const App: React.FC<AppProps> = (props) => {
             <Toolbar />
             <Container disableGutters maxWidth={false}>
                 <Switch>
-                    <Route path="/test" component={() => <Test />} />
+                    {/* <Route path="/test" component={() => <Test />} />
                     <Route path="/movie/:id" exact component={() => <MoviePage />} />
                     <Route path="/tv-show/:id" exact component={() => <TvPage />} />
                     <Route path="/people/:id" exact component={() => <PeoplePage />} />
-                    <Route path="/search" component={() => <SearchPage />} />
+                    <Route path="/search" component={() => <SearchPage />} /> */}
                     <Route path="/not-found" component={() => <h1>NotFound</h1>} />
 
                     <Route path="/" exact component={() => <Home />} />
