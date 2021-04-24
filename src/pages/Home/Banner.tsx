@@ -10,6 +10,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Slide from '@material-ui/core/Slide';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 import landingImg from '../../asset/img/landing-bg.jpg';
 
@@ -92,59 +95,78 @@ const Banner: React.FC<IOwnProps> = ({ history }) => {
         });
     };
 
+    const [checked, setChecked] = React.useState(false);
+
+    const handleChange = () => {
+        setChecked((prev) => !prev);
+    };
+
     return (
         <Box className={classes.bannerGrid}>
             <Box className={classes.bannerContent}>
+                <FormControlLabel
+                    control={<Switch checked={checked} onChange={handleChange} />}
+                    label="Show"
+                />
                 <Typography className={classes.title} variant="h3" gutterBottom>
                     <b>Popular</b> Movies & TV shows
                 </Typography>
-                <Box className={classes.cardCont}>
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                            <CardMedia
-                                className={classes.media}
-                                image="https://www.themoviedb.org/t/p/w220_and_h330_face/6kbAMLteGO8yyewYau6bJ683sw7.jpg"
-                                title="Contemplative Reptile"
-                            />
-                        </CardActionArea>
-                    </Card>
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                            <CardMedia
-                                className={classes.media}
-                                image="https://www.themoviedb.org/t/p/w220_and_h330_face/8yhtzsbBExY8mUct2GOk4LDDuGH.jpg"
-                                title="Contemplative Reptile"
-                            />
-                        </CardActionArea>
-                    </Card>
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                            <CardMedia
-                                className={classes.media}
-                                image="https://www.themoviedb.org/t/p/w220_and_h330_face/pgqgaUx1cJb5oZQQ5v0tNARCeBp.jpg"
-                                title="Contemplative Reptile"
-                            />
-                        </CardActionArea>
-                    </Card>
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                            <CardMedia
-                                className={classes.media}
-                                image="https://www.themoviedb.org/t/p/w220_and_h330_face/qRyy2UmjC5ur9bDi3kpNNRCc5nc.jpg"
-                                title="Contemplative Reptile"
-                            />
-                        </CardActionArea>
-                    </Card>
-                    <Card className={classes.root}>
-                        <CardActionArea>
-                            <CardMedia
-                                className={classes.media}
-                                image="https://www.themoviedb.org/t/p/w220_and_h330_face/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg"
-                                title="Contemplative Reptile"
-                            />
-                        </CardActionArea>
-                    </Card>
-                </Box>
+                <Slide
+                    direction={checked ? 'left' : 'right'}
+                    in={checked}
+                    mountOnEnter
+                    unmountOnExit
+                    timeout={1000}
+                >
+                    <Box className={classes.cardCont}>
+                        <Card className={classes.root} raised>
+                            <CardActionArea>
+                                <CardMedia
+                                    className={classes.media}
+                                    image="https://www.themoviedb.org/t/p/w220_and_h330_face/6kbAMLteGO8yyewYau6bJ683sw7.jpg"
+                                    title="Contemplative Reptile"
+                                />
+                            </CardActionArea>
+                        </Card>
+
+                        <Card className={classes.root} raised>
+                            <CardActionArea>
+                                <CardMedia
+                                    className={classes.media}
+                                    image="https://www.themoviedb.org/t/p/w220_and_h330_face/8yhtzsbBExY8mUct2GOk4LDDuGH.jpg"
+                                    title="Contemplative Reptile"
+                                />
+                            </CardActionArea>
+                        </Card>
+                        <Card className={classes.root} raised>
+                            <CardActionArea>
+                                <CardMedia
+                                    className={classes.media}
+                                    image="https://www.themoviedb.org/t/p/w220_and_h330_face/pgqgaUx1cJb5oZQQ5v0tNARCeBp.jpg"
+                                    title="Contemplative Reptile"
+                                />
+                            </CardActionArea>
+                        </Card>
+                        <Card className={classes.root} raised>
+                            <CardActionArea>
+                                <CardMedia
+                                    className={classes.media}
+                                    image="https://www.themoviedb.org/t/p/w220_and_h330_face/qRyy2UmjC5ur9bDi3kpNNRCc5nc.jpg"
+                                    title="Contemplative Reptile"
+                                />
+                            </CardActionArea>
+                        </Card>
+                        <Card className={classes.root} raised>
+                            <CardActionArea>
+                                <CardMedia
+                                    className={classes.media}
+                                    image="https://www.themoviedb.org/t/p/w220_and_h330_face/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg"
+                                    title="Contemplative Reptile"
+                                />
+                            </CardActionArea>
+                        </Card>
+                    </Box>
+                </Slide>
             </Box>
 
             {/* <Box display="flex" flexDirection="column" alignItems="center" mb={3}>

@@ -15,7 +15,7 @@ import SearchPage from './pages/Search';
 import MoviePage from './pages/Movie';
 import TvPage from './pages/Tv';
 import PeoplePage from './pages/People';
-import Test from './pages/Test/AutoComplete';
+import Test from './pages/Test/Carousel';
 
 interface AppProps {}
 
@@ -34,6 +34,7 @@ const App: React.FC<AppProps> = (props) => {
                     <Route path="/tv-show/:id" exact component={() => <TvPage />} />
                     <Route path="/people/:id" exact component={() => <PeoplePage />} />
                     <Route path="/search" component={() => <SearchPage />} /> */}
+                    <Route path="/test" component={() => <Test />} />
                     <Route path="/not-found" component={() => <h1>NotFound</h1>} />
 
                     <Route path="/" exact component={() => <Home />} />
