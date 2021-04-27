@@ -1,50 +1,51 @@
-/* eslint-disable no-use-before-define */
-import React from 'react';
-import { AutoRotatingCarousel, Slide } from 'material-auto-rotating-carousel';
-import { red, blue, green } from '@material-ui/core/colors';
+import React, { Component } from 'react';
+import Slider from 'react-slick';
 
-// const Slide = require('./Slide').default;
-// const { red, blue, green } = require('@material-ui/core/colors');
-// const Button = require('@material-ui/core/Button').default;
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-export default function Tags() {
-    return (
-        <div style={{ position: 'relative', width: '100%', height: 500 }}>
-            <AutoRotatingCarousel
-                label="Get started"
-                open
-                // onClose={() => setState({ open: false })}
-                // onStart={() => setState({ open: false })}
-                style={{ position: 'absolute' }}
-            >
-                <Slide
-                    media={
-                        <img src="http://www.icons101.com/icon_png/size_256/id_79394/youtube.png" />
-                    }
-                    mediaBackgroundStyle={{ backgroundColor: red[400] }}
-                    style={{ backgroundColor: red[600] }}
-                    title="This is a very cool feature"
-                    subtitle="Just using this will blow your mind."
-                />
-                <Slide
-                    media={
-                        <img src="http://www.icons101.com/icon_png/size_256/id_80975/GoogleInbox.png" />
-                    }
-                    mediaBackgroundStyle={{ backgroundColor: blue[400] }}
-                    style={{ backgroundColor: blue[600] }}
-                    title="Ever wanted to be popular?"
-                    subtitle="Well just mix two colors and your are good to go!"
-                />
-                <Slide
-                    media={
-                        <img src="http://www.icons101.com/icon_png/size_256/id_76704/Google_Settings.png" />
-                    }
-                    mediaBackgroundStyle={{ backgroundColor: green[400] }}
-                    style={{ backgroundColor: green[600] }}
-                    title="May the force be with you"
-                    subtitle="The Force is a metaphysical and ubiquitous power in the Star Wars fictional universe."
-                />
-            </AutoRotatingCarousel>
-        </div>
-    );
+export default class MultipleItems extends Component {
+    render() {
+        const settings = {
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 3,
+            slidesToScroll: 3
+        };
+        return (
+            <div>
+                <h2> Multiple items </h2>
+                <Slider {...settings}>
+                    <div>
+                        <h3>1</h3>
+                    </div>
+                    <div>
+                        <h3>2</h3>
+                    </div>
+                    <div>
+                        <h3>3</h3>
+                    </div>
+                    <div>
+                        <h3>4</h3>
+                    </div>
+                    <div>
+                        <h3>5</h3>
+                    </div>
+                    <div>
+                        <h3>6</h3>
+                    </div>
+                    <div>
+                        <h3>7</h3>
+                    </div>
+                    <div>
+                        <h3>8</h3>
+                    </div>
+                    <div>
+                        <h3>9</h3>
+                    </div>
+                </Slider>
+            </div>
+        );
+    }
 }
