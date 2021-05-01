@@ -2,10 +2,16 @@ import * as constants from './constants';
 import * as interfaces from './interfaces';
 import * as types from './types';
 
+import { createAction } from '@reduxjs/toolkit';
+// console.log(getPopularMedias2({ media: 'movie' }));
+// console.log(getPopularMedias2.type);
+
 export const getPopularMedias = (payload: types.media): interfaces.IGetPopularMedias => ({
     type: constants.GET_POPULAR_MOVIES,
     payload
 });
+
+export const getPopularMedias2 = createAction<{ media: types.media }>('GET_POPULAR_MOVIES');
 
 export const getPopularMediasSucceed = (
     payload: interfaces.IMedia[]

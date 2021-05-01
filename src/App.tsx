@@ -8,6 +8,8 @@ import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import configureStore from './utils/configureStore';
+// import * as actions from './ducks/actions';
+import { GET_POPULAR_MOVIES } from './ducks/reducer';
 import './App.css';
 import AppBar from './components/AppBar';
 import Home from './pages/Home';
@@ -20,6 +22,10 @@ import Test from './pages/Test/Carousel';
 interface AppProps {}
 
 const store = configureStore();
+
+// store.dispatch(actions.getPopularMedias2({ media: 'movie' }));
+store.dispatch(GET_POPULAR_MOVIES({ media: 'movie' }));
+// console.log(store);
 
 const App: React.FC<AppProps> = (props) => {
     return (

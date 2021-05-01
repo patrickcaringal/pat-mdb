@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -16,6 +17,8 @@ import Switch from '@material-ui/core/Switch';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
+
+import { actions, interfaces, types } from '../../ducks';
 
 import landingImg from '../../asset/img/landing-bg.jpg';
 
@@ -37,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
         },
         '& .slick-arrow:before': {
             fontSize: 40
+        },
+        '& .slick-next': {
+            right: -5
         }
     },
     bannerContent: {},
@@ -89,9 +95,18 @@ const useStyles = makeStyles((theme) => ({
     // }
 }));
 
-interface IOwnProps extends RouteComponentProps {}
+interface IStateToProps {
+    data: interfaces.IMedia[];
+    isLoading: boolean;
+}
 
-const Banner: React.FC<IOwnProps> = ({ history }) => {
+interface IDispatchToProps {
+    getMedias: (media: types.media) => interfaces.IGetPopularMedias;
+}
+
+interface IOwnProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
+
+const Banner: React.FC<IOwnProps> = ({ isLoading, data, getMedias, history }) => {
     // const renders = React.useRef(0);
 
     const classes = useStyles();
@@ -216,4 +231,14 @@ const Banner: React.FC<IOwnProps> = ({ history }) => {
     );
 };
 
-export default withRouter(Banner);
+// export default withRouter(Banner);
+const mapStateToProps = (state: interfaces.TState) => ({
+    data: state.popularMedias,
+    isLoading: state.loaders.isPopularLoading
+});
+
+const mapDispatchToProps = {
+    getMedias: actions.getPopularMedias
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Banner));

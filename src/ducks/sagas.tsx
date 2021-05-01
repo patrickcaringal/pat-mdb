@@ -1,10 +1,13 @@
 import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
+import { GET_POPULAR_MOVIES } from './reducer';
 import * as constants from './constants';
 import * as actions from './actions';
 import * as interfaces from './interfaces';
 import http, { getQueryString } from '../utils/http';
 
 function* getPopularMedias({ payload: media }: interfaces.IGetPopularMedias) {
+    // console.log('SAGA - getPopularMedias');
+    alert('SAGA - getPopularMedias');
     try {
         const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/popular`);
 
@@ -98,7 +101,8 @@ function* getMovieDetail({ payload }: interfaces.IGetMovieDetail) {
 }
 
 export default function* rootSaga() {
-    yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMedias)]);
+    yield all([yield takeLatest(GET_POPULAR_MOVIES.type, getPopularMedias)]);
+    // yield all([yield takeLatest(constants.GET_POPULAR_MOVIES, getPopularMedias)]);
     yield all([yield takeLatest(constants.GET_TRENDING_MEDIAS, getTrendingMedias)]);
     yield all([yield takeLatest(constants.GET_CATALOG_MOVIES, getCatalogMovies)]);
     yield all([yield takeLatest(constants.GET_CATALOG_TV_SHOWS, getCatalogTVShows)]);
