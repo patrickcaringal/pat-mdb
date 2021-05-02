@@ -33,6 +33,10 @@ const slice = createSlice({
     }
 });
 
+// Selector
+export const getPopularMedias = (state) => state.popularMedias;
+// store.getState().popularMedias
+
 export const { GET_POPULAR_MOVIES } = slice.actions;
 export default slice.reducer;
 

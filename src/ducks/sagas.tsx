@@ -5,9 +5,10 @@ import * as actions from './actions';
 import * as interfaces from './interfaces';
 import http, { getQueryString } from '../utils/http';
 
-function* getPopularMedias({ payload: media }: interfaces.IGetPopularMedias) {
-    // console.log('SAGA - getPopularMedias');
-    alert('SAGA - getPopularMedias');
+// { payload: media }
+function* getPopularMedias(payload) {
+    const { media } = payload;
+
     try {
         const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/popular`);
 

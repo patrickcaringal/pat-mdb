@@ -7,25 +7,20 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 
-import configureStore from './utils/configureStore';
-// import * as actions from './ducks/actions';
-import { GET_POPULAR_MOVIES } from './ducks/reducer';
+import configureStore from './store/configureStore';
 import './App.css';
+
 import AppBar from './components/AppBar';
 import Home from './pages/Home';
-import SearchPage from './pages/Search';
-import MoviePage from './pages/Movie';
-import TvPage from './pages/Tv';
-import PeoplePage from './pages/People';
+// import SearchPage from './pages/Search';
+// import MoviePage from './pages/Movie';
+// import TvPage from './pages/Tv';
+// import PeoplePage from './pages/People';
 import Test from './pages/Test/Carousel';
 
 interface AppProps {}
 
 const store = configureStore();
-
-// store.dispatch(actions.getPopularMedias2({ media: 'movie' }));
-store.dispatch(GET_POPULAR_MOVIES({ media: 'movie' }));
-// console.log(store);
 
 const App: React.FC<AppProps> = (props) => {
     return (

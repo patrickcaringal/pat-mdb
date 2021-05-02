@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -18,7 +18,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
-import { actions, interfaces, types } from '../../ducks';
+import { getPopularMediaList, popularMediaListSelector } from '../../store/media.slice';
 
 import landingImg from '../../asset/img/landing-bg.jpg';
 
@@ -95,39 +95,20 @@ const useStyles = makeStyles((theme) => ({
     // }
 }));
 
-interface IStateToProps {
-    data: interfaces.IMedia[];
-    isLoading: boolean;
-}
+interface IOwnProps extends RouteComponentProps {}
 
-interface IDispatchToProps {
-    getMedias: (media: types.media) => interfaces.IGetPopularMedias;
-}
-
-interface IOwnProps extends IStateToProps, IDispatchToProps, RouteComponentProps {}
-
-const Banner: React.FC<IOwnProps> = ({ isLoading, data, getMedias, history }) => {
+const Banner: React.FC<IOwnProps> = ({ history }) => {
     // const renders = React.useRef(0);
+    const dispatch = useDispatch();
+    const popularMediaList = useSelector(popularMediaListSelector);
+
+    useEffect(() => {
+        dispatch(getPopularMediaList({ media: 'movie' }));
+    }, []);
+
+    console.log('LORD', popularMediaList);
 
     const classes = useStyles();
-    const [searchQuery, setSearchQuery] = useState<string>('');
-
-    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        if (!searchQuery) return;
-
-        history.push({
-            pathname: '/search',
-            search: `?query=${searchQuery}`
-        });
-    };
-
-    const [checked, setChecked] = React.useState(false);
-
-    const handleChange = () => {
-        setChecked((prev) => !prev);
-    };
 
     const settings = {
         dots: true,
@@ -196,49 +177,8 @@ const Banner: React.FC<IOwnProps> = ({ isLoading, data, getMedias, history }) =>
                     </div>
                 ))}
             </Slider>
-
-            {/* <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
-                <Typography variant="h3" component="h2" className={classes.bannerHeader}>
-                    Discover lots of movies and TV series.
-                </Typography>
-                <Typography variant="h4" className={classes.bannerSubheader}>
-                    Keep track of your favorite shows.
-                </Typography>
-            </Box>
-
-            <form
-                noValidate
-                autoComplete="off"
-                className={classes.searchForm}
-                onSubmit={handleSearchSubmit}
-            >
-                <Paper className={classes.searchContainer}>
-                    <FormControl variant="filled" fullWidth>
-                        <InputLabel>Search for a movie, tv show series, person</InputLabel>
-                        <FilledInput
-                            value={searchQuery}
-                            disableUnderline
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            classes={{ root: classes.searchInput }}
-                        />
-                    </FormControl>
-                    <IconButton type="submit" className={classes.seachBtn} aria-label="search">
-                        <SearchIcon />
-                    </IconButton>
-                </Paper>
-            </form> */}
         </Box>
     );
 };
 
-// export default withRouter(Banner);
-const mapStateToProps = (state: interfaces.TState) => ({
-    data: state.popularMedias,
-    isLoading: state.loaders.isPopularLoading
-});
-
-const mapDispatchToProps = {
-    getMedias: actions.getPopularMedias
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Banner));
+export default withRouter(Banner);
