@@ -1,20 +1,21 @@
-import { all, call, delay, takeLatest } from 'redux-saga/effects';
-import { getPopularMediaList } from './media.slice';
+import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
+import { actions } from './media.slice';
 import * as interfaces from './interfaces';
 import http, { getQueryString } from '../utils/http';
 
 function* getPopularMediasSaga(action) {
-    const { media } = action.payload;
+    const { media, onSuccess } = action.payload;
     try {
         const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/popular`);
         yield delay(500);
-        // yield put(actions.getPopularMediasSucceed(data));
+        // onSuccess();
+        yield put(actions.getPopularMediaListSuccess(data));
     } catch (error) {
         console.log(error);
-        // yield put(actions.getPopularMediasFailed('Error'));
+        yield put(actions.getPopularMediaListError('Error'));
     }
 }
 
 export default function* rootSaga() {
-    yield all([yield takeLatest(getPopularMediaList.type, getPopularMediasSaga)]);
+    yield all([yield takeLatest(actions.getPopularMediaList.type, getPopularMediasSaga)]);
 }

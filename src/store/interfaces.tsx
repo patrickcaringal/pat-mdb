@@ -182,6 +182,7 @@ export interface IPeopleCatalog {
 
 export type TState = {
     popularMediaList: IMedia[];
+    loaders: { [key: string]: boolean };
 };
 
 // export type TAction =

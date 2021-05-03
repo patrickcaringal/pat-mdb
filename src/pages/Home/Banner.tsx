@@ -18,7 +18,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
-import { getPopularMediaList, popularMediaListSelector } from '../../store/media.slice';
+import { actions, selectors } from '../../store/media.slice';
 
 import landingImg from '../../asset/img/landing-bg.jpg';
 
@@ -100,13 +100,25 @@ interface IOwnProps extends RouteComponentProps {}
 const Banner: React.FC<IOwnProps> = ({ history }) => {
     // const renders = React.useRef(0);
     const dispatch = useDispatch();
-    const popularMediaList = useSelector(popularMediaListSelector);
+    const popularMediaList = useSelector(selectors.popularMediaListSelector);
+    const loading = useSelector(selectors.loaderSelector('popularMediaList'));
 
     useEffect(() => {
-        dispatch(getPopularMediaList({ media: 'movie' }));
+        dispatch(
+            actions.getPopularMediaList({
+                media: 'movie'
+                // onSuccess() {
+                //     alert('success');
+                // },
+                // onError() {
+                //     alert('error');
+                // }
+            })
+        );
     }, []);
 
-    console.log('LORD', popularMediaList);
+    // console.log('LORD', popularMediaList);
+    // console.log(loading);
 
     const classes = useStyles();
 
