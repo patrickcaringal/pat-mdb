@@ -1,19 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Slide from '@material-ui/core/Slide';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
@@ -97,97 +92,61 @@ const useStyles = makeStyles((theme) => ({
 
 interface IOwnProps extends RouteComponentProps {}
 
-const Banner: React.FC<IOwnProps> = ({ history }) => {
-    // const renders = React.useRef(0);
+const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+};
+
+const Banner: React.FC<IOwnProps> = ({}) => {
+    const classes = useStyles();
     const dispatch = useDispatch();
-    const popularMediaList = useSelector(selectors.popularMediaListSelector);
-    const loading = useSelector(selectors.loaderSelector('popularMediaList'));
+    const { data: popularMediaList, fetching: loading } = useSelector(
+        selectors.popularMediaListSelector
+    );
 
     useEffect(() => {
-        dispatch(
-            actions.getPopularMediaList({
-                media: 'movie'
-                // onSuccess() {
-                //     alert('success');
-                // },
-                // onError() {
-                //     alert('error');
-                // }
-            })
-        );
+        dispatch(actions.getPopularMediaList({ media: 'movie' }));
     }, []);
 
-    // console.log('LORD', popularMediaList);
-    // console.log(loading);
-
-    const classes = useStyles();
-
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
-    };
+    const slides: number[] = _.range(Math.ceil(popularMediaList.length / 5));
 
     return (
         <Box className={classes.bannerGrid}>
             <Typography className={classes.title} variant="h3" gutterBottom>
                 <b>Popular</b> Movies & TV shows
             </Typography>
-            <Slider {...settings}>
-                {[...Array(5)].map((i) => (
-                    <div>
-                        <div className={classes.cardCont}>
-                            <Card className={classes.root} raised>
-                                <CardActionArea>
-                                    <CardMedia
-                                        className={classes.media}
-                                        image="https://www.themoviedb.org/t/p/w220_and_h330_face/6kbAMLteGO8yyewYau6bJ683sw7.jpg"
-                                        title="Contemplative Reptile"
-                                    />
-                                </CardActionArea>
-                            </Card>
 
-                            <Card className={classes.root} raised>
-                                <CardActionArea>
-                                    <CardMedia
-                                        className={classes.media}
-                                        image="https://www.themoviedb.org/t/p/w220_and_h330_face/8yhtzsbBExY8mUct2GOk4LDDuGH.jpg"
-                                        title="Contemplative Reptile"
-                                    />
-                                </CardActionArea>
-                            </Card>
-                            <Card className={classes.root} raised>
-                                <CardActionArea>
-                                    <CardMedia
-                                        className={classes.media}
-                                        image="https://www.themoviedb.org/t/p/w220_and_h330_face/pgqgaUx1cJb5oZQQ5v0tNARCeBp.jpg"
-                                        title="Contemplative Reptile"
-                                    />
-                                </CardActionArea>
-                            </Card>
-                            <Card className={classes.root} raised>
-                                <CardActionArea>
-                                    <CardMedia
-                                        className={classes.media}
-                                        image="https://www.themoviedb.org/t/p/w220_and_h330_face/qRyy2UmjC5ur9bDi3kpNNRCc5nc.jpg"
-                                        title="Contemplative Reptile"
-                                    />
-                                </CardActionArea>
-                            </Card>
-                            <Card className={classes.root} raised>
-                                <CardActionArea>
-                                    <CardMedia
-                                        className={classes.media}
-                                        image="https://www.themoviedb.org/t/p/w220_and_h330_face/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg"
-                                        title="Contemplative Reptile"
-                                    />
-                                </CardActionArea>
-                            </Card>
+            {loading && <h2>Loading</h2>}
+
+            <Slider {...sliderSettings}>
+                {slides.map((slideIndex) => {
+                    const medias: number[] = _.range(slideIndex * 5, slideIndex * 5 + 5);
+
+                    return (
+                        <div>
+                            <div className={classes.cardCont}>
+                                {medias.map((mediaIndex) => {
+                                    const { poster, title } = popularMediaList[mediaIndex];
+
+                                    return (
+                                        <Card className={classes.root} raised>
+                                            <CardActionArea>
+                                                <CardMedia
+                                                    className={classes.media}
+                                                    image={poster}
+                                                    title={title}
+                                                />
+                                            </CardActionArea>
+                                        </Card>
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </Slider>
         </Box>
     );

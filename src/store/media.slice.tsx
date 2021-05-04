@@ -10,25 +10,30 @@ import * as interfaces from './interfaces';
 // const x = createActionTemplate('getPopularMediaList');
 // console.log(x);
 
+const initialEntityState = { data: [], fetching: false, fetchFailed: false };
+
 export const initialState: interfaces.TState = {
-    popularMediaList: [] as interfaces.IMedia[],
-    loaders: {}
+    popularMediaList: { ...initialEntityState } as interfaces.IStateEntity<interfaces.IMedia[]>
 };
+
 const slice = createSlice({
     name: 'media',
     initialState,
     reducers: {
         getPopularMediaList: (state, action) => {
-            state.popularMediaList = [] as interfaces.IMedia[];
-            state.loaders.popularMediaList = true;
+            state.popularMediaList.data = [] as interfaces.IMedia[];
+            state.popularMediaList.fetching = true;
+            state.popularMediaList.fetchFailed = false;
         },
         getPopularMediaListSuccess: (state, action) => {
-            state.popularMediaList = action.payload;
-            delete state.loaders.popularMediaList;
+            state.popularMediaList.data = action.payload;
+            state.popularMediaList.fetching = false;
+            state.popularMediaList.fetchFailed = false;
         },
-        getPopularMediaListError: (state, action) => {
-            state.popularMediaList = [] as interfaces.IMedia[];
-            delete state.loaders.popularMediaList;
+        getPopularMediaListFail: (state, action) => {
+            state.popularMediaList.data = [] as interfaces.IMedia[];
+            state.popularMediaList.fetching = false;
+            state.popularMediaList.fetchFailed = true;
         }
     }
 });
@@ -41,16 +46,16 @@ export const popularMediaListSelector = createSelector(
     (state: interfaces.TState) => state.popularMediaList
 );
 
-export const loaderSelector = (loadingEntity) =>
-    createSelector(mediaSelector, (state: interfaces.TState) => state.loaders[loadingEntity]);
+// export const loaderSelector = (loadingEntity) =>
+//     createSelector(mediaSelector, (state: interfaces.TState) => state.loaders[loadingEntity]);
 
 export const selectors = {
     popularMediaListSelector: createSelector(
         mediaSelector,
         (state: interfaces.TState) => state.popularMediaList
-    ),
-    loaderSelector: (loadingEntity) =>
-        createSelector(mediaSelector, (state: interfaces.TState) => state.loaders[loadingEntity])
+    )
+    // loaderSelector: (loadingEntity) =>
+    //     createSelector(mediaSelector, (state: interfaces.TState) => state.loaders[loadingEntity])
 };
 
 // exports

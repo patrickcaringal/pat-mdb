@@ -12,7 +12,7 @@ function* getPopularMediasSaga(action) {
         yield put(actions.getPopularMediaListSuccess(data));
     } catch (error) {
         console.log(error);
-        yield put(actions.getPopularMediaListError('Error'));
+        yield put(actions.getPopularMediaListFail('Error'));
     }
 }
 

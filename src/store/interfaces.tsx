@@ -179,10 +179,14 @@ export interface IPeopleCatalog {
 //     type: typeof constants.GET_MOVIE_DETAIL_FAILED;
 //     payload: string;
 // }
+export interface IStateEntity<T> {
+    data: T;
+    fetching: boolean;
+    fetchFailed: boolean;
+}
 
 export type TState = {
-    popularMediaList: IMedia[];
-    loaders: { [key: string]: boolean };
+    popularMediaList: IStateEntity<IMedia[]>;
 };
 
 // export type TAction =
