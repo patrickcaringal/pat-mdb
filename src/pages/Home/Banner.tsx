@@ -4,11 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
+import { Box, Card, CardMedia, CardActionArea, Typography } from '@material-ui/core';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
@@ -19,13 +15,8 @@ import landingImg from '../../asset/img/landing-bg.jpg';
 
 const useStyles = makeStyles((theme) => ({
     bannerGrid: {
-        // display: 'flex',
-        // flexDirection: 'column',
-        // alignItems: 'center',
-        // justifyContent: 'center',
-
         height: 660,
-        background: `linear-gradient(rgba(31, 36, 33, 0.95), rgba(73, 160, 120, 0.85)), url(${landingImg}) repeat`,
+        background: `linear-gradient(rgba(31, 36, 33, 0.95), rgba(38, 102, 69, 0.9)), url(${landingImg}) repeat`,
         backgroundSize: 'contain',
         backgroundPosition: 'center',
         padding: '60px 100px',
@@ -38,6 +29,12 @@ const useStyles = makeStyles((theme) => ({
         },
         '& .slick-next': {
             right: -5
+        },
+        '& .slick-dots': {
+            bottom: -50,
+            '& .slick-active button:before': {
+                color: '#DCE1DE'
+            }
         }
     },
     bannerContent: {},
@@ -53,16 +50,36 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         marginLeft: -30,
         // marginBottom: 60,
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'center'
         // background: 'khaki'
     },
     root: {
-        width: 232,
-        marginLeft: 30
+        width: 210,
+        marginLeft: 30,
+        zIndex: 9,
+        '& .card__rate': {
+            fontSize: 14,
+            fontWeight: 600,
+            color: '#fff',
+            position: 'absolute',
+            zIndex: 9,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 36,
+            height: 36,
+            top: 15,
+            left: 15,
+            backgroundColor: 'rgba(26,25,31,0.6)',
+            border: '3px solid transparent',
+            borderRadius: '50%',
+            borderColor: '#49A078'
+        }
     },
     media: {
-        height: 343
+        height: 311
     }
     // bannerHeader: { color: '#fff', fontWeight: 700 },
     // bannerSubheader: { color: '#fff', fontWeight: 600 },
@@ -129,18 +146,45 @@ const Banner: React.FC<IOwnProps> = ({}) => {
                         <div>
                             <div className={classes.cardCont}>
                                 {medias.map((mediaIndex) => {
-                                    const { poster, title } = popularMediaList[mediaIndex];
+                                    const { poster, title, release_date } = popularMediaList[
+                                        mediaIndex
+                                    ];
 
                                     return (
-                                        <Card className={classes.root} raised>
-                                            <CardActionArea>
-                                                <CardMedia
-                                                    className={classes.media}
-                                                    image={poster}
-                                                    title={title}
-                                                />
-                                            </CardActionArea>
-                                        </Card>
+                                        <Box className={classes.root}>
+                                            <Card>
+                                                <CardActionArea>
+                                                    <CardMedia
+                                                        className={classes.media}
+                                                        image={poster}
+                                                        title={title}
+                                                    />
+                                                    <span className="card__rate card__rate--green">
+                                                        8.4
+                                                    </span>
+                                                </CardActionArea>
+                                            </Card>
+                                            <Typography
+                                                variant="h6"
+                                                style={{
+                                                    color: '#DCE1DE',
+                                                    fontWeight: 600,
+                                                    margin: '8px 8px 0 8px'
+                                                }}
+                                                noWrap
+                                            >
+                                                {title}
+                                            </Typography>
+                                            <Typography
+                                                variant="body1"
+                                                style={{
+                                                    color: '#DCE1DE',
+                                                    margin: '0 8px'
+                                                }}
+                                            >
+                                                {new Date(release_date).getFullYear()}
+                                            </Typography>
+                                        </Box>
                                     );
                                 })}
                             </div>
