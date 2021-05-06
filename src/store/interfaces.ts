@@ -186,7 +186,9 @@ export interface IStateEntity<T> {
 }
 
 export type TState = {
-    popularMediaList: IStateEntity<IMedia[]>;
+    media: {
+        popularMediaList: IStateEntity<IMedia[]>;
+    };
 };
 
 // export type TAction =

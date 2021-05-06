@@ -12,13 +12,11 @@ import * as interfaces from './interfaces';
 
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 
-export const initialState: interfaces.TState = {
-    popularMediaList: { ...initialEntityState } as interfaces.IStateEntity<interfaces.IMedia[]>
-};
-
 const slice = createSlice({
     name: 'media',
-    initialState,
+    initialState: {
+        popularMediaList: { ...initialEntityState } as interfaces.IStateEntity<interfaces.IMedia[]>
+    },
     reducers: {
         getPopularMediaList: (state, action) => {
             state.popularMediaList.data = [] as interfaces.IMedia[];
@@ -38,32 +36,18 @@ const slice = createSlice({
     }
 });
 
-const mediaSelector = (state: interfaces.TState) => state;
+const mediaSelector = (state: interfaces.TState) => state.media;
 
 // selector
 export const popularMediaListSelector = createSelector(
     mediaSelector,
-    (state: interfaces.TState) => state.popularMediaList
+    (state) => state.popularMediaList
 );
 
-// export const loaderSelector = (loadingEntity) =>
-//     createSelector(mediaSelector, (state: interfaces.TState) => state.loaders[loadingEntity]);
-
 export const selectors = {
-    popularMediaListSelector: createSelector(
-        mediaSelector,
-        (state: interfaces.TState) => state.popularMediaList
-    )
-    // loaderSelector: (loadingEntity) =>
-    //     createSelector(mediaSelector, (state: interfaces.TState) => state.loaders[loadingEntity])
+    popularMediaListSelector: createSelector(mediaSelector, (state) => state.popularMediaList)
 };
 
-// exports
-// export const {
-//     getPopularMediaList,
-//     getPopularMediaListSuccess,
-//     getPopularMediaListError
-// } = slice.actions;
-
 export const actions = { ...slice.actions };
+
 export default slice.reducer;

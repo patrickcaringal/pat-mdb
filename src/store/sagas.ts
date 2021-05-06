@@ -6,7 +6,7 @@ import http, { getQueryString } from '../utils/http';
 function* getPopularMediasSaga(action) {
     const { media, onSuccess } = action.payload;
     try {
-        const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/popular`);
+        const { data }: { data: interfaces.IMedia[] } = yield call(http.get, `${media}/trending`);
         yield delay(500);
         // onSuccess();
         yield put(actions.getPopularMediaListSuccess(data));

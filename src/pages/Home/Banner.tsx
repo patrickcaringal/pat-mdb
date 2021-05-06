@@ -117,7 +117,7 @@ const sliderSettings = {
     slidesToScroll: 1
 };
 
-const Banner: React.FC<IOwnProps> = ({}) => {
+const Banner: React.FC<IOwnProps> = ({ history }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const { data: popularMediaList, fetching: loading } = useSelector(
@@ -129,6 +129,10 @@ const Banner: React.FC<IOwnProps> = ({}) => {
     }, []);
 
     const slides: number[] = _.range(Math.ceil(popularMediaList.length / 5));
+
+    const handleCardClick = (id: string) => {
+        history.push(`/movie/${id}`);
+    };
 
     return (
         <Box className={classes.bannerGrid}>
@@ -146,14 +150,14 @@ const Banner: React.FC<IOwnProps> = ({}) => {
                         <div>
                             <div className={classes.cardCont}>
                                 {medias.map((mediaIndex) => {
-                                    const { poster, title, release_date } = popularMediaList[
+                                    const { id, poster, title, release_date } = popularMediaList[
                                         mediaIndex
                                     ];
 
                                     return (
                                         <Box className={classes.root}>
                                             <Card>
-                                                <CardActionArea>
+                                                <CardActionArea onClick={() => handleCardClick(id)}>
                                                     <CardMedia
                                                         className={classes.media}
                                                         image={poster}
