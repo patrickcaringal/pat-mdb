@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+import { Box, Container, Typography } from '@material-ui/core';
+
+import { actions, selectors } from '../../../store/movie.slice';
+import { IMediaDetail } from '../../../store/interfaces';
 
 import BannerSkeleton from './BannerSkeleton';
 import { bannerUseStyles as useStyles } from './styles';
 
-import { interfaces } from '../../../ducks';
 import { formatNumWithComma, formatDate, formatHours } from '../../../utils/helpers';
 
 interface MovieDetailProps extends RouteComponentProps {}
 
 const MoivieDetail: React.FC<MovieDetailProps> = () => {
+    const { data: detail, fetching: loading } = useSelector(selectors.movieDetailSelector);
+
     const {
         banner,
         budget,
@@ -29,13 +31,13 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
         title,
         vote_average,
         vote_count
-    } = {} as interfaces.IMediaDetail;
+    } = detail as IMediaDetail;
 
     const isLoading = false;
 
     const classes = useStyles({ bannerBg: banner });
 
-    return !isLoading ? (
+    return !loading ? (
         <Box display="flex" className={classes.backdrop} style={{ backgroundSize: 'cover' }}>
             <Box display="flex" flex="1" className={classes.backdropOverlay}>
                 <Container disableGutters maxWidth="lg">
@@ -95,12 +97,3 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
 };
 
 export default withRouter(MoivieDetail);
-
-// const mapStateToProps = (state: interfaces.TState) => ({
-//     data: state.movieDetail,
-//     isLoading: state.loaders.isMovieDetailLoading
-// });
-
-// const mapDispatchToProps = {};
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MoivieDetail));

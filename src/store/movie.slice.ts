@@ -1,42 +1,37 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import * as interfaces from './interfaces';
+import { IStateEntity, IMediaDetail, TState } from './interfaces';
 
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 
 const slice = createSlice({
     name: 'movie',
     initialState: {
-        popularMediaList: { ...initialEntityState } as interfaces.IStateEntity<interfaces.IMedia[]>
+        detail: { ...initialEntityState, data: {} } as IStateEntity<IMediaDetail>
     },
     reducers: {
-        getPopularMediaList: (state, action) => {
-            state.popularMediaList.data = [] as interfaces.IMedia[];
-            state.popularMediaList.fetching = true;
-            state.popularMediaList.fetchFailed = false;
+        getMovieDetail: (state, action) => {
+            state.detail.data = {} as IMediaDetail;
+            state.detail.fetching = true;
+            state.detail.fetchFailed = false;
         },
-        getPopularMediaListSuccess: (state, action) => {
-            state.popularMediaList.data = action.payload;
-            state.popularMediaList.fetching = false;
-            state.popularMediaList.fetchFailed = false;
+        getMovieDetailSuccess: (state, action) => {
+            state.detail.data = action.payload;
+            state.detail.fetching = false;
+            state.detail.fetchFailed = false;
         },
-        getPopularMediaListFail: (state, action) => {
-            state.popularMediaList.data = [] as interfaces.IMedia[];
-            state.popularMediaList.fetching = false;
-            state.popularMediaList.fetchFailed = true;
+        getMovieDetailFail: (state, action) => {
+            state.detail.data = {} as IMediaDetail;
+            state.detail.fetching = false;
+            state.detail.fetchFailed = true;
         }
     }
 });
 
-const mediaSelector = (state: interfaces.TState) => state.media;
+const mediaSelector = (state: TState) => state.movie;
 
 // selector
-export const popularMediaListSelector = createSelector(
-    mediaSelector,
-    (state) => state.popularMediaList
-);
-
 export const selectors = {
-    popularMediaListSelector: createSelector(mediaSelector, (state) => state.popularMediaList)
+    movieDetailSelector: createSelector(mediaSelector, (state) => state.detail)
 };
 
 export const actions = { ...slice.actions };

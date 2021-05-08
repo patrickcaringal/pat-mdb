@@ -1,6 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import mediasReducer from './media.slice';
+import mediaReducer from './media.slice';
+import movieReducer from './movie.slice';
 
 export default combineReducers({
-    media: mediasReducer
+    media: mediaReducer,
+    movie: movieReducer
 });

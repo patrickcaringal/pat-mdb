@@ -189,6 +189,9 @@ export type TState = {
     media: {
         popularMediaList: IStateEntity<IMedia[]>;
     };
+    movie: {
+        detail: IStateEntity<IMediaDetail>;
+    };
 };
 
 // export type TAction =

@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+
+import { actions } from '../../store/movie.slice';
 
 import Banner from './Banner';
 // import BodyContainer from './BodyContainer';
@@ -27,11 +30,11 @@ interface IStateToProps {}
 interface MovieDetailProps extends RouteComponentProps<MatchParams> {}
 
 const MoivieDetail: React.FC<MovieDetailProps> = ({ match, location }) => {
-    const { id: movieId } = match.params;
+    const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     getMovieDetail({ id: movieId });
-    // }, []);
+    useEffect(() => {
+        dispatch(actions.getMovieDetail({ id: match.params.id }));
+    }, []);
 
     return (
         <>
