@@ -19,15 +19,16 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'column',
             flex: 1,
-            overflow: 'hidden',
-            marginRight: theme.spacing(6)
+            overflow: 'hidden'
+            // marginRight: theme.spacing(6),
+            // border: '1px solid khaki'
         },
         right: {
             display: 'flex',
             flexDirection: 'column',
-            width: 300,
-            minWidth: 300,
-            background: 'khaki'
+            width: 320,
+            minWidth: 320,
+            background: 'red'
         }
     };
 });
@@ -40,7 +41,7 @@ const BodyContainer: React.FC<BodyContainerProps> = ({ children }) => {
     const classes = useStyles();
 
     return (
-        <Box style={{ background: '#F3F8F3', height: 500 }}>
+        <Box style={{ background: '#F3F8F3' }}>
             <Container className={classes.content} disableGutters maxWidth="lg">
                 {/* left */}
                 <Box className={classes.left}>

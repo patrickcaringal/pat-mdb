@@ -28,15 +28,41 @@ import { selectors } from '../../../store/movie.slice';
 
 // interface IDispatchToProps {}
 const useStyles = makeStyles((theme) => ({
-    cardContainer: {
-        width: 138
+    castContainer: {
+        '& .cast-items-container': {
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            marginLeft: theme.spacing(-3),
+            marginBottom: theme.spacing(-3),
+
+            '& .card-container': {
+                width: 138,
+                marginLeft: theme.spacing(3),
+                marginBottom: theme.spacing(3)
+            },
+            '& .media': {
+                height: 175
+            },
+            '& .card-content': {
+                padding: theme.spacing(1)
+            }
+        }
     },
-    media: {
-        height: 175
-    },
-    cardContent: {
-        padding: theme.spacing(1)
+    title: {
+        fontWeight: 600,
+        marginBottom: theme.spacing(3)
     }
+
+    // cardContainer: {
+    //     width: 138
+    // },
+    // media: {
+    //     height: 175
+    // },
+    // cardContent: {
+    //     padding: theme.spacing(1)
+    // }
 }));
 
 interface IOwnProps {}
@@ -106,25 +132,25 @@ const LeftSection: React.FC<IOwnProps> = () => {
 
     return (
         <>
-            <Box display="flex" flexDirection="row" flexWrap="wrap">
-                {/* {
-        "poster": "https://image.tmdb.org/t/p/w138_and_h175_face/lkW8gh20BuwzHecXqYH1eRVuWpb.jpg",
-        "character": "Cole Young",
-        "name": "Lewis Tan"
-    } */}
-                {cast.map((actor) => (
-                    <Card className={classes.cardContainer}>
-                        <CardActionArea onClick={() => {}}>
-                            <CardMedia className={classes.media} image={actor.poster} title="asd" />
-                            <CardContent className={classes.cardContent}>
-                                <Typography variant="body1">{actor.name}</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    {actor.character}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                ))}
+            <Box className={classes.castContainer}>
+                <Typography className={classes.title} variant="h5">
+                    Cast
+                </Typography>
+                <Box className="cast-items-container">
+                    {cast.map((actor) => (
+                        <Card className="card-container">
+                            <CardActionArea onClick={() => {}}>
+                                <CardMedia className="media" image={actor.poster} title="asd" />
+                                <CardContent className="card-content">
+                                    <Typography variant="body1">{actor.name}</Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {actor.character}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>
+                    ))}
+                </Box>
             </Box>
             {/* <CardList<CardInterfaces.ICard> items={mappedCastItems} className={classes.containers}>
                 <CardHeader title="Cast" />
