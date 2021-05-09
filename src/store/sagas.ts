@@ -4,8 +4,6 @@ import { actions as movieActions } from './movie.slice';
 import * as interfaces from './interfaces';
 import http, { getQueryString } from '../utils/http';
 
-// const { getMovieDetail, get } = movieActions;
-
 function* getPopularMediasSaga(action) {
     const { media, onSuccess } = action.payload;
     try {

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { Box, Container, Typography } from '@material-ui/core';
 
-import { actions, selectors } from '../../../store/movie.slice';
+import { selectors } from '../../../store/movie.slice';
 import { IMediaDetail } from '../../../store/interfaces';
 
 import BannerSkeleton from './BannerSkeleton';
@@ -33,31 +33,28 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
         vote_count
     } = detail as IMediaDetail;
 
-    const isLoading = false;
-
     const classes = useStyles({ bannerBg: banner });
 
     return !loading ? (
-        <Box display="flex" className={classes.backdrop} style={{ backgroundSize: 'cover' }}>
-            <Box display="flex" flex="1" className={classes.backdropOverlay}>
+        <Box className={classes.backdrop} style={{ backgroundSize: 'cover' }}>
+            <Box className="backdrop-overlay">
                 <Container disableGutters maxWidth="lg">
-                    <Box display="flex" flexDirection="row" p={4}>
-                        <Box display="flex" flexDirection="column">
-                            <img src={poster} alt="PAT MDb" className={classes.poster} />
-                        </Box>
-                        <Box display="flex" flex="1" flexDirection="column" pl={5}>
-                            <Typography variant="h3" className={classes.boldText}>
+                    <Box className="flex-row" p={4}>
+                        <img src={poster} alt="PAT MDb" className="poster-image" />
+
+                        <Box className="flex-column" ml={5}>
+                            <Typography variant="h3" className="bold-text">
                                 {title}
                             </Typography>
-                            <Typography>
+                            <Typography className="subtitle">
                                 <span>{formatDate(release_date)}</span>
-                                <span>&#8226;{genres?.join(', ')}</span>
-                                <span>&#8226;{formatHours(runtime)}</span>
+                                <span>{genres?.join(', ')}</span>
+                                <span>{formatHours(runtime)}</span>
                             </Typography>
 
-                            <Box display="flex" flexDirection="column" mt={1} mb={2}>
-                                <Box display="flex" flexDirection="row" alignItems="center">
-                                    <Typography variant="h4" className={classes.boldText}>
+                            <Box className="flex-column" mt={1} mb={2}>
+                                <Box className="flex-row" alignItems="center">
+                                    <Typography variant="h4" className="bold-text">
                                         {vote_average}&nbsp;
                                     </Typography>
                                     <Typography variant="h6">/&nbsp;10</Typography>
@@ -65,24 +62,24 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
                                 <Typography>{formatNumWithComma(vote_count)} votes</Typography>
                             </Box>
 
-                            <Typography className={classes.tagline}>{tagline}</Typography>
+                            <Typography className="tagline-text">{tagline}</Typography>
 
-                            <Typography variant="h6" className={classes.boldText}>
+                            <Typography variant="h6" className="bold-text">
                                 Overview
                             </Typography>
                             <Typography>{overview}</Typography>
 
-                            <Box display="flex" mt={4}>
+                            <Box className="flex-row" mt={4}>
                                 <Box flex="1">
-                                    <Typography className={classes.boldText}>Director</Typography>
+                                    <Typography className="bold-text">Director</Typography>
                                     <Typography>{director?.join(', ')}</Typography>
                                 </Box>
                                 <Box flex="1">
-                                    <Typography className={classes.boldText}>Budget</Typography>
+                                    <Typography className="bold-text">Budget</Typography>
                                     <Typography>${formatNumWithComma(budget)}</Typography>
                                 </Box>
                                 <Box flex="2">
-                                    <Typography className={classes.boldText}>Revenue</Typography>
+                                    <Typography className="bold-text">Revenue</Typography>
                                     <Typography> ${formatNumWithComma(revenue)}</Typography>
                                 </Box>
                             </Box>

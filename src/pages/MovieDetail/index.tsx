@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { actions } from '../../store/movie.slice';
 
 import Banner from './Banner';
-// import BodyContainer from './BodyContainer';
-// import LeftContainer from './LeftContainer';
-// import RigthContainer from './RightContainer';
+import BodyContainer from './BodyContainer';
+import LeftContainer from './LeftContainer';
+import RigthContainer from './RightContainer';
 
 // import { actions, interfaces } from '../../../ducks';
 
@@ -39,10 +39,10 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match, location }) => {
     return (
         <>
             <Banner />
-            {/* <BodyContainer>
+            <BodyContainer>
                 <LeftContainer />
                 <RigthContainer />
-            </BodyContainer> */}
+            </BodyContainer>
         </>
     );
 };
