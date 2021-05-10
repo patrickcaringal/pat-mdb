@@ -23,6 +23,7 @@ export interface IMediaDetail extends IMedia {
     cast: ICast[];
     collection?: IMedia[];
     director: string[];
+    photos: string[];
     production_companies: {
         name: string;
         logo: string;
