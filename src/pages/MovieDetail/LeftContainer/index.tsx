@@ -96,6 +96,14 @@ const useStyles = makeStyles((theme) => ({
             },
             '& .media': {
                 height: 160
+            },
+            '& .desc-overlay': {
+                position: 'absolute',
+                bottom: 0,
+                width: '100%',
+                color: '#DCE1DE',
+                background: 'rgba(0,0,0,0.6)',
+                padding: theme.spacing(1, 2)
             }
         }
     }
@@ -122,11 +130,11 @@ interface IOwnProps {}
 const LeftSection: React.FC<IOwnProps> = () => {
     const classes = useStyles();
     const {
-        data: { cast = [], photos = [] },
+        data: { cast = [], photos = [], videos = [] },
         fetching: loading
     } = useSelector(selectors.movieDetailSelector);
 
-    const [selectedTab, setSelectedTab] = useState(1);
+    const [selectedTab, setSelectedTab] = useState(2);
 
     return (
         <>
@@ -170,7 +178,7 @@ const LeftSection: React.FC<IOwnProps> = () => {
                 <Divider />
 
                 <Box className="media-items-container">
-                    <TabPanel value={selectedTab} index={1} className="tab-item">
+                    <TabPanel className="tab-item" value={selectedTab} index={1}>
                         {photos.map((photo) => (
                             <Card className="card-container">
                                 <CardActionArea onClick={() => {}}>
@@ -179,8 +187,23 @@ const LeftSection: React.FC<IOwnProps> = () => {
                             </Card>
                         ))}
                     </TabPanel>
-                    <TabPanel value={selectedTab} index={2}>
-                        Item Two
+                    <TabPanel className="tab-item" value={selectedTab} index={2}>
+                        {videos.map((video) => (
+                            <Card className="card-container">
+                                <CardActionArea onClick={() => {}}>
+                                    <CardMedia
+                                        className="media"
+                                        image={video.thumbnail}
+                                        title="asd"
+                                    />
+                                    <Box className="desc-overlay">
+                                        <Typography variant="body1" noWrap>
+                                            {video.description}
+                                        </Typography>
+                                    </Box>
+                                </CardActionArea>
+                            </Card>
+                        ))}
                     </TabPanel>
                 </Box>
             </Box>

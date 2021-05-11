@@ -32,6 +32,12 @@ export interface IMediaDetail extends IMedia {
     revenue: number;
     runtime: number;
     tagline: string;
+    videos: {
+        id: string;
+        description: string;
+        thumbnail: string;
+        video: string;
+    }[];
     vote_average: number;
     vote_count: number;
 }
