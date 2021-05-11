@@ -82,12 +82,14 @@ const useStyles = makeStyles((theme) => ({
 
         '& .media-items-container': {
             '& .tab-item': {
+                maxHeight: 500,
+                overflow: 'auto',
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
                 marginLeft: theme.spacing(-3),
-                marginTop: theme.spacing(2),
-                marginBottom: theme.spacing(-3)
+                marginTop: theme.spacing(2)
+                // marginBottom: theme.spacing(-3)
             },
             '& .card-container': {
                 width: 241,
@@ -134,7 +136,7 @@ const LeftSection: React.FC<IOwnProps> = () => {
         fetching: loading
     } = useSelector(selectors.movieDetailSelector);
 
-    const [selectedTab, setSelectedTab] = useState(2);
+    const [selectedTab, setSelectedTab] = useState(1);
 
     return (
         <>
