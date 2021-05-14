@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'column',
             width: 320,
-            minWidth: 320,
-            background: 'red'
+            minWidth: 320
+            // background: 'red'
         }
     };
 });

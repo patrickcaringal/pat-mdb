@@ -68,6 +68,39 @@ const useStyles = makeStyles((theme) => ({
             }
         }
     },
+    collectionContainer: {
+        '& .cast-items-container': {
+            display: 'flex',
+            flexDirection: 'column',
+            // flexWrap: 'wrap',
+            // marginLeft: theme.spacing(-3),
+            // marginBottom: theme.spacing(-3),
+
+            '& .card-container': {
+                '&:not(:last-child)': {
+                    marginBottom: theme.spacing(3)
+                },
+                // marginLeft: theme.spacing(3),
+                '& .MuiCardActionArea-root': {
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start'
+                }
+            },
+            '& .media': {
+                height: 175,
+                width: 120
+            },
+            '& .card-content': {
+                flex: 1,
+                height: 175,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                padding: theme.spacing(2)
+            }
+        }
+    },
     mediaContainer: {
         '& .MuiTabs-flexContainer': {
             alignItems: 'center',
@@ -132,7 +165,7 @@ interface IOwnProps {}
 const LeftSection: React.FC<IOwnProps> = () => {
     const classes = useStyles();
     const {
-        data: { cast = [], photos = [], videos = [] },
+        data: { cast = [], collection = [], photos = [], videos = [] },
         fetching: loading
     } = useSelector(selectors.movieDetailSelector);
 
@@ -144,7 +177,6 @@ const LeftSection: React.FC<IOwnProps> = () => {
                 <Typography className={classes.title} variant="h5">
                     Cast
                 </Typography>
-                <Divider />
                 <Box className="cast-items-container">
                     {cast.map((actor) => (
                         <Card className="card-container">
@@ -163,6 +195,45 @@ const LeftSection: React.FC<IOwnProps> = () => {
             </Box>
 
             <Divider className={classes.divider} />
+
+            {collection.length !== 0 && (
+                <>
+                    <Box className={classes.collectionContainer}>
+                        <Typography className={classes.title} variant="h5">
+                            Collections
+                        </Typography>
+                        <Box className="cast-items-container">
+                            {collection.map((movie) => (
+                                <Card className="card-container">
+                                    <CardActionArea onClick={() => {}}>
+                                        <CardMedia
+                                            className="media"
+                                            image={movie.poster}
+                                            title="asd"
+                                        />
+                                        <CardContent className="card-content">
+                                            <div>
+                                                <Typography variant="body1">
+                                                    {movie.title}
+                                                </Typography>
+                                                <Typography variant="body2" color="textSecondary">
+                                                    {new Date(movie.release_date).getFullYear()}
+                                                </Typography>
+                                            </div>
+
+                                            <Typography className="line-clamp" variant="body2">
+                                                {movie.overview}
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            ))}
+                        </Box>
+                    </Box>
+
+                    <Divider className={classes.divider} />
+                </>
+            )}
 
             <Box className={classes.mediaContainer}>
                 <Tabs
@@ -281,13 +352,4 @@ const LeftSection: React.FC<IOwnProps> = () => {
     // }
 };
 
-// const mapStateToProps = (state: interfaces.TState) => ({
-//     cast: state.movieDetail.cast,
-//     collection: (state.movieDetail?.collection as interfaces.IMedia[]) || [],
-//     isLoading: state.loaders.isMovieDetailLoading
-// });
-
-// const mapDispatchToProps = {};
-
-// export default connect(mapStateToProps, mapDispatchToProps)(LeftSection);
 export default LeftSection;

@@ -21,7 +21,7 @@ const theme = createMuiTheme({
                     height: '12px'
                 },
                 '*::-webkit-scrollbar-thumb': {
-                    backgroundColor: '#dedede',
+                    backgroundColor: '#49A078',
                     borderRadius: '10px'
                 },
                 '*::-webkit-scrollbar-thumb:hover': {
