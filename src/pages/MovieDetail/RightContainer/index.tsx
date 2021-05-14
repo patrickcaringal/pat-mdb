@@ -1,12 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
-// import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Chip, Typography } from '@material-ui/core';
 // import Divider from '@material-ui/core/Divider';
 // import Typography from '@material-ui/core/Typography';
 
 // import Chip from '@material-ui/core/Chip';
 
-import { useStyles, cardStyle } from './styles';
+import { selectors } from '../../../store/movie.slice';
+
+// import { useStyles, cardStyle } from './styles';
 // import Skeleton from './Skeleton';
 // import { Card, CardInterfaces } from '../../../../components/Card';
 // import { CardList, CardHeader, CardItems } from '../../../../components/HorizontalCarList';
@@ -20,82 +24,74 @@ import { useStyles, cardStyle } from './styles';
 //     isLoading: boolean;
 // }
 
-interface IDispatchToProps {}
+// interface IDispatchToProps {}
+const useStyles = makeStyles((theme) => ({
+    prodCompanyContainer: {
+        marginBottom: theme.spacing(3),
+        paddingTop: theme.spacing(1),
+        '& .bold-text': {
+            fontWeight: 700
+        },
+        '& .prod-company-items': {
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            margin: `${-theme.spacing(-1)} ${theme.spacing(1)}`,
+            '& .prod-item': {
+                padding: theme.spacing(1),
+                margin: theme.spacing(1),
+                display: 'flex',
+                alignItems: 'center',
+                width: 40,
+                boxSizing: 'content-box',
+                '& img': { width: 'inherit' }
+            }
+        },
+        '& .keywords-container': {
+            marginTop: theme.spacing(2),
+            '& .MuiChip-sizeSmall': { margin: 4 }
+        }
+    }
+}));
 
 interface IOwnProps {}
 
 const RightContainer: React.FC<IOwnProps> = () => {
     const classes = useStyles();
 
-    // const { production_companies = [], recommendations = [] } = data;
-
-    // const mappedRecommendationItems = useMemo(
-    //     () =>
-    //         recommendations?.map((i: interfaces.IMedia) => {
-    //             const { id, poster: image, title, genres: subtitle } = i;
-    //             return {
-    //                 id: title,
-    //                 image,
-    //                 title,
-    //                 subtitle: subtitle.join(', ')
-    //             };
-    //         }),
-    //     [recommendations]
-    // );
-
-    // const recommendationItemRender = useCallback(
-    //     (item: CardInterfaces.ICard) => {
-    //         return <Card {...item} style={cardStyle} />;
-    //     },
-    //     [recommendations]
-    // );
-
-    // if (isLoading) {
-    //     return <Skeleton />;
-    // }
+    const {
+        data: { production_companies = [], recommendations = [] },
+        fetching: loading
+    } = useSelector(selectors.movieDetailSelector);
 
     return (
         <>
-            right content
-            {/* <Box mb={3} pt={1} className={classes.detailsCont}>
-                <Typography variant="body2">Production Companies</Typography>
-                <Box display="flex" flexDirection="row" flexWrap="wrap" mx={-1} mb={1}>
-                    {production_companies.map((company) => {
-                        return (
-                            <Box
-                                p={1}
-                                m={1}
-                                display="flex"
-                                alignItems="center"
-                                width={40}
-                                boxShadow={2}
-                                boxSizing="content-box"
-                            >
-                                <img
-                                    alt={company.name}
-                                    src={company.logo}
-                                    style={{ width: 'inherit' }}
-                                />
-                            </Box>
-                        );
-                    })}
+            <Box className={classes.prodCompanyContainer}>
+                <Typography className="bold-text" gutterBottom>
+                    Production Companies
+                </Typography>
+                <Box className="prod-company-items">
+                    {production_companies.map((company) => (
+                        <Box className="prod-item" boxShadow={2}>
+                            <img alt={company.name} src={company.logo} />
+                        </Box>
+                    ))}
                 </Box>
 
-                <Typography variant="body2">Keywords</Typography>
-                <Box display="flex" flexWrap="wrap" mt={1}>
-                    {[...Array(8)].map((i) => (
-                        <Chip
-                            label="Keyword"
-                            onClick={() => {}}
-                            size="small"
-                            style={{ margin: 4 }}
-                        />
-                    ))}
+                <Box className="keywords-container">
+                    <Typography className="bold-text" gutterBottom>
+                        Keywords
+                    </Typography>
+                    <Box display="flex" flexWrap="wrap" mt={1}>
+                        {[...Array(8)].map((i) => (
+                            <Chip label="Keyword" onClick={() => {}} size="small" />
+                        ))}
+                    </Box>
                 </Box>
             </Box>
 
+            {/*
             <Divider />
-
             <Box mt={3} mb={2}>
                 <Box display="flex" flexDirection="row">
                     <CardList<CardInterfaces.ICard> items={mappedRecommendationItems}>
@@ -114,13 +110,5 @@ const RightContainer: React.FC<IOwnProps> = () => {
         </>
     );
 };
-
-// const mapStateToProps = (state: interfaces.TState) => ({
-//     data: state.movieDetail,
-//     recommendations: state.movieDetail.recommendations,
-//     isLoading: state.loaders.isMovieDetailLoading
-// });
-
-// const mapDispatchToProps = {};
 
 export default RightContainer;

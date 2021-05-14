@@ -72,15 +72,11 @@ const useStyles = makeStyles((theme) => ({
         '& .cast-items-container': {
             display: 'flex',
             flexDirection: 'column',
-            // flexWrap: 'wrap',
-            // marginLeft: theme.spacing(-3),
-            // marginBottom: theme.spacing(-3),
 
             '& .card-container': {
                 '&:not(:last-child)': {
                     marginBottom: theme.spacing(3)
                 },
-                // marginLeft: theme.spacing(3),
                 '& .MuiCardActionArea-root': {
                     display: 'flex',
                     flexDirection: 'row',
