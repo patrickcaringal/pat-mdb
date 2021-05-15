@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -156,9 +157,9 @@ function TabPanel(props) {
     );
 }
 
-interface IOwnProps {}
+interface IOwnProps extends RouteComponentProps {}
 
-const LeftSection: React.FC<IOwnProps> = () => {
+const LeftSection: React.FC<IOwnProps> = ({ history }) => {
     const classes = useStyles();
     const {
         data: { cast = [], collection = [], photos = [], videos = [] },
@@ -166,6 +167,10 @@ const LeftSection: React.FC<IOwnProps> = () => {
     } = useSelector(selectors.movieDetailSelector);
 
     const [selectedTab, setSelectedTab] = useState(1);
+
+    const handleCollectionClick = (id: string) => {
+        history.push(`/movie/${id}`);
+    };
 
     return (
         <>
@@ -201,7 +206,7 @@ const LeftSection: React.FC<IOwnProps> = () => {
                         <Box className="cast-items-container">
                             {collection.map((movie) => (
                                 <Card className="card-container">
-                                    <CardActionArea onClick={() => {}}>
+                                    <CardActionArea onClick={() => handleCollectionClick(movie.id)}>
                                         <CardMedia
                                             className="media"
                                             image={movie.poster}
@@ -348,4 +353,4 @@ const LeftSection: React.FC<IOwnProps> = () => {
     // }
 };
 
-export default LeftSection;
+export default withRouter(LeftSection);

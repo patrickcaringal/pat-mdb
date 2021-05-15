@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'column',
             flex: 1,
             overflow: 'hidden',
-            marginRight: theme.spacing(4)
+            marginRight: theme.spacing(8)
             // border: '1px solid khaki'
         },
         right: {

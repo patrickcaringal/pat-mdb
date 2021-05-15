@@ -33,8 +33,9 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match, location }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         dispatch(actions.getMovieDetail({ id: match.params.id }));
-    }, []);
+    }, [match.params.id]);
 
     return (
         <>

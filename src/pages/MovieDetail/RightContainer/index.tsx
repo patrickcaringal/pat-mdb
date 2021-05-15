@@ -1,8 +1,18 @@
 import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Chip, Typography } from '@material-ui/core';
+import {
+    Box,
+    Card,
+    CardActionArea,
+    CardMedia,
+    CardContent,
+    Chip,
+    Divider,
+    Typography
+} from '@material-ui/core';
 // import Divider from '@material-ui/core/Divider';
 // import Typography from '@material-ui/core/Typography';
 
@@ -26,8 +36,16 @@ import { selectors } from '../../../store/movie.slice';
 
 // interface IDispatchToProps {}
 const useStyles = makeStyles((theme) => ({
+    title: {
+        fontWeight: 600,
+        marginBottom: theme.spacing(2)
+    },
+    divider: {
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(2)
+    },
     prodCompanyContainer: {
-        marginBottom: theme.spacing(3),
+        // marginBottom: theme.spacing(3),
         paddingTop: theme.spacing(1),
         '& .bold-text': {
             fontWeight: 700
@@ -51,18 +69,43 @@ const useStyles = makeStyles((theme) => ({
             marginTop: theme.spacing(2),
             '& .MuiChip-sizeSmall': { margin: 4 }
         }
+    },
+    castContainer: {
+        '& .cast-items-container': {
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            marginLeft: theme.spacing(-3),
+            marginBottom: theme.spacing(-3),
+
+            '& .card-container': {
+                width: 138,
+                marginLeft: theme.spacing(3),
+                marginBottom: theme.spacing(3)
+            },
+            '& .media': {
+                height: 175
+            },
+            '& .card-content': {
+                padding: theme.spacing(1)
+            }
+        }
     }
 }));
 
-interface IOwnProps {}
+interface IOwnProps extends RouteComponentProps {}
 
-const RightContainer: React.FC<IOwnProps> = () => {
+const RightContainer: React.FC<IOwnProps> = ({ history }) => {
     const classes = useStyles();
 
     const {
         data: { keywords = [], production_companies = [], recommendations = [] },
         fetching: loading
     } = useSelector(selectors.movieDetailSelector);
+
+    const handleRecommendationClick = (id: string) => {
+        history.push(`/movie/${id}`);
+    };
 
     return (
         <>
@@ -90,6 +133,35 @@ const RightContainer: React.FC<IOwnProps> = () => {
                 </Box>
             </Box>
 
+            <Divider className={classes.divider} />
+
+            <Box className={classes.castContainer}>
+                <Typography className={classes.title} variant="h5">
+                    You may also like
+                </Typography>
+                <Box className="cast-items-container">
+                    {recommendations.map((movie) => (
+                        <Card className="card-container">
+                            <CardActionArea onClick={() => handleRecommendationClick(movie.id)}>
+                                <CardMedia className="media" image={movie.poster} title="asd" />
+                                <CardContent className="card-content">
+                                    <Typography className="line-clamp-2" variant="body1">
+                                        {movie.title}
+                                    </Typography>
+                                    <Typography
+                                        className="line-clamp-2"
+                                        variant="body2"
+                                        color="textSecondary"
+                                    >
+                                        {movie.genres.join(', ')}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>
+                    ))}
+                </Box>
+            </Box>
+
             {/*
             <Divider />
             <Box mt={3} mb={2}>
@@ -111,4 +183,4 @@ const RightContainer: React.FC<IOwnProps> = () => {
     );
 };
 
-export default RightContainer;
+export default withRouter(RightContainer);
