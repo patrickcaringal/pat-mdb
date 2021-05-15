@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'column',
             flex: 1,
-            overflow: 'hidden'
-            // marginRight: theme.spacing(6),
+            overflow: 'hidden',
+            marginRight: theme.spacing(4)
             // border: '1px solid khaki'
         },
         right: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'column',
             width: 320,
             minWidth: 320
-            // background: 'red'
+            // border: '1px solid red'
         }
     };
 });

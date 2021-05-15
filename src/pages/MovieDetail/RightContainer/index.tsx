@@ -60,7 +60,7 @@ const RightContainer: React.FC<IOwnProps> = () => {
     const classes = useStyles();
 
     const {
-        data: { production_companies = [], recommendations = [] },
+        data: { keywords = [], production_companies = [], recommendations = [] },
         fetching: loading
     } = useSelector(selectors.movieDetailSelector);
 
@@ -83,8 +83,8 @@ const RightContainer: React.FC<IOwnProps> = () => {
                         Keywords
                     </Typography>
                     <Box display="flex" flexWrap="wrap" mt={1}>
-                        {[...Array(8)].map((i) => (
-                            <Chip label="Keyword" onClick={() => {}} size="small" />
+                        {keywords.map((keyword) => (
+                            <Chip label={keyword.name} onClick={() => {}} size="small" />
                         ))}
                     </Box>
                 </Box>
