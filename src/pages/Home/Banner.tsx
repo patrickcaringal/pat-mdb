@@ -125,13 +125,13 @@ const Banner: React.FC<IOwnProps> = ({ history }) => {
     );
 
     useEffect(() => {
-        dispatch(actions.getPopularMediaList({ media: 'movie' }));
+        dispatch(actions.getPopularMediaList());
     }, []);
 
     const slides: number[] = _.range(Math.ceil(popularMediaList.length / 5));
 
-    const handleCardClick = (id: string) => {
-        history.push(`/movie/${id}`);
+    const handleCardClick = (id: string, media: string) => {
+        history.push(`/${media}/${id}`);
     };
 
     return (
@@ -150,14 +150,22 @@ const Banner: React.FC<IOwnProps> = ({ history }) => {
                         <div>
                             <div className={classes.cardCont}>
                                 {medias.map((mediaIndex) => {
-                                    const { id, poster, title, release_date } = popularMediaList[
-                                        mediaIndex
-                                    ];
+                                    const {
+                                        id,
+                                        poster,
+                                        title,
+                                        release_date,
+                                        media
+                                    } = popularMediaList[mediaIndex];
 
                                     return (
                                         <Box className={classes.root}>
                                             <Card>
-                                                <CardActionArea onClick={() => handleCardClick(id)}>
+                                                <CardActionArea
+                                                    onClick={() =>
+                                                        handleCardClick(id, media as string)
+                                                    }
+                                                >
                                                     <CardMedia
                                                         className={classes.media}
                                                         image={poster}

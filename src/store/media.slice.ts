@@ -18,7 +18,7 @@ const slice = createSlice({
         popularMediaList: { ...initialEntityState } as interfaces.IStateEntity<interfaces.IMedia[]>
     },
     reducers: {
-        getPopularMediaList: (state, action) => {
+        getPopularMediaList: (state) => {
             state.popularMediaList.data = [] as interfaces.IMedia[];
             state.popularMediaList.fetching = true;
             state.popularMediaList.fetchFailed = false;

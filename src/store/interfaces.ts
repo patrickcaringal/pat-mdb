@@ -1,6 +1,11 @@
 // import * as constants from './constants';
 // import * as types from './types';
 
+enum MEDIA_TYPE {
+    'MOVIE' = 'movie',
+    'TV' = 'tv'
+}
+
 // State
 export interface IMedia {
     id: string;
@@ -9,6 +14,7 @@ export interface IMedia {
     overview?: string;
     poster: string;
     release_date: string;
+    media?: MEDIA_TYPE;
 }
 
 export interface ICast {
@@ -198,6 +204,9 @@ export type TState = {
         popularMediaList: IStateEntity<IMedia[]>;
     };
     movie: {
+        detail: IStateEntity<IMediaDetail>;
+    };
+    tvShow: {
         detail: IStateEntity<IMediaDetail>;
     };
 };

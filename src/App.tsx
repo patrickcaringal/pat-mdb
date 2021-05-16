@@ -14,6 +14,7 @@ import AppBar from './components/AppBar';
 import Home from './pages/Home';
 // import SearchPage from './pages/Search';
 import MovieDetail from './pages/MovieDetail';
+import TVShowDetail from './pages/TVShowDetail';
 // import TvPage from './pages/Tv';
 // import PeoplePage from './pages/People';
 import Test from './pages/Test/Carousel';
@@ -36,6 +37,7 @@ const App: React.FC<AppProps> = (props) => {
                     <Route path="/people/:id" exact component={() => <PeoplePage />} />
                     <Route path="/search" component={() => <SearchPage />} /> */}
                     <Route path="/movie/:id" exact component={() => <MovieDetail />} />
+                    <Route path="/tv/:id" exact component={() => <TVShowDetail />} />
                     <Route path="/test" component={() => <Test />} />
                     <Route path="/not-found" component={() => <h1>NotFound</h1>} />
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3101/MDb';
+const baseURL = 'http://localhost:3101';
 
 const http = axios.create({ baseURL });
 
