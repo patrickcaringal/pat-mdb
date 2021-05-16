@@ -23,6 +23,8 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
         director,
         genres,
         overview,
+        number_of_seasons = 0,
+        number_of_episodes = 0,
         poster,
         release_date,
         revenue,
@@ -75,12 +77,12 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
                                     <Typography>{director?.join(', ')}</Typography>
                                 </Box>
                                 <Box flex="1">
-                                    <Typography className="bold-text">Budget</Typography>
-                                    <Typography>${formatNumWithComma(budget)}</Typography>
+                                    <Typography className="bold-text">Seasons</Typography>
+                                    <Typography>{number_of_seasons}</Typography>
                                 </Box>
                                 <Box flex="2">
-                                    <Typography className="bold-text">Revenue</Typography>
-                                    <Typography> ${formatNumWithComma(revenue)}</Typography>
+                                    <Typography className="bold-text">Episodes</Typography>
+                                    <Typography>{number_of_episodes}</Typography>
                                 </Box>
                             </Box>
                         </Box>

@@ -14,13 +14,15 @@ export interface IMedia {
     overview?: string;
     poster: string;
     release_date: string;
-    media?: MEDIA_TYPE;
+    // media?: MEDIA_TYPE;
+    media: MEDIA_TYPE;
 }
 
 export interface ICast {
     character: string;
     name: string;
     poster: string;
+    episodes?: number;
 }
 
 export interface IMediaDetail extends IMedia {
@@ -47,6 +49,9 @@ export interface IMediaDetail extends IMedia {
     }[];
     vote_average: number;
     vote_count: number;
+    // tv
+    number_of_seasons?: number;
+    number_of_episodes?: number;
 }
 
 export interface IMovieCatalog {

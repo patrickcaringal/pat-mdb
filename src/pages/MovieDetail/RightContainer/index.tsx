@@ -103,8 +103,8 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
         fetching: loading
     } = useSelector(selectors.movieDetailSelector);
 
-    const handleRecommendationClick = (id: string) => {
-        history.push(`/movie/${id}`);
+    const handleRecommendationClick = (id: string, media: string) => {
+        history.push(`/${media}/${id}`);
     };
 
     return (
@@ -142,7 +142,11 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                 <Box className="cast-items-container">
                     {recommendations.map((movie) => (
                         <Card className="card-container">
-                            <CardActionArea onClick={() => handleRecommendationClick(movie.id)}>
+                            <CardActionArea
+                                onClick={() =>
+                                    handleRecommendationClick(movie.id, movie.media as string)
+                                }
+                            >
                                 <CardMedia className="media" image={movie.poster} title="asd" />
                                 <CardContent className="card-content">
                                     <Typography className="line-clamp-2" variant="body1">

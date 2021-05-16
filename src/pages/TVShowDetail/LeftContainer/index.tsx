@@ -188,6 +188,9 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                                     <Typography variant="body2" color="textSecondary">
                                         {actor.character}
                                     </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {actor.episodes} Episode{actor.episodes || 0 > 1 ? 's' : ''}
+                                    </Typography>
                                 </CardContent>
                             </CardActionArea>
                         </Card>
