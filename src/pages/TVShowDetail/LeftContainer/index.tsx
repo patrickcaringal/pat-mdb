@@ -73,10 +73,18 @@ const useStyles = makeStyles((theme) => ({
         '& .cast-items-container': {
             display: 'flex',
             flexDirection: 'column',
+            maxHeight: 500,
+            overflow: 'auto',
+            paddingRight: theme.spacing(2),
 
             '& .card-container': {
+                minHeight: 175,
+                // marginBottom: theme.spacing(3),
                 '&:not(:last-child)': {
                     marginBottom: theme.spacing(3)
+                },
+                '&:last-child': {
+                    marginBottom: 2
                 },
                 '& .MuiCardActionArea-root': {
                     display: 'flex',
@@ -185,7 +193,11 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                                 <CardMedia className="media" image={actor.poster} title="asd" />
                                 <CardContent className="card-content">
                                     <Typography variant="body1">{actor.name}</Typography>
-                                    <Typography variant="body2" color="textSecondary">
+                                    <Typography
+                                        className="line-clamp-2"
+                                        variant="body2"
+                                        color="textSecondary"
+                                    >
                                         {actor.character}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
@@ -204,34 +216,61 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                 <>
                     <Box className={classes.collectionContainer}>
                         <Typography className={classes.title} variant="h5">
-                            Collections
+                            Seasons
                         </Typography>
                         <Box className="cast-items-container">
-                            {collection.map((movie) => (
-                                <Card className="card-container">
-                                    <CardActionArea onClick={() => handleCollectionClick(movie.id)}>
-                                        <CardMedia
-                                            className="media"
-                                            image={movie.poster}
-                                            title="asd"
-                                        />
-                                        <CardContent className="card-content">
-                                            <div>
-                                                <Typography variant="body1">
-                                                    {movie.title}
-                                                </Typography>
-                                                <Typography variant="body2" color="textSecondary">
-                                                    {new Date(movie.release_date).getFullYear()}
-                                                </Typography>
-                                            </div>
+                            {collection
+                                .filter((i) => {
+                                    const release = new Date(i.release_date) as any;
+                                    const today = new Date() as any;
+                                    return release - today <= 0; // filter released seasons only
+                                })
+                                .map((movie) => {
+                                    const {
+                                        id,
+                                        title,
+                                        overview,
+                                        release_date,
+                                        poster,
+                                        episode_count = 0
+                                    } = movie;
 
-                                            <Typography className="line-clamp" variant="body2">
-                                                {movie.overview}
-                                            </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            ))}
+                                    return (
+                                        <Card className="card-container">
+                                            <CardActionArea
+                                                onClick={() => handleCollectionClick(id)}
+                                            >
+                                                <CardMedia
+                                                    className="media"
+                                                    image={poster}
+                                                    title="asd"
+                                                />
+                                                <CardContent className="card-content">
+                                                    <div>
+                                                        <Typography variant="body1">
+                                                            {title}
+                                                        </Typography>
+                                                        <Typography
+                                                            variant="body2"
+                                                            color="textSecondary"
+                                                        >
+                                                            {new Date(release_date).getFullYear()} |{' '}
+                                                            {episode_count} Episode
+                                                            {episode_count > 1 ? 's' : ''}
+                                                        </Typography>
+                                                    </div>
+
+                                                    <Typography
+                                                        className="line-clamp"
+                                                        variant="body2"
+                                                    >
+                                                        {overview}
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    );
+                                })}
                         </Box>
                     </Box>
 
@@ -300,60 +339,6 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
             </CardList> */}
         </>
     );
-
-    // const mappedCastItems = useMemo(
-    //     () =>
-    //         cast.map((i: interfaces.ICast) => {
-    //             const { poster: image, name: title, character: subtitle } = i;
-    //             return {
-    //                 id: title,
-    //                 image,
-    //                 title,
-    //                 subtitle
-    //             };
-    //         }),
-    //     [cast]
-    // );
-
-    // const castItemRender = useCallback(
-    //     (item: CardInterfaces.ICard) => {
-    //         return <Card {...item} style={cardStyle} />;
-    //     },
-    //     [cast]
-    // );
-
-    // const mappedCollectionItems = useMemo(
-    //     () =>
-    //         collection.map((i: interfaces.IMedia) => {
-    //             const {
-    //                 id,
-    //                 poster: image,
-    //                 title,
-    //                 release_date: subtitle,
-    //                 overview: description
-    //             } = i;
-
-    //             return {
-    //                 id,
-    //                 image,
-    //                 title,
-    //                 subtitle: formatDate(subtitle),
-    //                 description
-    //             };
-    //         }),
-    //     [collection]
-    // );
-
-    // const collectionItemRender = useCallback(
-    //     (item: CardInterfaces.ICard) => {
-    //         return <Card {...item} variant="horizontal" style={horizontalCardStyle} />;
-    //     },
-    //     [collection]
-    // );
-
-    // if (isLoading) {
-    //     return <Skeleton />;
-    // }
 };
 
 export default withRouter(LeftSection);

@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
                 marginBottom: theme.spacing(3)
             },
             '& .media': {
-                height: 175
+                height: 210
             },
             '& .card-content': {
                 padding: theme.spacing(1)

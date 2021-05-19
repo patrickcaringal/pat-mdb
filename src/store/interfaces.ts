@@ -16,6 +16,7 @@ export interface IMedia {
     release_date: string;
     // media?: MEDIA_TYPE;
     media: MEDIA_TYPE;
+    episode_count?: number;
 }
 
 export interface ICast {
