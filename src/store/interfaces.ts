@@ -19,7 +19,8 @@ export interface IMedia {
     episode_count?: number;
 }
 
-export interface ICast {
+export interface IPerson {
+    id: string;
     character: string;
     name: string;
     poster: string;
@@ -29,7 +30,7 @@ export interface ICast {
 export interface IMediaDetail extends IMedia {
     banner: string;
     budget: number;
-    cast: ICast[];
+    cast: IPerson[];
     collection?: IMedia[];
     director: string[];
     keywords: { id: string; name: string }[];
