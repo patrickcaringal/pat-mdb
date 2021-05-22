@@ -13,28 +13,8 @@ import {
     Divider,
     Typography
 } from '@material-ui/core';
-// import Divider from '@material-ui/core/Divider';
-// import Typography from '@material-ui/core/Typography';
-
-// import Chip from '@material-ui/core/Chip';
-
 import { selectors } from '../../../store/movie.slice';
 
-// import { useStyles, cardStyle } from './styles';
-// import Skeleton from './Skeleton';
-// import { Card, CardInterfaces } from '../../../../components/Card';
-// import { CardList, CardHeader, CardItems } from '../../../../components/HorizontalCarList';
-
-// import { actions, interfaces } from '../../../../ducks';
-// import { formatNumWithComma } from '../../../../utils/helpers';
-
-// interface IStateToProps {
-//     data: interfaces.IMediaDetail;
-//     recommendations: interfaces.IMedia[];
-//     isLoading: boolean;
-// }
-
-// interface IDispatchToProps {}
 const useStyles = makeStyles((theme) => ({
     title: {
         fontWeight: 600,
@@ -165,24 +145,6 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                     ))}
                 </Box>
             </Box>
-
-            {/*
-            <Divider />
-            <Box mt={3} mb={2}>
-                <Box display="flex" flexDirection="row">
-                    <CardList<CardInterfaces.ICard> items={mappedRecommendationItems}>
-                        <CardHeader title="You may also like" titleVariant="body1" />
-                        <CardItems
-                            itemRender={recommendationItemRender}
-                            // Box props
-                            display="flex"
-                            py={2}
-                            flexWrap="wrap"
-                            justifyContent="space-between"
-                        />
-                    </CardList>
-                </Box>
-            </Box> */}
         </>
     );
 };

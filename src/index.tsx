@@ -14,7 +14,8 @@ const theme = createMuiTheme({
         MuiCssBaseline: {
             '@global': {
                 body: {
-                    overflow: 'overlay'
+                    overflow: 'overlay',
+                    backgroundColor: '#F3F8F3'
                 },
                 '*::-webkit-scrollbar': {
                     width: '12px',
