@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
@@ -10,7 +10,6 @@ import {
     CardActionArea,
     CardMedia,
     CardContent,
-    Chip,
     Divider,
     Typography
 } from '@material-ui/core';
@@ -18,22 +17,13 @@ import {
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 
-import { selectors } from '../../../store/tvShow.slice';
+import { selectors } from '../../../store/person.slice';
 
 const useStyles = makeStyles((theme) => ({
-    // title: {
-    //     fontWeight: 600,
-    //     marginBottom: theme.spacing(2)
-    // },
     divider: {
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3)
@@ -52,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
         '& .bold-text': {
             fontWeight: 700
         },
+        '& .semibold-text': {
+            fontWeight: 600
+        },
         '& .gutterTop': {
             marginTop: theme.spacing(2)
         },
@@ -68,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
                 marginLeft: theme.spacing(3),
                 marginBottom: theme.spacing(3),
                 '& .media': {
-                    height: 175
+                    height: 210
                 },
                 '& .card-content': {
                     padding: theme.spacing(1)
@@ -85,12 +78,6 @@ const useStyles = makeStyles((theme) => ({
         '& .Mui-expanded': {
             margin: 0
         }
-
-        // borderBottom: '1px solid #f3f8f3'
-
-        // '& .MuiTypography-gutterBottom': {
-        //     marginBottom: theme.spacing(2)
-        // }
     }
 }));
 
@@ -100,35 +87,28 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
     const classes = useStyles();
 
     const {
-        data: { keywords = [], production_companies = [], recommendations = [] },
+        data: { name, biography, credits = [] },
         fetching: loading
-    } = useSelector(selectors.tvShowDetailSelector);
+    } = useSelector(selectors.personDetailSelector);
 
-    const handleRecommendationClick = (id: string, media: string) => {
-        history.push(`/${media}/${id}`);
-    };
+    const popularCredits = credits
+        .slice()
+        .sort((a, b) => b.popularity - a.popularity)
+        .slice(0, 6);
+
+    const uniqueCreditYear = new Set(credits.map((i) => new Date(i.release_date).getFullYear())); // [ 'A', 'B']
+    const creditYears = Array.from(uniqueCreditYear.values());
 
     return (
         <div className={classes.container}>
             <Typography className="title" variant="h3" gutterBottom>
-                Robert Downey Jr.
+                {name}
             </Typography>
 
             <Typography className="bold-text" gutterBottom>
                 Biography
             </Typography>
-            <Typography>
-                Robert John Downey Jr. (born April 4, 1965) is an American actor and producer.
-                Downey made his screen debut in 1970, at the age of five, when he appeared in his
-                father's film Pound, and has worked consistently in film and television ever since.
-                He received two Academy Award nominations for his roles in films Chaplin (1992) and
-                Tropic Thunder (2008). Downey Jr. is most known for his role in the Marvel Cinematic
-                Universe as Tony Stark/Iron Man. He has appeared as the character in Iron Man
-                (2008), The Incredible Hulk (2008), Iron Man 2 (2010), The Avengers (2012), Iron Man
-                3 (2013), Avengers: Age of Ultron (2015), Captain America: Civil War (2016),
-                Spider-Man: Homecoming (2017), Avengers: Infinity War (2018), and Avengers: Endgame
-                (2019).
-            </Typography>
+            <Typography>{biography}</Typography>
 
             <Box className="gutterTop">
                 <Typography className="title" variant="h5">
@@ -136,24 +116,13 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                 </Typography>
 
                 <Box className="popular-credit-container">
-                    {_.range(6).map((i) => (
+                    {popularCredits.map((credit) => (
                         <Card className="card-container">
                             <CardActionArea onClick={() => {}}>
-                                <CardMedia
-                                    className="media"
-                                    image="https://via.placeholder.com/138x210"
-                                    title="asd"
-                                />
+                                <CardMedia className="media" image={credit.poster} title="asd" />
                                 <CardContent className="card-content">
                                     <Typography className="line-clamp-2" variant="body2">
-                                        Lorem, ipsum dolor.
-                                    </Typography>
-                                    <Typography
-                                        className="line-clamp-2"
-                                        variant="body2"
-                                        color="textSecondary"
-                                    >
-                                        lorem2
+                                        {credit.title}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
@@ -170,69 +139,32 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                 </Typography>
 
                 <Box>
-                    <Accordion expanded>
-                        <AccordionSummary>
-                            <Typography className="bold-text" variant="h6">
-                                2021
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <List dense>
-                                <ListItem>
-                                    <Typography>
-                                        Avengers: Endgame as Tony Stark / Iron Man
-                                    </Typography>
-                                </ListItem>
-                                <ListItem>
-                                    <Typography>
-                                        Avengers: Endgame as Tony Stark / Iron Man
-                                    </Typography>
-                                </ListItem>
-                            </List>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion expanded>
-                        <AccordionSummary aria-controls="panel2a-content" id="panel2a-header">
-                            <Typography className="bold-text" variant="h6">
-                                2020
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <List dense>
-                                <ListItem>
-                                    <Typography>
-                                        Avengers: Endgame as Tony Stark / Iron Man
-                                    </Typography>
-                                </ListItem>
-                                <ListItem>
-                                    <Typography>
-                                        Avengers: Endgame as Tony Stark / Iron Man
-                                    </Typography>
-                                </ListItem>
-                            </List>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion expanded>
-                        <AccordionSummary aria-controls="panel2a-content" id="panel2a-header">
-                            <Typography className="bold-text" variant="h6">
-                                2019
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <List dense>
-                                <ListItem>
-                                    <Typography>
-                                        Avengers: Endgame as Tony Stark / Iron Man
-                                    </Typography>
-                                </ListItem>
-                                <ListItem>
-                                    <Typography>
-                                        Avengers: Endgame as Tony Stark / Iron Man
-                                    </Typography>
-                                </ListItem>
-                            </List>
-                        </AccordionDetails>
-                    </Accordion>
+                    {creditYears.map((year) => (
+                        <Accordion expanded>
+                            <AccordionSummary>
+                                <Typography className="bold-text" variant="h6">
+                                    {year}
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <List dense>
+                                    {credits
+                                        .filter(
+                                            (cred) =>
+                                                new Date(cred.release_date).getFullYear() === year
+                                        )
+                                        .map((cred) => (
+                                            <ListItem>
+                                                <Typography className="semibold-text">
+                                                    {cred.title}
+                                                </Typography>
+                                                <Typography>&nbsp;as {cred.character}</Typography>
+                                            </ListItem>
+                                        ))}
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+                    ))}
                 </Box>
             </Box>
         </div>

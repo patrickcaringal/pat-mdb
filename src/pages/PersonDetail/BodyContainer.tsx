@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'row',
             paddingTop: theme.spacing(4),
+            paddingBottom: theme.spacing(4),
             paddingLeft: 24,
             paddingRight: 24
         },

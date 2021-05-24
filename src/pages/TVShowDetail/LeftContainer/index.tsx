@@ -177,8 +177,7 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
     const [selectedTab, setSelectedTab] = useState(1);
 
     const handleCastClick = (id: string) => {
-        console.log(id);
-        // history.push(`/person/${id}`);
+        history.push(`/person/${id}`);
     };
 
     const handleCollectionClick = (id: string) => {
@@ -194,11 +193,7 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                 <Box className="cast-items-container">
                     {cast.map((person) => (
                         <Card className="card-container">
-                            <CardActionArea
-                                onClick={() => {
-                                    handleCastClick(person.id);
-                                }}
-                            >
+                            <CardActionArea onClick={() => handleCastClick(person.id)}>
                                 <CardMedia className="media" image={person.poster} title="asd" />
                                 <CardContent className="card-content">
                                     <Typography variant="body1">{person.name}</Typography>

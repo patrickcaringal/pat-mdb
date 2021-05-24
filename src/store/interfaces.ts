@@ -27,6 +27,17 @@ export interface IPerson {
     episodes?: number;
 }
 
+export interface ICredit {
+    id: string;
+    character: string;
+    title: string;
+    media: MEDIA_TYPE;
+    rating: number;
+    popularity: number;
+    poster: string;
+    release_date: string;
+}
+
 export interface IMediaDetail extends IMedia {
     banner: string;
     budget: number;
@@ -56,6 +67,16 @@ export interface IMediaDetail extends IMedia {
     number_of_episodes?: number;
 }
 
+export interface IPersonDetail extends IPerson {
+    biography: string;
+    birthday: string;
+    credits: ICredit[];
+    department: string;
+    photos: string[];
+    place_of_birth: string;
+    popularity: number;
+}
+
 export interface IMovieCatalog {
     page: number;
     total_pages: boolean;
@@ -70,12 +91,12 @@ export interface ITVShowCatalog {
     tvShows: IMedia[];
 }
 
-export interface IPerson {
-    id: string;
-    name: string;
-    known_for: string[];
-    poster: string;
-}
+// export interface IPerson {
+//     id: string;
+//     name: string;
+//     known_for: string[];
+//     poster: string;
+// }
 
 export interface IPeopleCatalog {
     page: number;
@@ -215,6 +236,9 @@ export type TState = {
     };
     tvShow: {
         detail: IStateEntity<IMediaDetail>;
+    };
+    person: {
+        detail: IStateEntity<IPersonDetail>;
     };
 };
 

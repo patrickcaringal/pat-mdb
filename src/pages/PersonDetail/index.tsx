@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { actions } from '../../store/tvShow.slice';
+import { actions } from '../../store/person.slice';
 
 import Banner from './Banner';
 import BodyContainer from './BodyContainer';
@@ -20,7 +20,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match, location }) => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        // dispatch(actions.getTVShowDetail({ id: match.params.id }));
+        dispatch(actions.getPersonDetail({ id: match.params.id }));
     }, [match.params.id]);
 
     return (
