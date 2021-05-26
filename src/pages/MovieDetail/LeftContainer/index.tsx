@@ -15,30 +15,9 @@ import {
     Typography
 } from '@material-ui/core';
 
-// import Typography from '@material-ui/core/Typography';
-// import Card2 from '@material-ui/core/Card';
-// import CardMedia from '@material-ui/core/CardMedia';
-// import Tab from '@material-ui/core/Tab';
-// import Tabs from '@material-ui/core/Tabs';
-
-// import { useStyles, cardStyle, horizontalCardStyle } from './styles';
-
 import { IMediaDetail } from '../../../store/interfaces';
 import { selectors } from '../../../store/movie.slice';
-// import Skeleton from './Skeleton';
-// import { actions, interfaces } from '../../../../ducks';
-// import { formatDate } from '../../../../utils/helpers';
 
-// import { Card, CardInterfaces } from '../../../../components/Card';
-// import { CardList, CardHeader, CardItems } from '../../../../components/HorizontalCarList';
-
-// interface IStateToProps {
-//     cast: interfaces.ICast[];
-//     collection: interfaces.IMedia[];
-//     isLoading: boolean;
-// }
-
-// interface IDispatchToProps {}
 const useStyles = makeStyles((theme) => ({
     title: {
         fontWeight: 600,
@@ -49,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2)
     },
     castContainer: {
-        '& .cast-items-container': {
+        '& .items-container': {
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'wrap',
@@ -70,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     collectionContainer: {
-        '& .cast-items-container': {
+        '& .items-container': {
             display: 'flex',
             flexDirection: 'column',
 
@@ -118,8 +97,8 @@ const useStyles = makeStyles((theme) => ({
                 flexDirection: 'row',
                 flexWrap: 'wrap',
                 marginLeft: theme.spacing(-3),
-                marginTop: theme.spacing(2)
-                // marginBottom: theme.spacing(-3)
+                marginTop: theme.spacing(2),
+                marginBottom: theme.spacing(-3)
             },
             '& .card-container': {
                 width: 241,
@@ -182,7 +161,7 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                 <Typography className={classes.title} variant="h5">
                     Cast
                 </Typography>
-                <Box className="cast-items-container">
+                <Box className="items-container">
                     {cast.map((person) => (
                         <Card className="card-container">
                             <CardActionArea onClick={() => handleCastClick(person.id)}>
@@ -207,7 +186,7 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                         <Typography className={classes.title} variant="h5">
                             Collections
                         </Typography>
-                        <Box className="cast-items-container">
+                        <Box className="items-container">
                             {collection.map((movie) => (
                                 <Card className="card-container">
                                     <CardActionArea onClick={() => handleCollectionClick(movie.id)}>
@@ -285,76 +264,8 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                     </TabPanel>
                 </Box>
             </Box>
-
-            {/* <CardList<CardInterfaces.ICard> items={mappedCastItems} className={classes.containers}>
-                <CardHeader title="Cast" />
-                <CardItems itemRender={castItemRender} className={classes.castList} />
-            </CardList>
-
-            <CardList<CardInterfaces.ICard>
-                items={mappedCollectionItems}
-                hideOnBlankItems
-                className={classes.containers}
-            >
-                <CardHeader title="Collections" />
-                <CardItems itemRender={collectionItemRender} className={classes.collectionList} />
-            </CardList> */}
         </>
     );
-
-    // const mappedCastItems = useMemo(
-    //     () =>
-    //         cast.map((i: interfaces.ICast) => {
-    //             const { poster: image, name: title, character: subtitle } = i;
-    //             return {
-    //                 id: title,
-    //                 image,
-    //                 title,
-    //                 subtitle
-    //             };
-    //         }),
-    //     [cast]
-    // );
-
-    // const castItemRender = useCallback(
-    //     (item: CardInterfaces.ICard) => {
-    //         return <Card {...item} style={cardStyle} />;
-    //     },
-    //     [cast]
-    // );
-
-    // const mappedCollectionItems = useMemo(
-    //     () =>
-    //         collection.map((i: interfaces.IMedia) => {
-    //             const {
-    //                 id,
-    //                 poster: image,
-    //                 title,
-    //                 release_date: subtitle,
-    //                 overview: description
-    //             } = i;
-
-    //             return {
-    //                 id,
-    //                 image,
-    //                 title,
-    //                 subtitle: formatDate(subtitle),
-    //                 description
-    //             };
-    //         }),
-    //     [collection]
-    // );
-
-    // const collectionItemRender = useCallback(
-    //     (item: CardInterfaces.ICard) => {
-    //         return <Card {...item} variant="horizontal" style={horizontalCardStyle} />;
-    //     },
-    //     [collection]
-    // );
-
-    // if (isLoading) {
-    //     return <Skeleton />;
-    // }
 };
 
 export default withRouter(LeftSection);

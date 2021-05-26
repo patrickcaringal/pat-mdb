@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -32,7 +32,7 @@ interface MovieDetailProps extends RouteComponentProps<MatchParams> {}
 const MoivieDetail: React.FC<MovieDetailProps> = ({ match, location }) => {
     const dispatch = useDispatch();
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         window.scrollTo(0, 0);
         dispatch(actions.getMovieDetail({ id: match.params.id }));
     }, [match.params.id]);

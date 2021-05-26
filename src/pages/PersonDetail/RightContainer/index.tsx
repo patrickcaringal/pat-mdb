@@ -87,9 +87,11 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
     const classes = useStyles();
 
     const {
-        data: { name, biography, credits = [] },
+        data: { name, biography, credits = [], department },
         fetching: loading
     } = useSelector(selectors.personDetailSelector);
+
+    const isActor = department?.toLocaleLowerCase() === 'acting';
 
     const popularCredits = credits
         .slice()
@@ -98,6 +100,10 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
 
     const uniqueCreditYear = new Set(credits.map((i) => new Date(i.release_date).getFullYear())); // [ 'A', 'B']
     const creditYears = Array.from(uniqueCreditYear.values());
+
+    const handleCreditClick = (id: string, media: string) => {
+        history.push(`/${media}/${id}`);
+    };
 
     return (
         <div className={classes.container}>
@@ -118,7 +124,11 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                 <Box className="popular-credit-container">
                     {popularCredits.map((credit) => (
                         <Card className="card-container">
-                            <CardActionArea onClick={() => {}}>
+                            <CardActionArea
+                                onClick={() => {
+                                    handleCreditClick(credit.id, credit.media as string);
+                                }}
+                            >
                                 <CardMedia className="media" image={credit.poster} title="asd" />
                                 <CardContent className="card-content">
                                     <Typography className="line-clamp-2" variant="body2">
@@ -158,7 +168,13 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                                                 <Typography className="semibold-text">
                                                     {cred.title}
                                                 </Typography>
-                                                <Typography>&nbsp;as {cred.character}</Typography>
+                                                <Typography style={{ whiteSpace: 'pre' }}>
+                                                    {cred.character
+                                                        ? ` ${isActor ? 'as' : '...'} ${
+                                                              cred.character
+                                                          }`
+                                                        : ''}
+                                                </Typography>
                                             </ListItem>
                                         ))}
                                 </List>
