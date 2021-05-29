@@ -21,8 +21,7 @@ export const bannerUseStyles = makeStyles<Theme, { bannerBg: string }>((theme) =
         '& .poster-image': {
             width: 300,
             height: 450,
-            borderRadius: 8,
-            border: '1px solid khaki'
+            borderRadius: 8
         },
         // General
         '& .flex-row': {

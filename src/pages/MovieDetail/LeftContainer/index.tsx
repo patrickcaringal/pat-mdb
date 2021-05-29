@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
@@ -15,8 +15,9 @@ import {
     Typography
 } from '@material-ui/core';
 
-import { IMediaDetail } from '../../../store/interfaces';
 import { selectors } from '../../../store/movie.slice';
+
+import CardComp from '../../../components/CardList/Card';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -33,48 +34,48 @@ const useStyles = makeStyles((theme) => ({
             flexDirection: 'row',
             flexWrap: 'wrap',
             marginLeft: theme.spacing(-3),
-            marginBottom: theme.spacing(-3),
+            marginBottom: theme.spacing(-3)
 
-            '& .card-container': {
-                width: 138,
-                marginLeft: theme.spacing(3),
-                marginBottom: theme.spacing(3)
-            },
-            '& .media': {
-                height: 175
-            },
-            '& .card-content': {
-                padding: theme.spacing(1)
-            }
+            // '& .card-container': {
+            //     width: 138,
+            //     marginLeft: theme.spacing(3),
+            //     marginBottom: theme.spacing(3)
+            // },
+            // '& .media': {
+            //     height: 175
+            // },
+            // '& .card-content': {
+            //     padding: theme.spacing(1)
+            // }
         }
     },
     collectionContainer: {
         '& .items-container': {
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'column'
 
-            '& .card-container': {
-                '&:not(:last-child)': {
-                    marginBottom: theme.spacing(3)
-                },
-                '& .MuiCardActionArea-root': {
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start'
-                }
-            },
-            '& .media': {
-                height: 175,
-                width: 120
-            },
-            '& .card-content': {
-                flex: 1,
-                height: 175,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                padding: theme.spacing(2)
-            }
+            // '& .card-container': {
+            //     '&:not(:last-child)': {
+            //         marginBottom: theme.spacing(3)
+            //     },
+            //     '& .MuiCardActionArea-root': {
+            //         display: 'flex',
+            //         flexDirection: 'row',
+            //         justifyContent: 'flex-start'
+            //     }
+            // },
+            // '& .media': {
+            //     height: 175,
+            //     width: 120
+            // },
+            // '& .card-content': {
+            //     flex: 1,
+            //     height: 175,
+            //     display: 'flex',
+            //     flexDirection: 'column',
+            //     justifyContent: 'space-between',
+            //     padding: theme.spacing(2)
+            // }
         }
     },
     mediaContainer: {
@@ -163,17 +164,14 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                 </Typography>
                 <Box className="items-container">
                     {cast.map((person) => (
-                        <Card className="card-container">
-                            <CardActionArea onClick={() => handleCastClick(person.id)}>
-                                <CardMedia className="media" image={person.poster} title="asd" />
-                                <CardContent className="card-content">
-                                    <Typography variant="body1">{person.name}</Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {person.character}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
+                        <CardComp
+                            onClick={() => {
+                                handleCastClick(person.id);
+                            }}
+                            poster={person.poster}
+                            title={person.name}
+                            subtitle={person.character}
+                        />
                     ))}
                 </Box>
             </Box>
@@ -188,29 +186,39 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                         </Typography>
                         <Box className="items-container">
                             {collection.map((movie) => (
-                                <Card className="card-container">
-                                    <CardActionArea onClick={() => handleCollectionClick(movie.id)}>
-                                        <CardMedia
-                                            className="media"
-                                            image={movie.poster}
-                                            title="asd"
-                                        />
-                                        <CardContent className="card-content">
-                                            <div>
-                                                <Typography variant="body1">
-                                                    {movie.title}
-                                                </Typography>
-                                                <Typography variant="body2" color="textSecondary">
-                                                    {new Date(movie.release_date).getFullYear()}
-                                                </Typography>
-                                            </div>
+                                <CardComp
+                                    variant="horizontal"
+                                    onClick={() => {
+                                        handleCollectionClick(movie.id);
+                                    }}
+                                    poster={movie.poster}
+                                    title={movie.title}
+                                    subtitle={`${new Date(movie.release_date).getFullYear()}`}
+                                    description={movie.overview}
+                                />
+                                // <Card className="card-container">
+                                //     <CardActionArea onClick={() => handleCollectionClick(movie.id)}>
+                                //         <CardMedia
+                                //             className="media"
+                                //             image={movie.poster}
+                                //             title="asd"
+                                //         />
+                                //         <CardContent className="card-content">
+                                //             <div>
+                                //                 <Typography variant="body1">
+                                //                     {movie.title}
+                                //                 </Typography>
+                                //                 <Typography variant="body2" color="textSecondary">
+                                //                     {new Date(movie.release_date).getFullYear()}
+                                //                 </Typography>
+                                //             </div>
 
-                                            <Typography className="line-clamp" variant="body2">
-                                                {movie.overview}
-                                            </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
+                                //             <Typography className="line-clamp" variant="body2">
+                                //                 {movie.overview}
+                                //             </Typography>
+                                //         </CardContent>
+                                //     </CardActionArea>
+                                // </Card>
                             ))}
                         </Box>
                     </Box>
