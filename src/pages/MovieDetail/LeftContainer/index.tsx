@@ -101,21 +101,23 @@ const useStyles = makeStyles((theme) => ({
                 marginTop: theme.spacing(2),
                 marginBottom: theme.spacing(-3)
             },
-            '& .card-container': {
+            '& .MuiCard-root': {
                 width: 241,
                 marginLeft: theme.spacing(3),
                 marginBottom: theme.spacing(3)
             },
-            '& .media': {
-                height: 160
-            },
-            '& .desc-overlay': {
-                position: 'absolute',
-                bottom: 0,
-                width: '100%',
-                color: '#DCE1DE',
-                background: 'rgba(0,0,0,0.6)',
-                padding: theme.spacing(1, 2)
+            '& .videos-tab': {
+                '& .MuiCardContent-root': {
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    color: '#DCE1DE',
+                    background: 'rgba(0,0,0,0.6)',
+                    padding: theme.spacing(1, 2),
+                    '& .MuiTypography-root': {
+                        color: '#DCE1DE'
+                    }
+                }
             }
         }
     }
@@ -245,29 +247,45 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                 <Box className="media-items-container">
                     <TabPanel className="tab-item" value={selectedTab} index={1}>
                         {photos.map((photo) => (
-                            <Card className="card-container">
-                                <CardActionArea onClick={() => {}}>
-                                    <CardMedia className="media" image={photo} title="asd" />
-                                </CardActionArea>
-                            </Card>
+                            // <Card className="card-container">
+                            //     <CardActionArea onClick={() => {}}>
+                            //         <CardMedia className="media" image={photo} title="asd" />
+                            //     </CardActionArea>
+                            // </Card>
+                            <CardComp
+                                onClick={() => {}}
+                                poster={photo}
+                                // title={movie.title}
+                                // subtitle={`${new Date(movie.release_date).getFullYear()}`}
+                                // description={movie.overview}
+                            />
                         ))}
                     </TabPanel>
-                    <TabPanel className="tab-item" value={selectedTab} index={2}>
+                    <TabPanel className="tab-item videos-tab" value={selectedTab} index={2}>
                         {videos.map((video) => (
-                            <Card className="card-container">
-                                <CardActionArea onClick={() => {}}>
-                                    <CardMedia
-                                        className="media"
-                                        image={video.thumbnail}
-                                        title="asd"
-                                    />
-                                    <Box className="desc-overlay">
-                                        <Typography variant="body1" noWrap>
-                                            {video.description}
-                                        </Typography>
-                                    </Box>
-                                </CardActionArea>
-                            </Card>
+                            // <Card className="card-container">
+                            //     <CardActionArea onClick={() => {}}>
+                            //         <CardMedia
+                            //             className="media"
+                            //             image={video.thumbnail}
+                            //             title="asd"
+                            //         />
+                            //         <Box className="desc-overlay">
+                            //             <Typography variant="body1" noWrap>
+                            //                 {video.description}
+                            //             </Typography>
+                            //         </Box>
+                            //     </CardActionArea>
+                            // </Card>
+
+                            <CardComp
+                                onClick={() => {}}
+                                poster={video.thumbnail}
+                                subtitle={video.description}
+                                // title={movie.title}
+                                // subtitle={`${new Date(movie.release_date).getFullYear()}`}
+                                // description={movie.overview}
+                            />
                         ))}
                     </TabPanel>
                 </Box>
