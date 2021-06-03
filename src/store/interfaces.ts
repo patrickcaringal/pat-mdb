@@ -1,7 +1,7 @@
 // import * as constants from './constants';
 // import * as types from './types';
 
-enum MEDIA_TYPE {
+export enum media_type {
     'MOVIE' = 'movie',
     'TV' = 'tv'
 }
@@ -14,8 +14,8 @@ export interface IMedia {
     overview?: string;
     poster: string;
     release_date: string;
-    // media?: MEDIA_TYPE;
-    media: MEDIA_TYPE;
+    // media?: media_type;
+    media: media_type;
     episode_count?: number;
 }
 
@@ -31,7 +31,7 @@ export interface ICredit {
     id: string;
     character: string;
     title: string;
-    media: MEDIA_TYPE;
+    media: media_type;
     rating: number;
     popularity: number;
     poster: string;

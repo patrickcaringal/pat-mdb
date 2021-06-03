@@ -3,17 +3,7 @@ import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {
-    Box,
-    Card,
-    CardContent,
-    CardMedia,
-    CardActionArea,
-    Divider,
-    Tab,
-    Tabs,
-    Typography
-} from '@material-ui/core';
+import { Box, Divider, Tab, Tabs, Typography } from '@material-ui/core';
 
 import { selectors } from '../../../store/movie.slice';
 
@@ -35,47 +25,21 @@ const useStyles = makeStyles((theme) => ({
             flexWrap: 'wrap',
             marginLeft: theme.spacing(-3),
             marginBottom: theme.spacing(-3)
-
-            // '& .card-container': {
-            //     width: 138,
-            //     marginLeft: theme.spacing(3),
-            //     marginBottom: theme.spacing(3)
-            // },
-            // '& .media': {
-            //     height: 175
-            // },
-            // '& .card-content': {
-            //     padding: theme.spacing(1)
-            // }
         }
     },
     collectionContainer: {
         '& .items-container': {
             display: 'flex',
-            flexDirection: 'column'
-
-            // '& .card-container': {
-            //     '&:not(:last-child)': {
-            //         marginBottom: theme.spacing(3)
-            //     },
-            //     '& .MuiCardActionArea-root': {
-            //         display: 'flex',
-            //         flexDirection: 'row',
-            //         justifyContent: 'flex-start'
-            //     }
-            // },
-            // '& .media': {
-            //     height: 175,
-            //     width: 120
-            // },
-            // '& .card-content': {
-            //     flex: 1,
-            //     height: 175,
-            //     display: 'flex',
-            //     flexDirection: 'column',
-            //     justifyContent: 'space-between',
-            //     padding: theme.spacing(2)
-            // }
+            flexDirection: 'column',
+            maxHeight: 500,
+            overflow: 'auto',
+            paddingRight: theme.spacing(2),
+            '& .MuiCard-root ': {
+                minHeight: 175
+            },
+            '&:last-child': {
+                marginBottom: 2
+            }
         }
     },
     mediaContainer: {
@@ -98,8 +62,8 @@ const useStyles = makeStyles((theme) => ({
                 flexDirection: 'row',
                 flexWrap: 'wrap',
                 marginLeft: theme.spacing(-3),
-                marginTop: theme.spacing(2),
-                marginBottom: theme.spacing(-3)
+                marginTop: theme.spacing(2)
+                // marginBottom: theme.spacing(-3)
             },
             '& .MuiCard-root': {
                 width: 241,
@@ -198,29 +162,6 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                                     subtitle={`${new Date(movie.release_date).getFullYear()}`}
                                     description={movie.overview}
                                 />
-                                // <Card className="card-container">
-                                //     <CardActionArea onClick={() => handleCollectionClick(movie.id)}>
-                                //         <CardMedia
-                                //             className="media"
-                                //             image={movie.poster}
-                                //             title="asd"
-                                //         />
-                                //         <CardContent className="card-content">
-                                //             <div>
-                                //                 <Typography variant="body1">
-                                //                     {movie.title}
-                                //                 </Typography>
-                                //                 <Typography variant="body2" color="textSecondary">
-                                //                     {new Date(movie.release_date).getFullYear()}
-                                //                 </Typography>
-                                //             </div>
-
-                                //             <Typography className="line-clamp" variant="body2">
-                                //                 {movie.overview}
-                                //             </Typography>
-                                //         </CardContent>
-                                //     </CardActionArea>
-                                // </Card>
                             ))}
                         </Box>
                     </Box>
@@ -247,44 +188,15 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
                 <Box className="media-items-container">
                     <TabPanel className="tab-item" value={selectedTab} index={1}>
                         {photos.map((photo) => (
-                            // <Card className="card-container">
-                            //     <CardActionArea onClick={() => {}}>
-                            //         <CardMedia className="media" image={photo} title="asd" />
-                            //     </CardActionArea>
-                            // </Card>
-                            <CardComp
-                                onClick={() => {}}
-                                poster={photo}
-                                // title={movie.title}
-                                // subtitle={`${new Date(movie.release_date).getFullYear()}`}
-                                // description={movie.overview}
-                            />
+                            <CardComp onClick={() => {}} poster={photo} />
                         ))}
                     </TabPanel>
                     <TabPanel className="tab-item videos-tab" value={selectedTab} index={2}>
                         {videos.map((video) => (
-                            // <Card className="card-container">
-                            //     <CardActionArea onClick={() => {}}>
-                            //         <CardMedia
-                            //             className="media"
-                            //             image={video.thumbnail}
-                            //             title="asd"
-                            //         />
-                            //         <Box className="desc-overlay">
-                            //             <Typography variant="body1" noWrap>
-                            //                 {video.description}
-                            //             </Typography>
-                            //         </Box>
-                            //     </CardActionArea>
-                            // </Card>
-
                             <CardComp
                                 onClick={() => {}}
                                 poster={video.thumbnail}
                                 subtitle={video.description}
-                                // title={movie.title}
-                                // subtitle={`${new Date(movie.release_date).getFullYear()}`}
-                                // description={movie.overview}
                             />
                         ))}
                     </TabPanel>

@@ -5,14 +5,16 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Box,
-    Card,
-    CardActionArea,
-    CardMedia,
-    CardContent,
+    // Card,
+    // CardActionArea,
+    // CardMedia,
+    // CardContent,
     Chip,
     Divider,
     Typography
 } from '@material-ui/core';
+import Card from '../../../components/CardList/Card';
+
 import { selectors } from '../../../store/movie.slice';
 
 const useStyles = makeStyles((theme) => ({
@@ -57,17 +59,11 @@ const useStyles = makeStyles((theme) => ({
             flexWrap: 'wrap',
             marginLeft: theme.spacing(-3),
             marginBottom: theme.spacing(-3),
-
             '& .card-container': {
-                width: 138,
-                marginLeft: theme.spacing(3),
-                marginBottom: theme.spacing(3)
+                width: 138
             },
             '& .media': {
-                height: 175
-            },
-            '& .card-content': {
-                padding: theme.spacing(1)
+                height: 210
             }
         }
     }
@@ -121,27 +117,32 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                 </Typography>
                 <Box className="cast-items-container">
                     {recommendations.map((movie) => (
-                        <Card className="card-container">
-                            <CardActionArea
-                                onClick={() =>
-                                    handleRecommendationClick(movie.id, movie.media as string)
-                                }
-                            >
-                                <CardMedia className="media" image={movie.poster} title="asd" />
-                                <CardContent className="card-content">
-                                    <Typography className="line-clamp-2" variant="body1">
-                                        {movie.title}
-                                    </Typography>
-                                    <Typography
-                                        className="line-clamp-2"
-                                        variant="body2"
-                                        color="textSecondary"
-                                    >
-                                        {movie.genres.join(', ')}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
+                        <Card
+                            onClick={() => {}}
+                            poster={movie.poster}
+                            subtitle={movie.genres.join(', ')}
+                        />
+                        // <Card className="card-container">
+                        //     <CardActionArea
+                        //         onClick={() =>
+                        //             handleRecommendationClick(movie.id, movie.media as string)
+                        //         }
+                        //     >
+                        //         <CardMedia className="media" image={movie.poster} title="asd" />
+                        //         <CardContent className="card-content">
+                        //             <Typography className="line-clamp-2" variant="body1">
+                        //                 {movie.title}
+                        //             </Typography>
+                        //             <Typography
+                        //                 className="line-clamp-2"
+                        //                 variant="body2"
+                        //                 color="textSecondary"
+                        //             >
+                        //                 {movie.genres.join(', ')}
+                        //             </Typography>
+                        //         </CardContent>
+                        //     </CardActionArea>
+                        // </Card>
                     ))}
                 </Box>
             </Box>

@@ -8,12 +8,14 @@ import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import configureStore from './store/configureStore';
+import { media_type } from './store/interfaces';
 import './App.css';
 
 import AppBar from './components/AppBar';
 import Home from './pages/Home';
 // import SearchPage from './pages/Search';
-import MovieDetail from './pages/MovieDetail';
+import MediaDetail from './pages/MediaDetail';
+// import MovieDetail from './pages/MovieDetail';
 import TVShowDetail from './pages/TVShowDetail';
 import PersonDetail from './pages/PersonDetail';
 // import TvPage from './pages/Tv';
@@ -37,8 +39,16 @@ const App: React.FC<AppProps> = (props) => {
                     <Route path="/tv-show/:id" exact component={() => <TvPage />} />
                     <Route path="/people/:id" exact component={() => <PeoplePage />} />
                     <Route path="/search" component={() => <SearchPage />} /> */}
-                    <Route path="/movie/:id" exact component={() => <MovieDetail />} />
-                    <Route path="/tv/:id" exact component={() => <TVShowDetail />} />
+                    <Route
+                        path="/movie/:id"
+                        exact
+                        component={() => <MediaDetail mediaType={media_type.MOVIE} />}
+                    />
+                    <Route
+                        path="/tv/:id"
+                        exact
+                        component={() => <MediaDetail mediaType={media_type.TV} />}
+                    />
                     <Route path="/person/:id" exact component={() => <PersonDetail />} />
                     <Route path="/test" component={() => <Test />} />
                     <Route path="/not-found" component={() => <h1>NotFound</h1>} />

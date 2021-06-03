@@ -6,10 +6,13 @@ import { Box, Container, ThemeProvider, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { createMuiTheme, makeStyles, Theme } from '@material-ui/core/styles';
 
-import { selectors } from '../../store/movie.slice';
-import { IMediaDetail } from '../../store/interfaces';
+import { selectors } from '../../../store/tvShow.slice';
+import { IMediaDetail } from '../../../store/interfaces';
 
-import { formatNumWithComma, formatDate, formatHours } from '../../utils/helpers';
+// import BannerSkeleton from './BannerSkeleton';
+// import { bannerUseStyles as useStyles } from './styles';
+
+import { formatNumWithComma, formatDate, formatHours } from '../../../utils/helpers';
 
 interface MovieDetailProps extends RouteComponentProps {}
 
@@ -58,14 +61,16 @@ const useStyles = makeStyles<Theme, { bannerBg: string }>((theme) => ({
 }));
 
 const MoivieDetail: React.FC<MovieDetailProps> = () => {
-    const { data: detail, fetching: loading } = useSelector(selectors.movieDetailSelector);
+    const { data: detail, fetching: loading } = useSelector(selectors.tvShowDetailSelector);
 
     const {
         banner,
         budget,
-        director = [],
-        genres = [],
+        director,
+        genres,
         overview,
+        number_of_seasons = 0,
+        number_of_episodes = 0,
         poster,
         release_date,
         revenue,
@@ -91,7 +96,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
                             </Typography>
                             <Typography className="subtitle">
                                 <span>{formatDate(release_date)}</span>
-                                <span>{genres.join(', ')}</span>
+                                <span>{genres?.join(', ')}</span>
                                 <span>{formatHours(runtime)}</span>
                             </Typography>
 
@@ -115,15 +120,15 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
                             <Box className="flex-row" mt={4}>
                                 <Box flex="1">
                                     <Typography className="bold-text">Director</Typography>
-                                    <Typography>{director.join(', ')}</Typography>
+                                    <Typography>{director?.join(', ')}</Typography>
                                 </Box>
                                 <Box flex="1">
-                                    <Typography className="bold-text">Budget</Typography>
-                                    <Typography>${formatNumWithComma(budget)}</Typography>
+                                    <Typography className="bold-text">Seasons</Typography>
+                                    <Typography>{number_of_seasons}</Typography>
                                 </Box>
                                 <Box flex="2">
-                                    <Typography className="bold-text">Revenue</Typography>
-                                    <Typography> ${formatNumWithComma(revenue)}</Typography>
+                                    <Typography className="bold-text">Episodes</Typography>
+                                    <Typography>{number_of_episodes}</Typography>
                                 </Box>
                             </Box>
                         </Box>
