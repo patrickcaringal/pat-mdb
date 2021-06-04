@@ -77,6 +77,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
         }
     }, [mediaId]);
 
+    // #region data mapping
     const mappedCast = isMovie
         ? movieDetail.cast.map((person) => ({
               onClick: () => {
@@ -96,8 +97,36 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
               subtitle2: `${person.episodes} Episode${person.episodes || 0 > 1 ? 's' : ''}`
           }));
 
+    const mappedCollection = isMovie
+        ? movieDetail.collection &&
+          movieDetail.collection.map((movie) => ({
+              onClick: () => {
+                  handleCollectionClick('movie', movie.id);
+              },
+              poster: movie.poster,
+              title: movie.title,
+              subtitle: `${new Date(movie.release_date).getFullYear()}`,
+              description: movie.overview
+          }))
+        : tvShowDetail.collection &&
+          tvShowDetail.collection.map((tvShow) => ({
+              onClick: () => {
+                  handleCollectionClick('tv', tvShow.id);
+              },
+              poster: tvShow.poster,
+              title: tvShow.title,
+              subtitle: `${new Date(tvShow.release_date).getFullYear()}`,
+              description: tvShow.overview
+          }));
+    // #endregion data mapping
+
     const handleCastClick = (id: string) => {
         history.push(`/person/${id}`);
+    };
+
+    const handleCollectionClick = (media: string, id: string) => {
+        history.push(`/${media}/${id}`);
+        // TODO: diff page for tv show season click
     };
 
     return (
@@ -106,7 +135,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
             <Box style={{ background: '#F3F8F3' }}>
                 <Container className={classes.content} disableGutters maxWidth="lg">
                     <Box className={classes.left}>
-                        <LeftContainer cast={mappedCast} />
+                        <LeftContainer cast={mappedCast} collection={mappedCollection} />
                     </Box>
                     <Box className={classes.right}>
                         {/* {isMovie ? <MovieDetailRight /> : <TvShowDetailRight />} */}

@@ -105,9 +105,10 @@ function TabPanel(props) {
 
 interface IOwnProps extends RouteComponentProps {
     cast: ICardComponentProps[];
+    collection?: ICardComponentProps[];
 }
 
-const LeftSection: React.FC<IOwnProps> = ({ cast, history }) => {
+const LeftSection: React.FC<IOwnProps> = ({ cast, collection = [], history }) => {
     const classes = useStyles();
     // const {
     //     data: { cast = [], collection = [], photos = [], videos = [] },
@@ -139,23 +140,24 @@ const LeftSection: React.FC<IOwnProps> = ({ cast, history }) => {
 
             <Divider className={classes.divider} />
 
-            {/* {collection.length !== 0 && (
+            {collection.length !== 0 && (
                 <>
                     <Box className={classes.collectionContainer}>
                         <Typography className={classes.title} variant="h5">
                             Collections
                         </Typography>
                         <Box className="items-container">
-                            {collection.map((movie) => (
+                            {collection.map((props) => (
                                 <Card
                                     variant="horizontal"
-                                    onClick={() => {
-                                        handleCollectionClick(movie.id);
-                                    }}
-                                    poster={movie.poster}
-                                    title={movie.title}
-                                    subtitle={`${new Date(movie.release_date).getFullYear()}`}
-                                    description={movie.overview}
+                                    {...props}
+                                    // onClick={() => {
+                                    //     handleCollectionClick(movie.id);
+                                    // }}
+                                    // poster={movie.poster}
+                                    // title={movie.title}
+                                    // subtitle={`${new Date(movie.release_date).getFullYear()}`}
+                                    // description={movie.overview}
                                 />
                             ))}
                         </Box>
@@ -164,6 +166,8 @@ const LeftSection: React.FC<IOwnProps> = ({ cast, history }) => {
                     <Divider className={classes.divider} />
                 </>
             )}
+
+            {/*
 
             <Box className={classes.mediaContainer}>
                 <Tabs
