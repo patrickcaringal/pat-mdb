@@ -1,16 +1,20 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { IStateEntity, IMediaDetail, TState } from './interfaces';
+import { IStateEntity, IMediaDetail, TState, IPerson } from './interfaces';
 
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
+
+const initialMediaDetail = {
+    cast: [] as IPerson[]
+} as IMediaDetail;
 
 const slice = createSlice({
     name: 'movie',
     initialState: {
-        detail: { ...initialEntityState, data: {} } as IStateEntity<IMediaDetail>
+        detail: { ...initialEntityState, data: initialMediaDetail } as IStateEntity<IMediaDetail>
     },
     reducers: {
         getMovieDetail: (state, action) => {
-            state.detail.data = {} as IMediaDetail;
+            state.detail.data = initialMediaDetail as IMediaDetail;
             state.detail.fetching = true;
             state.detail.fetchFailed = false;
         },

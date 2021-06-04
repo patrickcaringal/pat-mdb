@@ -15,8 +15,6 @@ import AppBar from './components/AppBar';
 import Home from './pages/Home';
 // import SearchPage from './pages/Search';
 import MediaDetail from './pages/MediaDetail';
-// import MovieDetail from './pages/MovieDetail';
-import TVShowDetail from './pages/TVShowDetail';
 import PersonDetail from './pages/PersonDetail';
 // import TvPage from './pages/Tv';
 // import PeoplePage from './pages/People';

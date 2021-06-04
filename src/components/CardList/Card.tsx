@@ -38,20 +38,22 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface IOwnProps {
+export interface ICardComponentProps {
     variant?: 'horizontal' | 'vertical';
     poster: string;
     title?: string;
     subtitle?: string;
+    subtitle2?: string;
     description?: string;
     onClick: () => void;
 }
 
-const CardComponent: React.FC<IOwnProps> = ({
+const CardComponent: React.FC<ICardComponentProps> = ({
     variant = 'vertical',
     poster,
     title,
     subtitle,
+    subtitle2,
     description = '',
     onClick
 }) => {
@@ -69,6 +71,11 @@ const CardComponent: React.FC<IOwnProps> = ({
                             {subtitle && (
                                 <Typography variant="body2" color="textSecondary">
                                     {subtitle}
+                                </Typography>
+                            )}
+                            {subtitle2 && (
+                                <Typography variant="body2" color="textSecondary">
+                                    {subtitle2}
                                 </Typography>
                             )}
                         </CardContent>

@@ -9,9 +9,6 @@ import { createMuiTheme, makeStyles, Theme } from '@material-ui/core/styles';
 import { selectors } from '../../../store/tvShow.slice';
 import { IMediaDetail } from '../../../store/interfaces';
 
-// import BannerSkeleton from './BannerSkeleton';
-// import { bannerUseStyles as useStyles } from './styles';
-
 import { formatNumWithComma, formatDate, formatHours } from '../../../utils/helpers';
 
 interface MovieDetailProps extends RouteComponentProps {}
