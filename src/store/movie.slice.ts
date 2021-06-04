@@ -1,10 +1,12 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { IStateEntity, IMediaDetail, TState, IPerson } from './interfaces';
+import { IStateEntity, IMediaDetail, TState, IPerson, IVideo } from './interfaces';
 
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 
 const initialMediaDetail = {
-    cast: [] as IPerson[]
+    cast: [] as IPerson[],
+    photos: [] as string[],
+    videos: [] as IVideo[]
 } as IMediaDetail;
 
 const slice = createSlice({
@@ -14,7 +16,7 @@ const slice = createSlice({
     },
     reducers: {
         getMovieDetail: (state, action) => {
-            state.detail.data = initialMediaDetail as IMediaDetail;
+            state.detail.data = initialMediaDetail;
             state.detail.fetching = true;
             state.detail.fetchFailed = false;
         },
@@ -24,7 +26,7 @@ const slice = createSlice({
             state.detail.fetchFailed = false;
         },
         getMovieDetailFail: (state, action) => {
-            state.detail.data = {} as IMediaDetail;
+            state.detail.data = initialMediaDetail;
             state.detail.fetching = false;
             state.detail.fetchFailed = true;
         }

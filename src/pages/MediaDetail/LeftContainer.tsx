@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Divider, Tab, Tabs, Typography } from '@material-ui/core';
-
-import { selectors } from '../../store/movie.slice';
 
 import Card, { ICardComponentProps } from '../../components/CardList/Card';
 
@@ -37,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
             '& .MuiCard-root ': {
                 minHeight: 175
             },
-            '&:last-child': {
-                marginBottom: 2
+            '& .MuiCard-root:last-child': {
+                marginBottom: 1
             }
         }
     },
@@ -61,14 +58,11 @@ const useStyles = makeStyles((theme) => ({
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                marginLeft: theme.spacing(-3),
-                marginTop: theme.spacing(2)
-                // marginBottom: theme.spacing(-3)
+                marginTop: theme.spacing(2),
+                marginLeft: theme.spacing(-3)
             },
             '& .MuiCard-root': {
-                width: 241,
-                marginLeft: theme.spacing(3),
-                marginBottom: theme.spacing(3)
+                width: 241
             },
             '& .videos-tab': {
                 '& .MuiCardContent-root': {
@@ -106,24 +100,14 @@ function TabPanel(props) {
 interface IOwnProps extends RouteComponentProps {
     cast: ICardComponentProps[];
     collection?: ICardComponentProps[];
+    photos: ICardComponentProps[];
+    videos: ICardComponentProps[];
 }
 
-const LeftSection: React.FC<IOwnProps> = ({ cast, collection = [], history }) => {
+const LeftSection: React.FC<IOwnProps> = ({ cast, collection = [], photos, videos, history }) => {
     const classes = useStyles();
-    // const {
-    //     data: { cast = [], collection = [], photos = [], videos = [] },
-    //     fetching: loading
-    // } = useSelector(selectors.movieDetailSelector);
 
-    // const [selectedTab, setSelectedTab] = useState(1);
-
-    const handleCastClick = (id: string) => {
-        history.push(`/person/${id}`);
-    };
-
-    const handleCollectionClick = (id: string) => {
-        history.push(`/movie/${id}`);
-    };
+    const [selectedTab, setSelectedTab] = useState(1);
 
     return (
         <>
@@ -148,17 +132,7 @@ const LeftSection: React.FC<IOwnProps> = ({ cast, collection = [], history }) =>
                         </Typography>
                         <Box className="items-container">
                             {collection.map((props) => (
-                                <Card
-                                    variant="horizontal"
-                                    {...props}
-                                    // onClick={() => {
-                                    //     handleCollectionClick(movie.id);
-                                    // }}
-                                    // poster={movie.poster}
-                                    // title={movie.title}
-                                    // subtitle={`${new Date(movie.release_date).getFullYear()}`}
-                                    // description={movie.overview}
-                                />
+                                <Card variant="horizontal" {...props} />
                             ))}
                         </Box>
                     </Box>
@@ -166,8 +140,6 @@ const LeftSection: React.FC<IOwnProps> = ({ cast, collection = [], history }) =>
                     <Divider className={classes.divider} />
                 </>
             )}
-
-            {/*
 
             <Box className={classes.mediaContainer}>
                 <Tabs
@@ -186,21 +158,17 @@ const LeftSection: React.FC<IOwnProps> = ({ cast, collection = [], history }) =>
 
                 <Box className="media-items-container">
                     <TabPanel className="tab-item" value={selectedTab} index={1}>
-                        {photos.map((photo) => (
-                            <Card onClick={() => {}} poster={photo} />
+                        {photos.map((props) => (
+                            <Card {...props} />
                         ))}
                     </TabPanel>
                     <TabPanel className="tab-item videos-tab" value={selectedTab} index={2}>
-                        {videos.map((video) => (
-                            <Card
-                                onClick={() => {}}
-                                poster={video.thumbnail}
-                                subtitle={video.description}
-                            />
+                        {videos.map((props) => (
+                            <Card {...props} />
                         ))}
                     </TabPanel>
                 </Box>
-            </Box> */}
+            </Box>
         </>
     );
 };

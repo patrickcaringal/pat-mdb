@@ -14,7 +14,7 @@ const slice = createSlice({
     },
     reducers: {
         getTVShowDetail: (state, action) => {
-            state.detail.data = initialMediaDetail as IMediaDetail;
+            state.detail.data = initialMediaDetail;
             state.detail.fetching = true;
             state.detail.fetchFailed = false;
         },
@@ -24,7 +24,7 @@ const slice = createSlice({
             state.detail.fetchFailed = false;
         },
         getTVShowDetailFail: (state, action) => {
-            state.detail.data = {} as IMediaDetail;
+            state.detail.data = initialMediaDetail;
             state.detail.fetching = false;
             state.detail.fetchFailed = true;
         }

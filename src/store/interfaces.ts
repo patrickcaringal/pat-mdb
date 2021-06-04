@@ -38,6 +38,13 @@ export interface ICredit {
     release_date: string;
 }
 
+export interface IVideo {
+    id: string;
+    description: string;
+    thumbnail: string;
+    video: string;
+}
+
 export interface IMediaDetail extends IMedia {
     banner: string;
     budget: number;
@@ -54,12 +61,7 @@ export interface IMediaDetail extends IMedia {
     revenue: number;
     runtime: number;
     tagline: string;
-    videos: {
-        id: string;
-        description: string;
-        thumbnail: string;
-        video: string;
-    }[];
+    videos: IVideo[];
     vote_average: number;
     vote_count: number;
     // tv

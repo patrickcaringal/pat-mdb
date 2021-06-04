@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         paddingTop: theme.spacing(4),
         paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(4)
+        paddingRight: theme.spacing(4),
+        paddingBottom: theme.spacing(4)
     },
     left: {
         display: 'flex',
@@ -118,6 +119,28 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
               subtitle: `${new Date(tvShow.release_date).getFullYear()}`,
               description: tvShow.overview
           }));
+
+    const mappedPhotos = isMovie
+        ? movieDetail.photos.map((photo) => ({
+              onClick: () => {},
+              poster: photo
+          }))
+        : tvShowDetail.photos.map((photo) => ({
+              onClick: () => {},
+              poster: photo
+          }));
+
+    const mappedVideos = isMovie
+        ? movieDetail.videos.map((video) => ({
+              onClick: () => {},
+              poster: video.thumbnail,
+              subtitle: video.description
+          }))
+        : tvShowDetail.videos.map((video) => ({
+              onClick: () => {},
+              poster: video.thumbnail,
+              subtitle: video.description
+          }));
     // #endregion data mapping
 
     const handleCastClick = (id: string) => {
@@ -135,7 +158,12 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
             <Box style={{ background: '#F3F8F3' }}>
                 <Container className={classes.content} disableGutters maxWidth="lg">
                     <Box className={classes.left}>
-                        <LeftContainer cast={mappedCast} collection={mappedCollection} />
+                        <LeftContainer
+                            cast={mappedCast}
+                            collection={mappedCollection}
+                            photos={mappedPhotos}
+                            videos={mappedVideos}
+                        />
                     </Box>
                     <Box className={classes.right}>
                         {/* {isMovie ? <MovieDetailRight /> : <TvShowDetailRight />} */}
