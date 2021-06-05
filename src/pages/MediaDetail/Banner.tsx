@@ -1,17 +1,33 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
 import { Box, Container, ThemeProvider, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { createMuiTheme, makeStyles, Theme } from '@material-ui/core/styles';
 
-import { selectors } from '../../../store/tvShow.slice';
-import { IMediaDetail } from '../../../store/interfaces';
+import { IMediaDetail } from '../../store/interfaces';
 
-import { formatNumWithComma, formatDate, formatHours } from '../../../utils/helpers';
+import { formatNumWithComma, formatDate, formatHours } from '../../utils/helpers';
 
-interface MovieDetailProps extends RouteComponentProps {}
+export interface IMediaDetailComponentProps
+    extends RouteComponentProps,
+        Pick<
+            IMediaDetail,
+            | 'banner'
+            | 'poster'
+            | 'title'
+            | 'release_date'
+            | 'genres'
+            | 'runtime'
+            | 'vote_average'
+            | 'vote_count'
+            | 'tagline'
+            | 'overview'
+        > {
+    others: {
+        [label: string]: any;
+    };
+    loading: boolean;
+}
 
 const useStyles = makeStyles<Theme, { bannerBg: string }>((theme) => ({
     backdrop: {
@@ -57,27 +73,20 @@ const useStyles = makeStyles<Theme, { bannerBg: string }>((theme) => ({
     }
 }));
 
-const MoivieDetail: React.FC<MovieDetailProps> = () => {
-    const { data: detail, fetching: loading } = useSelector(selectors.tvShowDetailSelector);
-
-    const {
-        banner,
-        budget,
-        director,
-        genres,
-        overview,
-        number_of_seasons = 0,
-        number_of_episodes = 0,
-        poster,
-        release_date,
-        revenue,
-        runtime,
-        tagline,
-        title,
-        vote_average,
-        vote_count
-    } = detail as IMediaDetail;
-
+const MoivieDetail: React.FC<IMediaDetailComponentProps> = ({
+    banner,
+    genres = [],
+    overview,
+    poster,
+    release_date,
+    runtime,
+    tagline,
+    title,
+    vote_average,
+    vote_count,
+    others,
+    loading
+}) => {
     const classes = useStyles({ bannerBg: banner });
 
     return !loading ? (
@@ -93,7 +102,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
                             </Typography>
                             <Typography className="subtitle">
                                 <span>{formatDate(release_date)}</span>
-                                <span>{genres?.join(', ')}</span>
+                                <span>{genres.join(', ')}</span>
                                 <span>{formatHours(runtime)}</span>
                             </Typography>
 
@@ -116,16 +125,22 @@ const MoivieDetail: React.FC<MovieDetailProps> = () => {
 
                             <Box className="flex-row" mt={4}>
                                 <Box flex="1">
-                                    <Typography className="bold-text">Director</Typography>
-                                    <Typography>{director?.join(', ')}</Typography>
+                                    <Typography className="bold-text">
+                                        {Object.keys(others)[0]}
+                                    </Typography>
+                                    <Typography>{Object.values(others)[0]}</Typography>
                                 </Box>
                                 <Box flex="1">
-                                    <Typography className="bold-text">Seasons</Typography>
-                                    <Typography>{number_of_seasons}</Typography>
+                                    <Typography className="bold-text">
+                                        {Object.keys(others)[1]}
+                                    </Typography>
+                                    <Typography>{Object.values(others)[1]}</Typography>
                                 </Box>
                                 <Box flex="2">
-                                    <Typography className="bold-text">Episodes</Typography>
-                                    <Typography>{number_of_episodes}</Typography>
+                                    <Typography className="bold-text">
+                                        {Object.keys(others)[2]}
+                                    </Typography>
+                                    <Typography>{Object.values(others)[2]}</Typography>
                                 </Box>
                             </Box>
                         </Box>

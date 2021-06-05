@@ -4,6 +4,20 @@ import * as i from './interfaces';
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 
 const initialMediaDetail = {
+    id: '',
+    title: '',
+    genres: [],
+    poster: '',
+    release_date: '',
+    media: i.media_type.MOVIE,
+    banner: '',
+    budget: 0,
+    director: [],
+    revenue: 0,
+    runtime: 0,
+    tagline: '',
+    vote_average: 0,
+    vote_count: 0,
     cast: [] as i.IPerson[],
     photos: [] as string[],
     videos: [] as i.IVideo[],

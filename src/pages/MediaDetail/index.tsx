@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container } from '@material-ui/core';
 
@@ -10,10 +11,9 @@ import { actions as movieActions } from '../../store/movie.slice';
 import { actions as tvShowActions } from '../../store/tvShow.slice';
 import * as i from '../../store/interfaces';
 
-import MovieBanner from './Movie/Banner';
+import { formatNumWithComma } from '../../utils/helpers';
 
-import TvShowBanner from './TvShow/Banner';
-
+import Banner, { IMediaDetailComponentProps } from './Banner';
 import LeftContainer from './LeftContainer';
 import RightContainer from './RightContainer';
 
@@ -76,6 +76,39 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
     }, [mediaId]);
 
     // #region data mapping
+    const loading = isMovie ? movieDetailLoading : tvShowDetailLoading;
+
+    // Banner props
+    const propsForBanner = [
+        'banner',
+        'genres',
+        'overview',
+        'poster',
+        'release_date',
+        'runtime',
+        'tagline',
+        'title',
+        'vote_average',
+        'vote_count'
+    ];
+    const bannerProps = isMovie
+        ? {
+              ...(_.pick(movieDetail, propsForBanner) as IMediaDetailComponentProps),
+              others: {
+                  Director: movieDetail.director.join(', '),
+                  Budget: `$${formatNumWithComma(movieDetail.budget)}`,
+                  Revenue: `$${formatNumWithComma(movieDetail.revenue)}`
+              }
+          }
+        : {
+              ...(_.pick(tvShowDetail, propsForBanner) as IMediaDetailComponentProps),
+              others: {
+                  Director: tvShowDetail.director.join(', '),
+                  Seasons: `${tvShowDetail.number_of_seasons || ''}`,
+                  Episodes: `${tvShowDetail.number_of_episodes || ''}`
+              }
+          };
+
     // Cast
     const mappedCast = isMovie
         ? movieDetail.cast.map((person) => ({
@@ -150,7 +183,6 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
     // Keywords
     const mappedKeywords = isMovie ? movieDetail.keywords : tvShowDetail.keywords;
 
-    console.log(movieDetail.recommendations);
     // Recommendations
     const mappedRecommendations = isMovie
         ? movieDetail.recommendations.map((movie) => ({
@@ -176,8 +208,8 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
     };
 
     const handleCollectionClick = (id: string, media: i.media_type) => {
-        history.push(`/${media}/${id}`);
         // TODO: diff page for tv show season click
+        history.push(`/${media}/${id}`);
     };
 
     const handleRecommendationClick = (id: string, media: i.media_type) => {
@@ -186,7 +218,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
 
     return (
         <>
-            {isMovie ? <MovieBanner /> : <TvShowBanner />}
+            <Banner {...bannerProps} loading={loading} />
             <Box style={{ background: '#F3F8F3' }}>
                 <Container className={classes.content} disableGutters maxWidth="lg">
                     <Box className={classes.left}>
