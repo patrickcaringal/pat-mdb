@@ -1,6 +1,3 @@
-// import * as constants from './constants';
-// import * as types from './types';
-
 export enum media_type {
     'MOVIE' = 'movie',
     'TV' = 'tv'
@@ -45,18 +42,25 @@ export interface IVideo {
     video: string;
 }
 
+export interface ICompany {
+    name: string;
+    logo: string;
+}
+
+export interface IKeyword {
+    id: string;
+    name: string;
+}
+
 export interface IMediaDetail extends IMedia {
     banner: string;
     budget: number;
     cast: IPerson[];
     collection?: IMedia[];
     director: string[];
-    keywords: { id: string; name: string }[];
+    keywords: IKeyword[];
     photos: string[];
-    production_companies: {
-        name: string;
-        logo: string;
-    }[];
+    production_companies: ICompany[];
     recommendations: IMedia[];
     revenue: number;
     runtime: number;

@@ -64,7 +64,7 @@ const CardComponent: React.FC<ICardComponentProps> = ({
         return (
             <Card className={classes.cardContainer}>
                 <CardActionArea onClick={onClick}>
-                    <CardMedia className="media" image={poster} title="asd" />
+                    <CardMedia className="media" image={poster} title={title || ''} />
                     {hasContent && (
                         <CardContent className="card-content">
                             {title && <Typography variant="body1">{title}</Typography>}
@@ -88,7 +88,7 @@ const CardComponent: React.FC<ICardComponentProps> = ({
     return (
         <Card className={classes.horizontalCardContainer}>
             <CardActionArea onClick={onClick}>
-                <CardMedia className="media" image={poster} title="asd" />
+                <CardMedia className="media" image={poster} title={title || ''} />
                 <CardContent className="card-content">
                     <div>
                         <Typography variant="body1">{title}</Typography>

@@ -8,17 +8,14 @@ import { selectors as movieSelectors } from '../../store/movie.slice';
 import { selectors as tvShowSelectors } from '../../store/tvShow.slice';
 import { actions as movieActions } from '../../store/movie.slice';
 import { actions as tvShowActions } from '../../store/tvShow.slice';
-import { media_type, IPerson, IStateEntity, IMediaDetail, TState } from '../../store/interfaces';
-
-import Card, { ICardComponentProps } from '../../components/CardList/Card';
+import * as i from '../../store/interfaces';
 
 import MovieBanner from './Movie/Banner';
-import MovieDetailRight from './Movie/RightContainer';
 
 import TvShowBanner from './TvShow/Banner';
-import TvShowDetailRight from './TvShow/RightContainer';
 
 import LeftContainer from './LeftContainer';
+import RightContainer from './RightContainer';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -49,7 +46,7 @@ interface MatchParams {
 }
 
 interface MovieDetailProps extends RouteComponentProps<MatchParams> {
-    mediaType: media_type;
+    mediaType: i.media_type;
 }
 
 const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match }) => {
@@ -57,17 +54,17 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
     const classes = useStyles();
 
     const { data: movieDetail, fetching: movieDetailLoading } = useSelector<
-        TState,
-        IStateEntity<IMediaDetail>
+        i.TState,
+        i.IStateEntity<i.IMediaDetail>
     >(movieSelectors.movieDetailSelector);
 
     const { data: tvShowDetail, fetching: tvShowDetailLoading } = useSelector<
-        TState,
-        IStateEntity<IMediaDetail>
+        i.TState,
+        i.IStateEntity<i.IMediaDetail>
     >(tvShowSelectors.tvShowDetailSelector);
 
     const { id: mediaId } = match.params;
-    const isMovie = mediaType === media_type.MOVIE;
+    const isMovie = mediaType === i.media_type.MOVIE;
 
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
@@ -79,6 +76,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
     }, [mediaId]);
 
     // #region data mapping
+    // Cast
     const mappedCast = isMovie
         ? movieDetail.cast.map((person) => ({
               onClick: () => {
@@ -98,11 +96,12 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
               subtitle2: `${person.episodes} Episode${person.episodes || 0 > 1 ? 's' : ''}`
           }));
 
+    // Collection
     const mappedCollection = isMovie
         ? movieDetail.collection &&
           movieDetail.collection.map((movie) => ({
               onClick: () => {
-                  handleCollectionClick('movie', movie.id);
+                  handleCollectionClick(movie.id, movie.media);
               },
               poster: movie.poster,
               title: movie.title,
@@ -112,7 +111,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
         : tvShowDetail.collection &&
           tvShowDetail.collection.map((tvShow) => ({
               onClick: () => {
-                  handleCollectionClick('tv', tvShow.id);
+                  handleCollectionClick(tvShow.id, tvShow.media);
               },
               poster: tvShow.poster,
               title: tvShow.title,
@@ -120,6 +119,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
               description: tvShow.overview
           }));
 
+    // Photos
     const mappedPhotos = isMovie
         ? movieDetail.photos.map((photo) => ({
               onClick: () => {},
@@ -129,7 +129,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
               onClick: () => {},
               poster: photo
           }));
-
+    // Videos
     const mappedVideos = isMovie
         ? movieDetail.videos.map((video) => ({
               onClick: () => {},
@@ -141,15 +141,47 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
               poster: video.thumbnail,
               subtitle: video.description
           }));
+
+    // Companies
+    const mappedProdCompany = isMovie
+        ? movieDetail.production_companies
+        : tvShowDetail.production_companies;
+
+    // Keywords
+    const mappedKeywords = isMovie ? movieDetail.keywords : tvShowDetail.keywords;
+
+    console.log(movieDetail.recommendations);
+    // Recommendations
+    const mappedRecommendations = isMovie
+        ? movieDetail.recommendations.map((movie) => ({
+              onClick: () => {
+                  handleRecommendationClick(movie.id, movie.media);
+              },
+              poster: movie.poster,
+              title: movie.title,
+              subtitle: movie.genres.join(', ')
+          }))
+        : tvShowDetail.recommendations.map((tvShow) => ({
+              onClick: () => {
+                  handleRecommendationClick(tvShow.id, tvShow.media);
+              },
+              poster: tvShow.poster,
+              title: tvShow.title,
+              subtitle: tvShow.genres.join(', ')
+          }));
     // #endregion data mapping
 
     const handleCastClick = (id: string) => {
         history.push(`/person/${id}`);
     };
 
-    const handleCollectionClick = (media: string, id: string) => {
+    const handleCollectionClick = (id: string, media: i.media_type) => {
         history.push(`/${media}/${id}`);
         // TODO: diff page for tv show season click
+    };
+
+    const handleRecommendationClick = (id: string, media: i.media_type) => {
+        history.push(`/${media}/${id}`);
     };
 
     return (
@@ -166,7 +198,11 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
                         />
                     </Box>
                     <Box className={classes.right}>
-                        {/* {isMovie ? <MovieDetailRight /> : <TvShowDetailRight />} */}
+                        <RightContainer
+                            productionCompanies={mappedProdCompany}
+                            keywords={mappedKeywords}
+                            recommendations={mappedRecommendations}
+                        />
                     </Box>
                 </Container>
             </Box>

@@ -13,9 +13,11 @@ import {
     Divider,
     Typography
 } from '@material-ui/core';
-import Card from '../../components/CardList/Card';
 
-import { selectors } from '../../store/movie.slice';
+import * as i from '../../store/interfaces';
+
+// import Card from '../../components/CardList/Card';
+import Card, { ICardComponentProps } from '../../components/CardList/Card';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -69,19 +71,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface IOwnProps extends RouteComponentProps {}
+interface IOwnProps extends RouteComponentProps {
+    productionCompanies: i.ICompany[];
+    keywords: i.IKeyword[];
+    recommendations: ICardComponentProps[];
+}
 
-const RightContainer: React.FC<IOwnProps> = ({ history }) => {
+const RightContainer: React.FC<IOwnProps> = ({
+    keywords,
+    productionCompanies,
+    recommendations,
+    history
+}) => {
     const classes = useStyles();
-
-    const {
-        data: { keywords = [], production_companies = [], recommendations = [] },
-        fetching: loading
-    } = useSelector(selectors.movieDetailSelector);
-
-    const handleRecommendationClick = (id: string, media: string) => {
-        history.push(`/${media}/${id}`);
-    };
 
     return (
         <>
@@ -90,9 +92,9 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                     Production Companies
                 </Typography>
                 <Box className="prod-company-items">
-                    {production_companies.map((company) => (
+                    {productionCompanies.map((company) => (
                         <Box className="prod-item" boxShadow={2}>
-                            <img alt={company.name} src={company.logo} />
+                            <img alt={company.name} src={company.logo} title={company.name} />
                         </Box>
                     ))}
                 </Box>
@@ -116,33 +118,8 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
                     You may also like
                 </Typography>
                 <Box className="cast-items-container">
-                    {recommendations.map((movie) => (
-                        <Card
-                            onClick={() => {}}
-                            poster={movie.poster}
-                            subtitle={movie.genres.join(', ')}
-                        />
-                        // <Card className="card-container">
-                        //     <CardActionArea
-                        //         onClick={() =>
-                        //             handleRecommendationClick(movie.id, movie.media as string)
-                        //         }
-                        //     >
-                        //         <CardMedia className="media" image={movie.poster} title="asd" />
-                        //         <CardContent className="card-content">
-                        //             <Typography className="line-clamp-2" variant="body1">
-                        //                 {movie.title}
-                        //             </Typography>
-                        //             <Typography
-                        //                 className="line-clamp-2"
-                        //                 variant="body2"
-                        //                 color="textSecondary"
-                        //             >
-                        //                 {movie.genres.join(', ')}
-                        //             </Typography>
-                        //         </CardContent>
-                        //     </CardActionArea>
-                        // </Card>
+                    {recommendations.map((props) => (
+                        <Card {...props} />
                     ))}
                 </Box>
             </Box>

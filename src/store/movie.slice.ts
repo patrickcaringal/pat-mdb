@@ -1,18 +1,23 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { IStateEntity, IMediaDetail, TState, IPerson, IVideo } from './interfaces';
+import * as i from './interfaces';
 
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 
 const initialMediaDetail = {
-    cast: [] as IPerson[],
+    cast: [] as i.IPerson[],
     photos: [] as string[],
-    videos: [] as IVideo[]
-} as IMediaDetail;
+    videos: [] as i.IVideo[],
+    production_companies: [] as i.ICompany[],
+    keywords: [] as i.IKeyword[],
+    recommendations: [] as i.IMedia[]
+} as i.IMediaDetail;
 
 const slice = createSlice({
     name: 'movie',
     initialState: {
-        detail: { ...initialEntityState, data: initialMediaDetail } as IStateEntity<IMediaDetail>
+        detail: { ...initialEntityState, data: initialMediaDetail } as i.IStateEntity<
+            i.IMediaDetail
+        >
     },
     reducers: {
         getMovieDetail: (state, action) => {
@@ -33,7 +38,7 @@ const slice = createSlice({
     }
 });
 
-const mediaSelector = (state: TState) => state.movie;
+const mediaSelector = (state: i.TState) => state.movie;
 
 // selector
 export const selectors = {
