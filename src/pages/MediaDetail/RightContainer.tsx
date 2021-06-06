@@ -75,13 +75,14 @@ interface IOwnProps extends RouteComponentProps {
     productionCompanies: i.ICompany[];
     keywords: i.IKeyword[];
     recommendations: ICardComponentProps[];
+    loading: boolean;
 }
 
 const RightContainer: React.FC<IOwnProps> = ({
     keywords,
     productionCompanies,
     recommendations,
-    history
+    loading
 }) => {
     const classes = useStyles();
 

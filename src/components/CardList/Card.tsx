@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, CardMedia, CardActionArea, Typography } from '@material-ui/core';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles((theme) => ({
     cardContainer: {
@@ -45,6 +46,7 @@ export interface ICardComponentProps {
     subtitle?: string;
     subtitle2?: string;
     description?: string;
+    skeleton?: boolean;
     onClick: () => void;
 }
 
@@ -55,6 +57,7 @@ const CardComponent: React.FC<ICardComponentProps> = ({
     subtitle,
     subtitle2,
     description = '',
+    skeleton = false,
     onClick
 }) => {
     const classes = useStyles();
@@ -106,3 +109,54 @@ const CardComponent: React.FC<ICardComponentProps> = ({
 };
 
 export default CardComponent;
+
+interface ICardSkeleton {
+    variant?: 'horizontal' | 'vertical';
+    hasContent?: boolean;
+}
+
+export const CardSkeleton: React.FC<ICardSkeleton> = ({
+    variant = 'vertical',
+    hasContent = true
+}) => {
+    const classes = useStyles();
+
+    return variant === 'vertical' ? (
+        <Card className={classes.cardContainer}>
+            <CardActionArea>
+                <Skeleton variant="rect" className="media" />
+                {hasContent && (
+                    <CardContent className="card-content">
+                        <Typography variant="body1">
+                            <Skeleton variant="text" />
+                        </Typography>
+                        <Typography variant="body2">
+                            <Skeleton variant="text" />
+                        </Typography>
+                    </CardContent>
+                )}
+            </CardActionArea>
+        </Card>
+    ) : (
+        <Card className={classes.horizontalCardContainer}>
+            <CardActionArea>
+                <Skeleton variant="rect" className="media" />
+                <CardContent className="card-content">
+                    <div>
+                        <Typography variant="body1">
+                            <Skeleton variant="text" width={140} />
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            <Skeleton variant="text" width={100} />
+                        </Typography>
+                    </div>
+                    <Typography className="line-clamp" variant="body2">
+                        <Skeleton variant="text" />
+                        <Skeleton variant="text" />
+                        <Skeleton variant="text" width="90%" />
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+        </Card>
+    );
+};

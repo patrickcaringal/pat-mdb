@@ -134,7 +134,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
         ? movieDetail.collection &&
           movieDetail.collection.map((movie) => ({
               onClick: () => {
-                  handleCollectionClick(movie.id, movie.media);
+                  handleCollectionClick(movie.id, i.media_type.MOVIE);
               },
               poster: movie.poster,
               title: movie.title,
@@ -144,7 +144,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
         : tvShowDetail.collection &&
           tvShowDetail.collection.map((tvShow) => ({
               onClick: () => {
-                  handleCollectionClick(tvShow.id, tvShow.media);
+                  handleCollectionClick(tvShow.id, i.media_type.TV);
               },
               poster: tvShow.poster,
               title: tvShow.title,
@@ -218,11 +218,12 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
 
     return (
         <>
-            <Banner {...bannerProps} loading={loading} />
+            {/* <Banner {...bannerProps} loading={loading} /> */}
             <Box style={{ background: '#F3F8F3' }}>
                 <Container className={classes.content} disableGutters maxWidth="lg">
                     <Box className={classes.left}>
                         <LeftContainer
+                            loading={loading}
                             cast={mappedCast}
                             collection={mappedCollection}
                             photos={mappedPhotos}
@@ -231,6 +232,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
                     </Box>
                     <Box className={classes.right}>
                         <RightContainer
+                            loading={loading}
                             productionCompanies={mappedProdCompany}
                             keywords={mappedKeywords}
                             recommendations={mappedRecommendations}

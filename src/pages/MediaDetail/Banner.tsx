@@ -73,7 +73,7 @@ const useStyles = makeStyles<Theme, { bannerBg: string }>((theme) => ({
     }
 }));
 
-const MoivieDetail: React.FC<IMediaDetailComponentProps> = ({
+const Banner: React.FC<IMediaDetailComponentProps> = ({
     banner,
     genres = [],
     overview,
@@ -153,7 +153,7 @@ const MoivieDetail: React.FC<IMediaDetailComponentProps> = ({
     );
 };
 
-export default withRouter(MoivieDetail);
+export default withRouter(Banner);
 
 const BannerSkeleton: React.FC = () => {
     const classes = useStyles({ bannerBg: '' });
