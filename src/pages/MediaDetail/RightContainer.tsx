@@ -1,23 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import _ from 'lodash';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {
-    Box,
-    // Card,
-    // CardActionArea,
-    // CardMedia,
-    // CardContent,
-    Chip,
-    Divider,
-    Typography
-} from '@material-ui/core';
+import { Box, Chip, Divider, Typography } from '@material-ui/core';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import * as i from '../../store/interfaces';
 
-// import Card from '../../components/CardList/Card';
-import Card, { ICardComponentProps } from '../../components/CardList/Card';
+import Card, { CardSkeleton, ICardComponentProps } from '../../components/CardList/Card';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -29,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2)
     },
     prodCompanyContainer: {
-        // marginBottom: theme.spacing(3),
         paddingTop: theme.spacing(1),
         '& .bold-text': {
             fontWeight: 700
@@ -54,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
             '& .MuiChip-sizeSmall': { margin: 4 }
         }
     },
-    castContainer: {
-        '& .cast-items-container': {
+    recommendationsContainer: {
+        '& .items-container': {
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'wrap',
@@ -86,6 +76,8 @@ const RightContainer: React.FC<IOwnProps> = ({
 }) => {
     const classes = useStyles();
 
+    if (loading) return <RightSectionSkeleton />;
+
     return (
         <>
             <Box className={classes.prodCompanyContainer}>
@@ -114,11 +106,11 @@ const RightContainer: React.FC<IOwnProps> = ({
 
             <Divider className={classes.divider} />
 
-            <Box className={classes.castContainer}>
+            <Box className={classes.recommendationsContainer}>
                 <Typography className={classes.title} variant="h5">
                     You may also like
                 </Typography>
-                <Box className="cast-items-container">
+                <Box className="items-container">
                     {recommendations.map((props) => (
                         <Card {...props} />
                     ))}
@@ -129,3 +121,51 @@ const RightContainer: React.FC<IOwnProps> = ({
 };
 
 export default withRouter(RightContainer);
+
+const RightSectionSkeleton: React.FC = () => {
+    const classes = useStyles();
+
+    return (
+        <>
+            <Box className={classes.prodCompanyContainer}>
+                <Typography className="bold-text" gutterBottom>
+                    <Skeleton variant="text" width={140} />
+                </Typography>
+                <Box className="prod-company-items">
+                    {_.range(3).map(() => (
+                        <Skeleton className="prod-item" variant="rect" width={40} height={40} />
+                    ))}
+                </Box>
+
+                <Box className="keywords-container">
+                    <Typography className="bold-text" gutterBottom>
+                        <Skeleton variant="text" width={140} />
+                    </Typography>
+                    <Box display="flex" flexWrap="wrap" mt={1}>
+                        {_.range(8).map(() => (
+                            <Skeleton
+                                className="MuiChip-sizeSmall"
+                                style={{ borderRadius: 50 }}
+                                variant="rect"
+                                width={60}
+                            />
+                        ))}
+                    </Box>
+                </Box>
+            </Box>
+
+            <Divider className={classes.divider} />
+
+            <Box className={classes.recommendationsContainer}>
+                <Typography className={classes.title} variant="h5">
+                    <Skeleton variant="text" width={140} />
+                </Typography>
+                <Box className="items-container">
+                    {_.range(10).map(() => (
+                        <CardSkeleton />
+                    ))}
+                </Box>
+            </Box>
+        </>
+    );
+};
