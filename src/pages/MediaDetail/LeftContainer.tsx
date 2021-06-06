@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
-
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Divider, Tab, Tabs, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -99,7 +98,10 @@ function TabPanel(props) {
     );
 }
 
-interface IOwnProps extends RouteComponentProps {
+interface IOwnProps
+    extends RouteComponentProps<{
+        id: string;
+    }> {
     cast: ICardComponentProps[];
     collection?: ICardComponentProps[];
     photos: ICardComponentProps[];
@@ -113,11 +115,12 @@ const LeftSection: React.FC<IOwnProps> = ({
     photos,
     videos,
     loading,
-    history
+    match
 }) => {
     const classes = useStyles();
 
     const [selectedTab, setSelectedTab] = useState(1);
+    const mediaId = match.params.id;
 
     if (loading) return <LeftSectionSkeleton />;
 
@@ -131,6 +134,24 @@ const LeftSection: React.FC<IOwnProps> = ({
                     {cast.map((props) => (
                         <Card {...props} />
                     ))}
+
+                    <Card
+                        variant="blank"
+                        onClick={() => {
+                            // TODO: full cast & crew page
+                            alert(mediaId);
+                        }}
+                    >
+                        <Typography
+                            variant="body1"
+                            style={{ textAlign: 'center', fontWeight: 600 }}
+                            color="textSecondary"
+                        >
+                            See all
+                            <br />
+                            Cast & Crew
+                        </Typography>
+                    </Card>
                 </Box>
             </Box>
 

@@ -1,7 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
-
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Chip, Divider, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';

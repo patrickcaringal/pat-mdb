@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, CardMedia, CardActionArea, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -36,18 +36,33 @@ const useStyles = makeStyles((theme) => ({
             justifyContent: 'space-between',
             padding: theme.spacing(2)
         }
+    },
+    blankCardContainer: {
+        background: '#EAEFEA',
+        display: 'flex',
+        width: 138,
+        marginLeft: theme.spacing(3),
+        marginBottom: theme.spacing(3),
+
+        '& .card-content-blank': {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+        }
     }
 }));
 
 export interface ICardComponentProps {
-    variant?: 'horizontal' | 'vertical';
-    poster: string;
+    variant?: 'horizontal' | 'vertical' | 'blank';
+    poster?: string;
     title?: string;
     subtitle?: string;
     subtitle2?: string;
     description?: string;
     skeleton?: boolean;
     onClick: () => void;
+    children?: ReactNode;
 }
 
 const CardComponent: React.FC<ICardComponentProps> = ({
@@ -57,8 +72,8 @@ const CardComponent: React.FC<ICardComponentProps> = ({
     subtitle,
     subtitle2,
     description = '',
-    skeleton = false,
-    onClick
+    onClick,
+    children
 }) => {
     const classes = useStyles();
 
@@ -88,21 +103,31 @@ const CardComponent: React.FC<ICardComponentProps> = ({
         );
     }
 
-    return (
-        <Card className={classes.horizontalCardContainer}>
-            <CardActionArea onClick={onClick}>
-                <CardMedia className="media" image={poster} title={title || ''} />
-                <CardContent className="card-content">
-                    <div>
-                        <Typography variant="body1">{title}</Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            {subtitle}
+    if (variant === 'horizontal') {
+        return (
+            <Card className={classes.horizontalCardContainer}>
+                <CardActionArea onClick={onClick}>
+                    <CardMedia className="media" image={poster} title={title || ''} />
+                    <CardContent className="card-content">
+                        <div>
+                            <Typography variant="body1">{title}</Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                {subtitle}
+                            </Typography>
+                        </div>
+                        <Typography className="line-clamp" variant="body2">
+                            {description}
                         </Typography>
-                    </div>
-                    <Typography className="line-clamp" variant="body2">
-                        {description}
-                    </Typography>
-                </CardContent>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        );
+    }
+
+    return (
+        <Card className={classes.blankCardContainer}>
+            <CardActionArea onClick={onClick}>
+                <CardContent className="card-content-blank">{children}</CardContent>
             </CardActionArea>
         </Card>
     );

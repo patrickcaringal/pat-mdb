@@ -218,7 +218,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
 
     return (
         <>
-            {/* <Banner {...bannerProps} loading={loading} /> */}
+            <Banner {...bannerProps} loading={loading} />
             <Box style={{ background: '#F3F8F3' }}>
                 <Container className={classes.content} disableGutters maxWidth="lg">
                     <Box className={classes.left}>
