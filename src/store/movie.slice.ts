@@ -26,14 +26,21 @@ const initialMediaDetail = {
     recommendations: [] as i.IMedia[]
 } as i.IMediaDetail;
 
+const initialCredits = {
+    cast: [],
+    crew: []
+} as i.ICastCrew;
+
 const slice = createSlice({
     name: 'movie',
     initialState: {
         detail: { ...initialEntityState, data: initialMediaDetail } as i.IStateEntity<
             i.IMediaDetail
-        >
+        >,
+        credits: { ...initialEntityState, data: initialCredits } as i.IStateEntity<i.ICastCrew>
     },
     reducers: {
+        // MOVIE DETAIL
         getMovieDetail: (state, action) => {
             state.detail.data = initialMediaDetail;
             state.detail.fetching = true;
@@ -48,6 +55,22 @@ const slice = createSlice({
             state.detail.data = initialMediaDetail;
             state.detail.fetching = false;
             state.detail.fetchFailed = true;
+        },
+        // CREDITS
+        getMovieCredits: (state, action) => {
+            state.credits.data = initialCredits;
+            state.credits.fetching = true;
+            state.credits.fetchFailed = false;
+        },
+        getMovieCreditsSuccess: (state, action) => {
+            state.credits.data = action.payload;
+            state.credits.fetching = false;
+            state.credits.fetchFailed = false;
+        },
+        getMovieCreditsFail: (state, action) => {
+            state.credits.data = initialCredits;
+            state.credits.fetching = false;
+            state.credits.fetchFailed = true;
         }
     }
 });
@@ -56,7 +79,8 @@ const mediaSelector = (state: i.TState) => state.movie;
 
 // selector
 export const selectors = {
-    movieDetailSelector: createSelector(mediaSelector, (state) => state.detail)
+    movieDetailSelector: createSelector(mediaSelector, (state) => state.detail),
+    movieCreditsSelector: createSelector(mediaSelector, (state) => state.credits)
 };
 
 export const actions = { ...slice.actions };

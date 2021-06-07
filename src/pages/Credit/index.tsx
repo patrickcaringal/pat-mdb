@@ -53,6 +53,25 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
     const dispatch = useDispatch();
     const classes = useStyles();
 
+    const { data: credits, fetching: movieDetailLoading } = useSelector<
+        i.TState,
+        i.IStateEntity<i.ICastCrew>
+    >(movieSelectors.movieCreditsSelector);
+
+    // console.log(credits);
+
+    const { id: mediaId } = match.params;
+    const isMovie = mediaType === i.media_type.MOVIE;
+
+    useLayoutEffect(() => {
+        window.scrollTo(0, 0);
+        if (isMovie) {
+            dispatch(movieActions.getMovieCredits({ id: mediaId }));
+        } else {
+            // dispatch(tvShowActions.getTVShowDetail({ id: mediaId }));
+        }
+    }, [mediaId]);
+
     return <>Credits {mediaType}</>;
 };
 

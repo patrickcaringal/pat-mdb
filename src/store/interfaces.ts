@@ -22,6 +22,7 @@ export interface IPerson {
     name: string;
     poster: string;
     episodes?: number;
+    department?: string;
 }
 
 export interface ICredit {
@@ -71,6 +72,11 @@ export interface IMediaDetail extends IMedia {
     // tv
     number_of_seasons?: number;
     number_of_episodes?: number;
+}
+
+export interface ICastCrew {
+    cast: IPerson[];
+    crew: IPerson[];
 }
 
 export interface IPersonDetail extends IPerson {
@@ -239,6 +245,7 @@ export type TState = {
     };
     movie: {
         detail: IStateEntity<IMediaDetail>;
+        credits: IStateEntity<ICastCrew>;
     };
     tvShow: {
         detail: IStateEntity<IMediaDetail>;
