@@ -203,6 +203,10 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
           }));
     // #endregion data mapping
 
+    const handleViewCreditsClick = () => {
+        history.push(`/${mediaType}/${mediaId}/credits`);
+    };
+
     const handleCastClick = (id: string) => {
         history.push(`/person/${id}`);
     };
@@ -228,6 +232,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
                             collection={mappedCollection}
                             photos={mappedPhotos}
                             videos={mappedVideos}
+                            onViewCredits={handleViewCreditsClick}
                         />
                     </Box>
                     <Box className={classes.right}>

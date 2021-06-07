@@ -43,6 +43,13 @@
     overflow: overlay;
 } */
 
+.overflow-overlay {
+    overflow: hidden;
+}
+.overflow-overlay:hover {
+    overflow: overlay;
+}
+
 .line-clamp {
     display: -webkit-box;
     -webkit-line-clamp: 3;

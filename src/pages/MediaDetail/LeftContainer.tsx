@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
             display: 'flex',
             flexDirection: 'column',
             maxHeight: 500,
-            overflow: 'auto',
-            paddingRight: theme.spacing(2),
+
+            paddingRight: theme.spacing(4),
             '& .MuiCard-root ': {
                 minHeight: 175
             },
@@ -55,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
         '& .media-items-container': {
             '& .tab-item': {
                 maxHeight: 500,
-                overflow: 'auto',
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
@@ -107,6 +106,7 @@ interface IOwnProps
     photos: ICardComponentProps[];
     videos: ICardComponentProps[];
     loading: boolean;
+    onViewCredits: () => void;
 }
 
 const LeftSection: React.FC<IOwnProps> = ({
@@ -115,6 +115,7 @@ const LeftSection: React.FC<IOwnProps> = ({
     photos,
     videos,
     loading,
+    onViewCredits,
     match
 }) => {
     const classes = useStyles();
@@ -135,13 +136,7 @@ const LeftSection: React.FC<IOwnProps> = ({
                         <Card {...props} />
                     ))}
 
-                    <Card
-                        variant="blank"
-                        onClick={() => {
-                            // TODO: full cast & crew page
-                            alert(mediaId);
-                        }}
-                    >
+                    <Card variant="blank" onClick={onViewCredits}>
                         <Typography
                             variant="body1"
                             style={{ textAlign: 'center', fontWeight: 600 }}
@@ -163,7 +158,7 @@ const LeftSection: React.FC<IOwnProps> = ({
                         <Typography className={classes.title} variant="h5">
                             Collections
                         </Typography>
-                        <Box className="items-container">
+                        <Box className="items-container overflow-overlay">
                             {collection.map((props) => (
                                 <Card variant="horizontal" {...props} />
                             ))}
@@ -190,12 +185,16 @@ const LeftSection: React.FC<IOwnProps> = ({
                 <Divider />
 
                 <Box className="media-items-container">
-                    <TabPanel className="tab-item" value={selectedTab} index={1}>
+                    <TabPanel className="tab-item overflow-overlay" value={selectedTab} index={1}>
                         {photos.map((props) => (
                             <Card {...props} />
                         ))}
                     </TabPanel>
-                    <TabPanel className="tab-item videos-tab" value={selectedTab} index={2}>
+                    <TabPanel
+                        className="tab-item videos-tab overflow-overlay"
+                        value={selectedTab}
+                        index={2}
+                    >
                         {videos.map((props) => (
                             <Card {...props} />
                         ))}

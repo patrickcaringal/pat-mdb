@@ -14,6 +14,7 @@ import './App.css';
 import AppBar from './components/AppBar';
 import Home from './pages/Home';
 // import SearchPage from './pages/Search';
+import CreditPage from './pages/Credit';
 import MediaDetail from './pages/MediaDetail';
 import PersonDetail from './pages/PersonDetail';
 // import TvPage from './pages/Tv';
@@ -37,6 +38,16 @@ const App: React.FC<AppProps> = (props) => {
                     <Route path="/tv-show/:id" exact component={() => <TvPage />} />
                     <Route path="/people/:id" exact component={() => <PeoplePage />} />
                     <Route path="/search" component={() => <SearchPage />} /> */}
+                    <Route
+                        path="/movie/:id/credits"
+                        exact
+                        component={() => <CreditPage mediaType={media_type.MOVIE} />}
+                    />
+                    <Route
+                        path="/tv/:id/credits"
+                        exact
+                        component={() => <CreditPage mediaType={media_type.TV} />}
+                    />
                     <Route
                         path="/movie/:id"
                         exact
