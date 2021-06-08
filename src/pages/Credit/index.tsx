@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container } from '@material-ui/core';
+import { Box, Container, Typography } from '@material-ui/core';
 
 import { selectors as movieSelectors } from '../../store/movie.slice';
 import { selectors as tvShowSelectors } from '../../store/tvShow.slice';
@@ -18,26 +18,27 @@ import { formatNumWithComma } from '../../utils/helpers';
 // import RightContainer from './RightContainer';
 
 const useStyles = makeStyles((theme) => ({
-    content: {
+    container: {
+        color: '#fff',
         display: 'flex',
-        flexDirection: 'row',
-        paddingTop: theme.spacing(4),
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(4),
-        paddingBottom: theme.spacing(4)
-    },
-    left: {
-        display: 'flex',
-        flexDirection: 'column',
         flex: 1,
-        overflow: 'hidden',
-        marginRight: theme.spacing(8)
-    },
-    right: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: 320,
-        minWidth: 320
+        background:
+            'linear-gradient(to right, rgba(31, 36, 33, 0.95) 150px, rgba(38, 102, 69, 0.9) 100%)',
+        '& .flex-row': {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center'
+        },
+        '& .flex-column': {
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        '& .poster-image': {
+            // minWidth: 300,
+            // width: 300,
+            height: 140,
+            borderRadius: 8
+        }
     }
 }));
 
@@ -53,12 +54,10 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
     const dispatch = useDispatch();
     const classes = useStyles();
 
-    const { data: credits, fetching: movieDetailLoading } = useSelector<
+    const { data: movieCredits, fetching: movieDetailLoading } = useSelector<
         i.TState,
         i.IStateEntity<i.ICastCrew>
     >(movieSelectors.movieCreditsSelector);
-
-    // console.log(credits);
 
     const { id: mediaId } = match.params;
     const isMovie = mediaType === i.media_type.MOVIE;
@@ -72,7 +71,26 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
         }
     }, [mediaId]);
 
-    return <>Credits {mediaType}</>;
+    return (
+        <Box className={classes.container} style={{ backgroundSize: 'cover' }}>
+            <Container disableGutters maxWidth="lg">
+                <Box className="flex-row" p={4}>
+                    <img
+                        src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/bOFaAXmWWXC3Rbv4u4uM9ZSzRXP.jpg"
+                        alt="PAT MDb"
+                        className="poster-image"
+                    />
+
+                    <Box className="flex-column" pl={5}>
+                        <Typography variant="h3" className="semibold-text">
+                            F9 {/* Lorem ipsum dolor sit amet consectetur. */}
+                        </Typography>
+                        <Typography variant="h4">(2021)</Typography>
+                    </Box>
+                </Box>
+            </Container>
+        </Box>
+    );
 };
 
 export default withRouter(Credit);

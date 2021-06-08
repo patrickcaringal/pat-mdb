@@ -38,7 +38,8 @@ const useStyles = makeStyles<Theme, { bannerBg: string }>((theme) => ({
             display: 'flex',
             flex: 1,
             background:
-                'linear-gradient(to right, rgba(14.12%, 14.51%, 16.86%, 1.00) 150px, rgba(22.35%, 22.35%, 22.35%, 0.84) 100%)'
+                'linear-gradient(to right, rgba(31, 36, 33, 0.95) 150px, rgba(38, 102, 69, 0.9) 100%)'
+            // 'linear-gradient(to right, rgba(14.12%, 14.51%, 16.86%, 1.00) 150px, rgba(22.35%, 22.35%, 22.35%, 0.84) 100%)'
         },
         '& .subtitle > span:not(:first-child)': {
             marginLeft: theme.spacing(1),

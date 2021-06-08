@@ -65,3 +65,11 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+.bold-text {
+    font-weight: 700 !important;
+}
+
+.semibold-text {
+    font-weight: 600 !important;
+}
