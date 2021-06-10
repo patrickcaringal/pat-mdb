@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
             },
             '& .MuiTab-root': {
                 minWidth: 120
+            },
+            '& .Mui-selected': {
+                fontWeight: 700
             }
         },
 

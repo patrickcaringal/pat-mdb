@@ -1,9 +1,9 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container, Typography } from '@material-ui/core';
+import { Box, Container, Divider, Tab, Tabs, Typography } from '@material-ui/core';
 
 import { selectors as movieSelectors } from '../../store/movie.slice';
 import { selectors as tvShowSelectors } from '../../store/tvShow.slice';
@@ -12,6 +12,8 @@ import { actions as tvShowActions } from '../../store/tvShow.slice';
 import * as i from '../../store/interfaces';
 
 import { formatNumWithComma } from '../../utils/helpers';
+
+import Card, { CardSkeleton, ICardComponentProps } from '../../components/CardList/Card';
 
 // import Banner, { IMediaDetailComponentProps } from './Banner';
 // import LeftContainer from './LeftContainer';
@@ -39,6 +41,67 @@ const useStyles = makeStyles((theme) => ({
             height: 140,
             borderRadius: 8
         }
+    },
+    body: {
+        display: 'flex',
+        flexDirection: 'column',
+        padding: theme.spacing(4)
+        // flex: 1,
+        // overflow: 'hidden',
+        // marginRight: theme.spacing(8)
+    },
+    mediaContainer: {
+        padding: theme.spacing(4),
+        paddingTop: theme.spacing(2),
+        '& .MuiTabs-flexContainer': {
+            alignItems: 'center',
+            '& .tab-title': {
+                fontWeight: 600,
+                marginRight: theme.spacing(4)
+            },
+            '& .MuiTab-root': {
+                minWidth: 120
+            },
+            '& .Mui-selected': {
+                fontWeight: 700
+            }
+        },
+
+        '& .media-items-container': {
+            '& .tab-item': {
+                maxHeight: 500,
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                marginTop: theme.spacing(2),
+                marginLeft: theme.spacing(-3)
+            },
+            '& .MuiCard-root': {
+                width: 260,
+                marginLeft: theme.spacing(3),
+                marginBottom: theme.spacing(3),
+                '& .media': {
+                    height: 100,
+                    width: 100
+                },
+                '& .card-content': {
+                    height: 100
+                }
+            },
+            '& .videos-tab': {
+                '& .MuiCardContent-root': {
+                    position: 'absolute',
+                    bottom: 0,
+                    width: '100%',
+                    color: '#DCE1DE',
+                    background: 'rgba(0,0,0,0.6)',
+                    padding: theme.spacing(1, 2),
+                    '& .MuiTypography-root': {
+                        color: '#DCE1DE'
+                    }
+                }
+            }
+        }
     }
 }));
 
@@ -50,9 +113,27 @@ interface CreditProps extends RouteComponentProps<MatchParams> {
     mediaType: i.media_type;
 }
 
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`full-width-tabpanel-${index}`}
+            aria-labelledby={`full-width-tab-${index}`}
+            {...other}
+        >
+            {value === index && children}
+        </div>
+    );
+}
+
 const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
     const dispatch = useDispatch();
     const classes = useStyles();
+
+    const [selectedTab, setSelectedTab] = useState(0);
 
     const { data: movieCredits, fetching: movieDetailLoading } = useSelector<
         i.TState,
@@ -71,25 +152,92 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
         }
     }, [mediaId]);
 
-    return (
-        <Box className={classes.container} style={{ backgroundSize: 'cover' }}>
-            <Container disableGutters maxWidth="lg">
-                <Box className="flex-row" p={4}>
-                    <img
-                        src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/bOFaAXmWWXC3Rbv4u4uM9ZSzRXP.jpg"
-                        alt="PAT MDb"
-                        className="poster-image"
-                    />
+    const mapData = () => {
+        const { cast, crew } = isMovie ? movieCredits : ({} as i.ICastCrew);
 
-                    <Box className="flex-column" pl={5}>
-                        <Typography variant="h3" className="semibold-text">
-                            F9 {/* Lorem ipsum dolor sit amet consectetur. */}
-                        </Typography>
-                        <Typography variant="h4">(2021)</Typography>
+        const mappedCast = cast.map((person) => ({
+            onClick: () => {
+                // handleCastClick(person.id);
+            },
+            poster: person.poster,
+            title: person.name,
+            subtitle: person.character
+        }));
+
+        const mappedCrew = crew.map((person) => ({
+            onClick: () => {
+                // handleCastClick(person.id);
+            },
+            poster: person.poster,
+            title: person.name,
+            subtitle: person.character
+        }));
+
+        return { cast: mappedCast, crew: mappedCrew };
+    };
+
+    const { cast, crew } = mapData();
+
+    return (
+        <>
+            {/* BANNER */}
+            <Box className={classes.container} style={{ backgroundSize: 'cover' }}>
+                <Container disableGutters maxWidth="lg">
+                    <Box className="flex-row" p={4}>
+                        <img
+                            src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/bOFaAXmWWXC3Rbv4u4uM9ZSzRXP.jpg"
+                            alt="PAT MDb"
+                            className="poster-image"
+                        />
+
+                        <Box className="flex-column" pl={5}>
+                            <Typography variant="h3" className="semibold-text">
+                                F9 {/* Lorem ipsum dolor sit amet consectetur. */}
+                            </Typography>
+                            <Typography variant="h4">(2021)</Typography>
+                        </Box>
+                    </Box>
+                </Container>
+            </Box>
+
+            {/* BODY */}
+            <Container disableGutters maxWidth="lg">
+                {/* <Box className={classes.body}>Body</Box> */}
+                <Box className={classes.mediaContainer}>
+                    <Tabs
+                        value={selectedTab}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        onChange={(event, newValue) => setSelectedTab(newValue)}
+                    >
+                        <Tab label="Cast" disableRipple />
+                        <Tab label="Crew" disableRipple />
+                    </Tabs>
+                    <Divider />
+
+                    <Box className="media-items-container">
+                        <TabPanel
+                            className="tab-item overflow-overlay"
+                            value={selectedTab}
+                            index={0}
+                        >
+                            {cast.map((props) => (
+                                <Card variant="horizontal" {...props} />
+                            ))}
+                        </TabPanel>
+                        <TabPanel
+                            className="tab-item overflow-overlay"
+                            value={selectedTab}
+                            index={1}
+                        >
+                            {crew.map((props) => (
+                                <Card variant="horizontal" {...props} />
+                            ))}
+                        </TabPanel>
                     </Box>
                 </Box>
             </Container>
-        </Box>
+        </>
     );
 };
 
