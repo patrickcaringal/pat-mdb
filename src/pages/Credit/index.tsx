@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
                 marginLeft: theme.spacing(-3)
             },
             '& .MuiCard-root': {
-                width: 260,
+                width: 340,
                 marginLeft: theme.spacing(3),
                 marginBottom: theme.spacing(3),
                 '& .media': {
@@ -140,6 +140,11 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
         i.IStateEntity<i.ICastCrew>
     >(movieSelectors.movieCreditsSelector);
 
+    const { data: tvShowCredits, fetching: tvShowDetailLoading } = useSelector<
+        i.TState,
+        i.IStateEntity<i.ICastCrew>
+    >(tvShowSelectors.tvShowCreditsSelector);
+
     const { id: mediaId } = match.params;
     const isMovie = mediaType === i.media_type.MOVIE;
 
@@ -148,12 +153,12 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
         if (isMovie) {
             dispatch(movieActions.getMovieCredits({ id: mediaId }));
         } else {
-            // dispatch(tvShowActions.getTVShowDetail({ id: mediaId }));
+            dispatch(tvShowActions.getTVShowCredits({ id: mediaId }));
         }
     }, [mediaId]);
 
     const mapData = () => {
-        const { cast, crew } = isMovie ? movieCredits : ({} as i.ICastCrew);
+        const { cast, crew } = isMovie ? movieCredits : tvShowCredits;
 
         const mappedCast = cast.map((person) => ({
             onClick: () => {
@@ -161,7 +166,10 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
             },
             poster: person.poster,
             title: person.name,
-            subtitle: person.character
+            subtitle: person.character,
+            subtitle2: !isMovie
+                ? `${person.episodes} Episode${person.episodes || 0 > 1 ? 's' : ''}`
+                : ''
         }));
 
         const mappedCrew = crew.map((person) => ({
@@ -170,7 +178,10 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
             },
             poster: person.poster,
             title: person.name,
-            subtitle: person.character
+            subtitle: person.character,
+            subtitle2: !isMovie
+                ? `${person.episodes} Episode${person.episodes || 0 > 1 ? 's' : ''}`
+                : ''
         }));
 
         return { cast: mappedCast, crew: mappedCrew };

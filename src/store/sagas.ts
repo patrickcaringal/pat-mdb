@@ -59,6 +59,19 @@ function* getMovieCreditsSaga(action) {
         yield put(movieActions.getMovieCreditsFail('Error'));
     }
 }
+
+function* getTVShowCreditsSaga(action) {
+    const { id, onSuccess } = action.payload;
+
+    try {
+        const { data }: { data: i.IMediaDetail } = yield call(http.get, `tv/${id}/credits`);
+        yield delay(500);
+        yield put(tvShowActions.getTVShowCreditsSuccess(data));
+    } catch (error) {
+        console.log(error);
+        yield put(tvShowActions.getTVShowCreditsFail('Error'));
+    }
+}
 // #endregion CREDITS
 
 function* getPresonDetailSaga(action) {
@@ -81,5 +94,7 @@ export default function* rootSaga() {
     yield all([yield takeLatest(tvShowActions.getTVShowDetail.type, getTVShowDetailSaga)]);
     // CREDITS
     yield all([yield takeLatest(movieActions.getMovieCredits.type, getMovieCreditsSaga)]);
+    yield all([yield takeLatest(tvShowActions.getTVShowCredits.type, getTVShowCreditsSaga)]);
+    // PERSON
     yield all([yield takeLatest(personActions.getPersonDetail.type, getPresonDetailSaga)]);
 }

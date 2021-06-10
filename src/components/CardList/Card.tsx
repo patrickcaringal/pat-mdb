@@ -114,6 +114,11 @@ const CardComponent: React.FC<ICardComponentProps> = ({
                             <Typography variant="body2" color="textSecondary">
                                 {subtitle}
                             </Typography>
+                            {subtitle2 && (
+                                <Typography variant="body2" color="textSecondary">
+                                    {subtitle2}
+                                </Typography>
+                            )}
                         </div>
                         <Typography className="line-clamp" variant="body2">
                             {description}

@@ -249,6 +249,7 @@ export type TState = {
     };
     tvShow: {
         detail: IStateEntity<IMediaDetail>;
+        credits: IStateEntity<ICastCrew>;
     };
     person: {
         detail: IStateEntity<IPersonDetail>;
