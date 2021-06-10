@@ -5,19 +5,16 @@ import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container, Divider, Tab, Tabs, Typography } from '@material-ui/core';
 
-import { selectors as movieSelectors } from '../../store/movie.slice';
-import { selectors as tvShowSelectors } from '../../store/tvShow.slice';
-import { actions as movieActions } from '../../store/movie.slice';
-import { actions as tvShowActions } from '../../store/tvShow.slice';
+import { selectors as mediaSelectors, actions as mediaActions } from '../../store/media.slice';
+// import { selectors as movieSelectors } from '../../store/movie.slice';
+// import { selectors as tvShowSelectors } from '../../store/tvShow.slice';
+// import { actions as movieActions } from '../../store/movie.slice';
+// import { actions as tvShowActions } from '../../store/tvShow.slice';
 import * as i from '../../store/interfaces';
 
 import { formatNumWithComma } from '../../utils/helpers';
 
 import Card, { CardSkeleton, ICardComponentProps } from '../../components/CardList/Card';
-
-// import Banner, { IMediaDetailComponentProps } from './Banner';
-// import LeftContainer from './LeftContainer';
-// import RightContainer from './RightContainer';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -135,30 +132,37 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
 
     const [selectedTab, setSelectedTab] = useState(0);
 
-    const { data: movieCredits, fetching: movieDetailLoading } = useSelector<
-        i.TState,
-        i.IStateEntity<i.ICastCrew>
-    >(movieSelectors.movieCreditsSelector);
+    // const { data: movieCredits, fetching: movieDetailLoading } = useSelector<
+    //     i.TState,
+    //     i.IStateEntity<i.ICastCrew>
+    // >(movieSelectors.movieCreditsSelector);
 
-    const { data: tvShowCredits, fetching: tvShowDetailLoading } = useSelector<
+    // const { data: tvShowCredits, fetching: tvShowDetailLoading } = useSelector<
+    //     i.TState,
+    //     i.IStateEntity<i.ICastCrew>
+    // >(tvShowSelectors.tvShowCreditsSelector);
+
+    const { data: rawCredits, fetching: creditsLoading } = useSelector<
         i.TState,
         i.IStateEntity<i.ICastCrew>
-    >(tvShowSelectors.tvShowCreditsSelector);
+    >(mediaSelectors.mediaCreditsSelector);
 
     const { id: mediaId } = match.params;
     const isMovie = mediaType === i.media_type.MOVIE;
 
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
-        if (isMovie) {
-            dispatch(movieActions.getMovieCredits({ id: mediaId }));
-        } else {
-            dispatch(tvShowActions.getTVShowCredits({ id: mediaId }));
-        }
+        // if (isMovie) {
+        //     dispatch(movieActions.getMovieCredits({ id: mediaId }));
+        // } else {
+        //     dispatch(tvShowActions.getTVShowCredits({ id: mediaId }));
+        // }
+
+        dispatch(mediaActions.getMediaCredits({ id: mediaId, media: mediaType }));
     }, [mediaId]);
 
     const mapData = () => {
-        const { cast, crew } = isMovie ? movieCredits : tvShowCredits;
+        const { cast, crew } = rawCredits;
 
         const mappedCast = cast.map((person) => ({
             onClick: () => {
@@ -213,40 +217,43 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
 
             {/* BODY */}
             <Container disableGutters maxWidth="lg">
-                {/* <Box className={classes.body}>Body</Box> */}
-                <Box className={classes.mediaContainer}>
-                    <Tabs
-                        value={selectedTab}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        onChange={(event, newValue) => setSelectedTab(newValue)}
-                    >
-                        <Tab label="Cast" disableRipple />
-                        <Tab label="Crew" disableRipple />
-                    </Tabs>
-                    <Divider />
+                {!creditsLoading ? (
+                    <Box className={classes.mediaContainer}>
+                        <Tabs
+                            value={selectedTab}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            onChange={(event, newValue) => setSelectedTab(newValue)}
+                        >
+                            <Tab label="Cast" disableRipple />
+                            <Tab label="Crew" disableRipple />
+                        </Tabs>
+                        <Divider />
 
-                    <Box className="media-items-container">
-                        <TabPanel
-                            className="tab-item overflow-overlay"
-                            value={selectedTab}
-                            index={0}
-                        >
-                            {cast.map((props) => (
-                                <Card variant="horizontal" {...props} />
-                            ))}
-                        </TabPanel>
-                        <TabPanel
-                            className="tab-item overflow-overlay"
-                            value={selectedTab}
-                            index={1}
-                        >
-                            {crew.map((props) => (
-                                <Card variant="horizontal" {...props} />
-                            ))}
-                        </TabPanel>
+                        <Box className="media-items-container">
+                            <TabPanel
+                                className="tab-item overflow-overlay"
+                                value={selectedTab}
+                                index={0}
+                            >
+                                {cast.map((props) => (
+                                    <Card variant="horizontal" {...props} />
+                                ))}
+                            </TabPanel>
+                            <TabPanel
+                                className="tab-item overflow-overlay"
+                                value={selectedTab}
+                                index={1}
+                            >
+                                {crew.map((props) => (
+                                    <Card variant="horizontal" {...props} />
+                                ))}
+                            </TabPanel>
+                        </Box>
                     </Box>
-                </Box>
+                ) : (
+                    <>Loading</>
+                )}
             </Container>
         </>
     );

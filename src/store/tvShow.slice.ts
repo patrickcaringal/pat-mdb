@@ -55,23 +55,23 @@ const slice = createSlice({
             state.detail.data = initialMediaDetail;
             state.detail.fetching = false;
             state.detail.fetchFailed = true;
-        },
-        // CREDITS
-        getTVShowCredits: (state, action) => {
-            state.credits.data = initialCredits;
-            state.credits.fetching = true;
-            state.credits.fetchFailed = false;
-        },
-        getTVShowCreditsSuccess: (state, action) => {
-            state.credits.data = action.payload;
-            state.credits.fetching = false;
-            state.credits.fetchFailed = false;
-        },
-        getTVShowCreditsFail: (state, action) => {
-            state.credits.data = initialCredits;
-            state.credits.fetching = false;
-            state.credits.fetchFailed = true;
         }
+        // CREDITS
+        // getTVShowCredits: (state, action) => {
+        //     state.credits.data = initialCredits;
+        //     state.credits.fetching = true;
+        //     state.credits.fetchFailed = false;
+        // },
+        // getTVShowCreditsSuccess: (state, action) => {
+        //     state.credits.data = action.payload;
+        //     state.credits.fetching = false;
+        //     state.credits.fetchFailed = false;
+        // },
+        // getTVShowCreditsFail: (state, action) => {
+        //     state.credits.data = initialCredits;
+        //     state.credits.fetching = false;
+        //     state.credits.fetchFailed = true;
+        // }
     }
 });
 
@@ -79,8 +79,8 @@ const mediaSelector = (state: i.TState) => state.tvShow;
 
 // selector
 export const selectors = {
-    tvShowDetailSelector: createSelector(mediaSelector, (state) => state.detail),
-    tvShowCreditsSelector: createSelector(mediaSelector, (state) => state.credits)
+    tvShowDetailSelector: createSelector(mediaSelector, (state) => state.detail)
+    // tvShowCreditsSelector: createSelector(mediaSelector, (state) => state.credits)
 };
 
 export const actions = { ...slice.actions };

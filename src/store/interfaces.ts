@@ -242,6 +242,7 @@ export interface IStateEntity<T> {
 export type TState = {
     media: {
         popularMediaList: IStateEntity<IMedia[]>;
+        credits: IStateEntity<ICastCrew>;
     };
     movie: {
         detail: IStateEntity<IMediaDetail>;
