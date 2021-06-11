@@ -12,6 +12,29 @@ import * as i from './interfaces';
 
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 
+const initialMediaDetail = {
+    id: '',
+    title: '',
+    genres: [],
+    poster: '',
+    release_date: '',
+    media: i.media_type.MOVIE,
+    banner: '',
+    budget: 0,
+    director: [],
+    revenue: 0,
+    runtime: 0,
+    tagline: '',
+    vote_average: 0,
+    vote_count: 0,
+    cast: [] as i.IPerson[],
+    photos: [] as string[],
+    videos: [] as i.IVideo[],
+    production_companies: [] as i.ICompany[],
+    keywords: [] as i.IKeyword[],
+    recommendations: [] as i.IMedia[]
+} as i.IMediaDetail;
+
 const initialCredits = {
     cast: [],
     crew: []
@@ -21,6 +44,9 @@ const slice = createSlice({
     name: 'media',
     initialState: {
         popularMediaList: { ...initialEntityState } as i.IStateEntity<i.IMedia[]>,
+        detail: { ...initialEntityState, data: initialMediaDetail } as i.IStateEntity<
+            i.IMediaDetail
+        >,
         credits: { ...initialEntityState, data: initialCredits } as i.IStateEntity<i.ICastCrew>
     },
     reducers: {
@@ -38,6 +64,22 @@ const slice = createSlice({
             state.popularMediaList.data = [] as i.IMedia[];
             state.popularMediaList.fetching = false;
             state.popularMediaList.fetchFailed = true;
+        },
+        // MOVIE DETAIL
+        getMediaDetail: (state, action) => {
+            state.detail.data = initialMediaDetail;
+            state.detail.fetching = true;
+            state.detail.fetchFailed = false;
+        },
+        getMediaDetailSuccess: (state, action) => {
+            state.detail.data = action.payload;
+            state.detail.fetching = false;
+            state.detail.fetchFailed = false;
+        },
+        getMediaDetailFail: (state, action) => {
+            state.detail.data = initialMediaDetail;
+            state.detail.fetching = false;
+            state.detail.fetchFailed = true;
         },
         // CREDITS
         getMediaCredits: (state, action) => {
@@ -68,6 +110,7 @@ export const popularMediaListSelector = createSelector(
 
 export const selectors = {
     popularMediaListSelector: createSelector(mediaSelector, (state) => state.popularMediaList),
+    mediaDetailSelector: createSelector(mediaSelector, (state) => state.detail),
     mediaCreditsSelector: createSelector(mediaSelector, (state) => state.credits)
 };
 
