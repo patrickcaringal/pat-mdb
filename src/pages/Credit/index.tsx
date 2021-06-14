@@ -6,13 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container, Divider, Tab, Tabs, Typography } from '@material-ui/core';
 
 import { selectors as mediaSelectors, actions as mediaActions } from '../../store/media.slice';
-// import { selectors as movieSelectors } from '../../store/movie.slice';
-// import { selectors as tvShowSelectors } from '../../store/tvShow.slice';
-// import { actions as movieActions } from '../../store/movie.slice';
-// import { actions as tvShowActions } from '../../store/tvShow.slice';
 import * as i from '../../store/interfaces';
 
-import { formatNumWithComma } from '../../utils/helpers';
+import { formatNumWithComma, formatDate, formatHours } from '../../utils/helpers';
 
 import Card, { CardSkeleton, ICardComponentProps } from '../../components/CardList/Card';
 
@@ -37,6 +33,13 @@ const useStyles = makeStyles((theme) => ({
             // width: 300,
             height: 140,
             borderRadius: 8
+        },
+        '& .subtitle > span:not(:first-child)': {
+            marginLeft: theme.spacing(1),
+            '&::before': {
+                content: '"\\2022"',
+                marginRight: theme.spacing(1)
+            }
         }
     },
     body: {
@@ -73,6 +76,19 @@ const useStyles = makeStyles((theme) => ({
                 marginTop: theme.spacing(2),
                 marginLeft: theme.spacing(-3)
             },
+            '& .crew-tab-item': {
+                maxHeight: 500,
+                display: 'flex',
+                flexDirection: 'column',
+                '& .card-items': {
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    marginTop: theme.spacing(2),
+                    marginLeft: theme.spacing(-3),
+                    marginBottom: theme.spacing(2)
+                }
+            },
             '& .MuiCard-root': {
                 width: 340,
                 marginLeft: theme.spacing(3),
@@ -83,19 +99,6 @@ const useStyles = makeStyles((theme) => ({
                 },
                 '& .card-content': {
                     height: 100
-                }
-            },
-            '& .videos-tab': {
-                '& .MuiCardContent-root': {
-                    position: 'absolute',
-                    bottom: 0,
-                    width: '100%',
-                    color: '#DCE1DE',
-                    background: 'rgba(0,0,0,0.6)',
-                    padding: theme.spacing(1, 2),
-                    '& .MuiTypography-root': {
-                        color: '#DCE1DE'
-                    }
                 }
             }
         }
@@ -132,15 +135,10 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
 
     const [selectedTab, setSelectedTab] = useState(0);
 
-    // const { data: movieCredits, fetching: movieDetailLoading } = useSelector<
-    //     i.TState,
-    //     i.IStateEntity<i.ICastCrew>
-    // >(movieSelectors.movieCreditsSelector);
-
-    // const { data: tvShowCredits, fetching: tvShowDetailLoading } = useSelector<
-    //     i.TState,
-    //     i.IStateEntity<i.ICastCrew>
-    // >(tvShowSelectors.tvShowCreditsSelector);
+    const { data: mediaDetail, fetching: mediaDetailLoading } = useSelector<
+        i.TState,
+        i.IStateEntity<i.IMediaDetail>
+    >(mediaSelectors.mediaDetailSelector);
 
     const { data: rawCredits, fetching: creditsLoading } = useSelector<
         i.TState,
@@ -152,17 +150,31 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
 
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
-        // if (isMovie) {
-        //     dispatch(movieActions.getMovieCredits({ id: mediaId }));
-        // } else {
-        //     dispatch(tvShowActions.getTVShowCredits({ id: mediaId }));
-        // }
-
+        dispatch(mediaActions.getMediaDetail({ id: mediaId, media: mediaType }));
         dispatch(mediaActions.getMediaCredits({ id: mediaId, media: mediaType }));
     }, [mediaId]);
 
     const mapData = () => {
         const { cast, crew } = rawCredits;
+
+        let groupedCrew = _.chain(crew)
+            .groupBy('department')
+            .map((value, key) => ({
+                department: key,
+                crew: value.map((person) => ({
+                    onClick: () => {
+                        // handleCastClick(person.id);
+                    },
+                    poster: person.poster,
+                    title: person.name,
+                    subtitle: person.character,
+                    subtitle2: !isMovie
+                        ? `${person.episodes} Episode${person.episodes || 0 > 1 ? 's' : ''}`
+                        : ''
+                }))
+            }))
+            .sortBy('department')
+            .value();
 
         const mappedCast = cast.map((person) => ({
             onClick: () => {
@@ -176,19 +188,7 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
                 : ''
         }));
 
-        const mappedCrew = crew.map((person) => ({
-            onClick: () => {
-                // handleCastClick(person.id);
-            },
-            poster: person.poster,
-            title: person.name,
-            subtitle: person.character,
-            subtitle2: !isMovie
-                ? `${person.episodes} Episode${person.episodes || 0 > 1 ? 's' : ''}`
-                : ''
-        }));
-
-        return { cast: mappedCast, crew: mappedCrew };
+        return { cast: mappedCast, crew: groupedCrew };
     };
 
     const { cast, crew } = mapData();
@@ -199,17 +199,16 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
             <Box className={classes.container} style={{ backgroundSize: 'cover' }}>
                 <Container disableGutters maxWidth="lg">
                     <Box className="flex-row" p={4}>
-                        <img
-                            src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/bOFaAXmWWXC3Rbv4u4uM9ZSzRXP.jpg"
-                            alt="PAT MDb"
-                            className="poster-image"
-                        />
+                        <img src={mediaDetail.poster} alt="PAT MDb" className="poster-image" />
 
                         <Box className="flex-column" pl={5}>
                             <Typography variant="h3" className="semibold-text">
-                                F9 {/* Lorem ipsum dolor sit amet consectetur. */}
+                                {mediaDetail.title}
                             </Typography>
-                            <Typography variant="h4">(2021)</Typography>
+                            <Typography className="subtitle">
+                                <span>{formatDate(mediaDetail.release_date)}</span>
+                                <span>{mediaDetail.genres.join(', ')}</span>
+                            </Typography>
                         </Box>
                     </Box>
                 </Container>
@@ -241,12 +240,25 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
                                 ))}
                             </TabPanel>
                             <TabPanel
-                                className="tab-item overflow-overlay"
+                                className="crew-tab-item overflow-overlay"
                                 value={selectedTab}
                                 index={1}
                             >
-                                {crew.map((props) => (
-                                    <Card variant="horizontal" {...props} />
+                                {crew.map(({ department, crew: departmentCrew }) => (
+                                    <>
+                                        <Typography
+                                            variant="h6"
+                                            gutterBottom
+                                            className="semibold-text"
+                                        >
+                                            {department}
+                                        </Typography>
+                                        <Box className="card-items">
+                                            {departmentCrew.map((props) => (
+                                                <Card variant="horizontal" {...props} />
+                                            ))}
+                                        </Box>
+                                    </>
                                 ))}
                             </TabPanel>
                         </Box>
