@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
             width: 200,
             height: 'auto',
             borderRadius: 8,
-            marginBottom: theme.spacing(2)
+            marginBottom: theme.spacing(2),
+            backgroundColor: '#dbdbdb'
         },
         '& .title': {
             fontWeight: 600

@@ -53,7 +53,7 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
                 department: key,
                 crew: value.map((person) => ({
                     onClick: () => {
-                        // handleCastClick(person.id);
+                        handleCreditClick(person.id);
                     },
                     poster: person.poster,
                     title: person.name,
@@ -68,7 +68,7 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
 
         const mappedCast = cast.map((person) => ({
             onClick: () => {
-                // handleCastClick(person.id);
+                handleCreditClick(person.id);
             },
             poster: person.poster,
             title: person.name,
@@ -79,6 +79,10 @@ const Credit: React.FC<CreditProps> = ({ mediaType, history, match }) => {
         }));
 
         return { cast: mappedCast, crew: groupedCrew };
+    };
+
+    const handleCreditClick = (id: string) => {
+        history.push(`/person/${id}`);
     };
 
     const { cast, crew } = mapData();

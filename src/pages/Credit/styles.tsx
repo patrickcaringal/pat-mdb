@@ -84,7 +84,8 @@ export default makeStyles((theme) => ({
                 marginBottom: theme.spacing(3),
                 '& .media': {
                     height: 100,
-                    width: 100
+                    width: 100,
+                    backgroundColor: '#dbdbdb'
                 },
                 '& .card-content': {
                     height: 100
