@@ -1,12 +1,11 @@
 import React from 'react';
 import { Box, Container, ThemeProvider, Typography } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
-
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import useStyles from './styles';
 
-export interface IBannerComponentProps {
+interface IBannerComponentProps {
     poster: string;
     title: string;
     subtitle1: string;
