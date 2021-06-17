@@ -9,7 +9,8 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(3),
         marginBottom: theme.spacing(3),
         '& .media': {
-            height: 175
+            height: 175,
+            backgroundColor: '#dbdbdb'
         },
         '& .card-content': {
             padding: theme.spacing(1)
@@ -26,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
         },
         '& .media': {
             height: 175,
-            width: 120
+            width: 120,
+            backgroundColor: '#dbdbdb'
         },
         '& .card-content': {
             flex: 1,

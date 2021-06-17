@@ -100,77 +100,88 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
 
     if (personDetailLoading) return <RightContainerSkeleton />;
 
+    console.log(biography);
+
     return (
         <div className={classes.container}>
             <Typography className="title" variant="h3" gutterBottom>
                 {name}
             </Typography>
 
-            <Typography className="bold-text" gutterBottom>
-                Biography
-            </Typography>
-            <Typography>{biography}</Typography>
+            {biography && (
+                <>
+                    <Typography className="bold-text" gutterBottom>
+                        Biography
+                    </Typography>
+                    <Typography>{biography}</Typography>
+                </>
+            )}
 
-            <Box className="gutterTop">
-                <Typography className="title" variant="h5">
-                    Known For
-                </Typography>
+            {popularCredits.length > 0 && (
+                <Box className="gutterTop">
+                    <Typography className="title" variant="h5">
+                        Known For
+                    </Typography>
 
-                <Box className="popular-credit-container">
-                    {popularCredits.map((credit) => (
-                        <Card
-                            onClick={() => {
-                                handleCreditClick(credit.id, credit.media as string);
-                            }}
-                            poster={credit.poster}
-                            title={credit.title}
-                        />
-                    ))}
+                    <Box className="popular-credit-container">
+                        {popularCredits.map((credit) => (
+                            <Card
+                                onClick={() => {
+                                    handleCreditClick(credit.id, credit.media as string);
+                                }}
+                                poster={credit.poster}
+                                title={credit.title}
+                            />
+                        ))}
+                    </Box>
                 </Box>
-            </Box>
+            )}
 
             <Divider className={classes.divider} />
 
-            <Box>
-                <Typography className="title" variant="h5">
-                    Credits
-                </Typography>
-
+            {creditYears.length > 0 && (
                 <Box>
-                    {creditYears.map((year) => (
-                        <Accordion expanded>
-                            <AccordionSummary>
-                                <Typography className="bold-text" variant="h6">
-                                    {year}
-                                </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <List dense>
-                                    {credits
-                                        .filter(
-                                            (cred) =>
-                                                new Date(cred.release_date).getFullYear() === year
-                                        )
-                                        .map((cred) => (
-                                            <ListItem>
-                                                <Typography className="semibold-text">
-                                                    {cred.title}
-                                                </Typography>
-                                                <Typography style={{ whiteSpace: 'pre' }}>
-                                                    {cred.character
-                                                        ? ` ${isActor ? 'as' : '...'} ${
-                                                              cred.character
-                                                          }`
-                                                        : ''}
-                                                </Typography>
-                                            </ListItem>
-                                        ))}
-                                </List>
-                            </AccordionDetails>
-                        </Accordion>
-                    ))}
+                    <Typography className="title" variant="h5">
+                        Credits
+                    </Typography>
+
+                    <Box>
+                        {creditYears.map((year) => (
+                            <Accordion expanded>
+                                <AccordionSummary>
+                                    <Typography className="bold-text" variant="h6">
+                                        {year}
+                                    </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <List dense>
+                                        {credits
+                                            .filter(
+                                                (cred) =>
+                                                    new Date(cred.release_date).getFullYear() ===
+                                                    year
+                                            )
+                                            .map((cred) => (
+                                                <ListItem>
+                                                    <Typography className="semibold-text">
+                                                        {cred.title}
+                                                    </Typography>
+                                                    <Typography style={{ whiteSpace: 'pre' }}>
+                                                        {cred.character
+                                                            ? ` ${isActor ? 'as' : '...'} ${
+                                                                  cred.character
+                                                              }`
+                                                            : ''}
+                                                    </Typography>
+                                                </ListItem>
+                                            ))}
+                                    </List>
+                                </AccordionDetails>
+                            </Accordion>
+                        ))}
+                    </Box>
                 </Box>
-            </Box>
+            )}
         </div>
     );
 };
