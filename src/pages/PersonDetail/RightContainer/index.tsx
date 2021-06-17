@@ -2,17 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
-
 import { makeStyles } from '@material-ui/core/styles';
-import {
-    Box,
-    Card,
-    CardActionArea,
-    CardMedia,
-    CardContent,
-    Divider,
-    Typography
-} from '@material-ui/core';
+import { Box, Divider, Typography } from '@material-ui/core';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -22,6 +14,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 import { selectors } from '../../../store/person.slice';
+import Card, { CardSkeleton } from '../../../components/CardList/Card';
 
 const useStyles = makeStyles((theme) => ({
     divider: {
@@ -56,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
             marginLeft: theme.spacing(-3),
             marginBottom: theme.spacing(-3),
 
-            '& .card-container': {
+            '& .MuiCard-root': {
                 width: 138,
                 marginLeft: theme.spacing(3),
                 marginBottom: theme.spacing(3),
@@ -88,7 +81,7 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
 
     const {
         data: { name, biography, credits = [], department },
-        fetching: loading
+        fetching: personDetailLoading
     } = useSelector(selectors.personDetailSelector);
 
     const isActor = department?.toLocaleLowerCase() === 'acting';
@@ -104,6 +97,8 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
     const handleCreditClick = (id: string, media: string) => {
         history.push(`/${media}/${id}`);
     };
+
+    if (personDetailLoading) return <RightContainerSkeleton />;
 
     return (
         <div className={classes.container}>
@@ -123,20 +118,13 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
 
                 <Box className="popular-credit-container">
                     {popularCredits.map((credit) => (
-                        <Card className="card-container">
-                            <CardActionArea
-                                onClick={() => {
-                                    handleCreditClick(credit.id, credit.media as string);
-                                }}
-                            >
-                                <CardMedia className="media" image={credit.poster} title="asd" />
-                                <CardContent className="card-content">
-                                    <Typography className="line-clamp-2" variant="body2">
-                                        {credit.title}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
+                        <Card
+                            onClick={() => {
+                                handleCreditClick(credit.id, credit.media as string);
+                            }}
+                            poster={credit.poster}
+                            title={credit.title}
+                        />
                     ))}
                 </Box>
             </Box>
@@ -188,3 +176,69 @@ const RightContainer: React.FC<IOwnProps> = ({ history }) => {
 };
 
 export default withRouter(RightContainer);
+
+const RightContainerSkeleton: React.FC = () => {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.container}>
+            <Typography className="title" variant="h3" gutterBottom>
+                <Skeleton variant="text" width={400} />
+            </Typography>
+
+            <Typography className="bold-text" gutterBottom>
+                <Skeleton variant="text" width={160} />
+            </Typography>
+            <Typography>
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
+                <Skeleton variant="text" width="80%" />
+            </Typography>
+
+            <Box className="gutterTop">
+                <Typography className="title" variant="h5">
+                    <Skeleton variant="text" width={160} />
+                </Typography>
+
+                <Box className="popular-credit-container">
+                    {_.range(6).map(() => (
+                        <CardSkeleton />
+                    ))}
+                </Box>
+            </Box>
+
+            <Divider className={classes.divider} />
+
+            <Box>
+                <Typography className="title" variant="h5">
+                    <Skeleton variant="text" width={160} />
+                </Typography>
+
+                <Box>
+                    {_.range(3).map(() => (
+                        <Accordion expanded>
+                            <AccordionSummary>
+                                <Typography className="bold-text" variant="h6">
+                                    <Skeleton variant="text" width={100} />
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <List dense>
+                                    {_.range(2).map(() => (
+                                        <ListItem>
+                                            <Typography className="semibold-text">
+                                                <Skeleton variant="text" width={300} />
+                                            </Typography>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+                    ))}
+                </Box>
+            </Box>
+        </div>
+    );
+};

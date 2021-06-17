@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import { selectors } from '../../../store/person.slice';
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         '& .poster-image': {
             width: 200,
-            height: 'auto',
+            height: 300,
             borderRadius: 8,
             marginBottom: theme.spacing(2),
             backgroundColor: '#dbdbdb'
@@ -37,14 +37,16 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface IOwnProps extends RouteComponentProps {}
+interface IOwnProps {}
 
-const LeftSection: React.FC<IOwnProps> = ({ history }) => {
+const LeftSection: React.FC<IOwnProps> = () => {
     const classes = useStyles();
     const {
         data: { birthday, department, place_of_birth, poster },
-        fetching: loading
+        fetching: personDetailLoading
     } = useSelector(selectors.personDetailSelector);
+
+    if (personDetailLoading) return <LeftSectionSkeleton />;
 
     return (
         <div className={classes.container}>
@@ -68,4 +70,41 @@ const LeftSection: React.FC<IOwnProps> = ({ history }) => {
     );
 };
 
-export default withRouter(LeftSection);
+export default LeftSection;
+
+const LeftSectionSkeleton: React.FC = () => {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.container}>
+            <Skeleton variant="rect" className="poster-image" />
+
+            <Box>
+                <Typography className="title" variant="h5" gutterBottom>
+                    <Skeleton variant="text" width={160} />
+                </Typography>
+
+                <Typography className="bold-text">
+                    <Skeleton variant="text" width={160} />
+                </Typography>
+                <Typography gutterBottom>
+                    <Skeleton variant="text" width={120} />
+                </Typography>
+
+                <Typography className="bold-text">
+                    <Skeleton variant="text" width={160} />
+                </Typography>
+                <Typography gutterBottom>
+                    <Skeleton variant="text" width={120} />
+                </Typography>
+
+                <Typography className="bold-text">
+                    <Skeleton variant="text" width={160} />
+                </Typography>
+                <Typography gutterBottom>
+                    <Skeleton variant="text" width={120} />
+                </Typography>
+            </Box>
+        </div>
+    );
+};
