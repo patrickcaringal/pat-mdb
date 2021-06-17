@@ -1,13 +1,12 @@
 import React, { useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Box, Container } from '@material-ui/core';
 
 import { actions } from '../../store/person.slice';
-
-import Banner from './Banner';
-import BodyContainer from './BodyContainer';
 import LeftContainer from './LeftContainer';
 import RigthContainer from './RightContainer';
+import useStyles from './styles';
 
 interface MatchParams {
     id: string;
@@ -17,6 +16,7 @@ interface MovieDetailProps extends RouteComponentProps<MatchParams> {}
 
 const MoivieDetail: React.FC<MovieDetailProps> = ({ match, location }) => {
     const dispatch = useDispatch();
+    const classes = useStyles();
 
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
@@ -25,11 +25,16 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ match, location }) => {
 
     return (
         <>
-            {/* <Banner /> */}
-            <BodyContainer>
-                <LeftContainer />
-                <RigthContainer />
-            </BodyContainer>
+            <Box style={{ background: '#F3F8F3' }}>
+                <Container className={classes.content} disableGutters maxWidth="lg">
+                    <Box className={classes.leftContainer}>
+                        <LeftContainer />
+                    </Box>
+                    <Box className={classes.rightContainer}>
+                        <RigthContainer />
+                    </Box>
+                </Container>
+            </Box>
         </>
     );
 };
