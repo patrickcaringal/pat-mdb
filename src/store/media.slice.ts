@@ -15,6 +15,7 @@ const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 const initialMediaDetail = {
     id: '',
     title: '',
+    overview: '',
     genres: [],
     poster: '',
     release_date: '',
@@ -35,6 +36,12 @@ const initialMediaDetail = {
     recommendations: [] as i.IMedia[]
 } as i.IMediaDetail;
 
+const initialSeasonDetail = {
+    ...initialMediaDetail,
+    seasonNumber: 0,
+    episodes: []
+} as i.ISeasonDetail;
+
 const initialCredits = {
     cast: [],
     crew: []
@@ -46,6 +53,9 @@ const slice = createSlice({
         popularMediaList: { ...initialEntityState } as i.IStateEntity<i.IMedia[]>,
         detail: { ...initialEntityState, data: initialMediaDetail } as i.IStateEntity<
             i.IMediaDetail
+        >,
+        seasonDetail: { ...initialEntityState, data: initialSeasonDetail } as i.IStateEntity<
+            i.ISeasonDetail
         >,
         credits: { ...initialEntityState, data: initialCredits } as i.IStateEntity<i.ICastCrew>
     },
@@ -65,7 +75,7 @@ const slice = createSlice({
             state.popularMediaList.fetching = false;
             state.popularMediaList.fetchFailed = true;
         },
-        // MOVIE DETAIL
+        // MEDIA DETAIL
         getMediaDetail: (state, action) => {
             state.detail.data = initialMediaDetail;
             state.detail.fetching = true;
@@ -80,6 +90,22 @@ const slice = createSlice({
             state.detail.data = initialMediaDetail;
             state.detail.fetching = false;
             state.detail.fetchFailed = true;
+        },
+        // SEASON DETAIL
+        getSeasonDetail: (state, action) => {
+            state.seasonDetail.data = initialSeasonDetail;
+            state.seasonDetail.fetching = true;
+            state.seasonDetail.fetchFailed = false;
+        },
+        getSeasonDetailSuccess: (state, action) => {
+            state.seasonDetail.data = action.payload;
+            state.seasonDetail.fetching = false;
+            state.seasonDetail.fetchFailed = false;
+        },
+        getSeasonDetailFail: (state, action) => {
+            state.seasonDetail.data = initialSeasonDetail;
+            state.seasonDetail.fetching = false;
+            state.seasonDetail.fetchFailed = true;
         },
         // CREDITS
         getMediaCredits: (state, action) => {
@@ -111,6 +137,7 @@ export const popularMediaListSelector = createSelector(
 export const selectors = {
     popularMediaListSelector: createSelector(mediaSelector, (state) => state.popularMediaList),
     mediaDetailSelector: createSelector(mediaSelector, (state) => state.detail),
+    seasonDetailSelector: createSelector(mediaSelector, (state) => state.seasonDetail),
     mediaCreditsSelector: createSelector(mediaSelector, (state) => state.credits)
 };
 

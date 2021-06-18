@@ -6,6 +6,7 @@ const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 const initialMediaDetail = {
     id: '',
     title: '',
+    overview: '',
     genres: [],
     poster: '',
     release_date: '',

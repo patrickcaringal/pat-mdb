@@ -8,12 +8,19 @@ export interface IMedia {
     id: string;
     title: string;
     genres: string[];
-    overview?: string;
+    overview: string; // check if need optional
     poster: string;
     release_date: string;
     // media?: media_type;
     media: media_type;
     episode_count?: number;
+}
+
+export interface IEpisode {
+    title: string;
+    number: number;
+    overview: string;
+    poster: string;
 }
 
 export interface IPerson {
@@ -72,6 +79,11 @@ export interface IMediaDetail extends IMedia {
     // tv
     number_of_seasons?: number;
     number_of_episodes?: number;
+}
+
+export interface ISeasonDetail extends IMediaDetail {
+    seasonNumber: number;
+    episodes: IEpisode[];
 }
 
 export interface ICastCrew {
@@ -243,6 +255,7 @@ export type TState = {
     media: {
         popularMediaList: IStateEntity<IMedia[]>;
         detail: IStateEntity<IMediaDetail>;
+        seasonDetail: IStateEntity<ISeasonDetail>;
         credits: IStateEntity<ICastCrew>;
     };
     movie: {

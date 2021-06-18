@@ -24,6 +24,7 @@ function* getMediaDetailSaga(action) {
 
     try {
         const { data }: { data: i.IMediaDetail } = yield call(http.get, `${media}/${id}/details`);
+
         yield delay(500);
         yield put(mediaActions.getMediaDetailSuccess(data));
     } catch (error) {
@@ -58,6 +59,22 @@ function* getMediaDetailSaga(action) {
 //     }
 // }
 // #endregion DETAIL
+
+function* getSeasonDetailSaga(action) {
+    const { id, seasonNumber, onSuccess } = action.payload;
+
+    try {
+        const { data }: { data: i.IMediaDetail } = yield call(
+            http.get,
+            `tv/${id}/season/${seasonNumber}/details`
+        );
+        yield delay(500);
+        yield put(mediaActions.getSeasonDetailSuccess(data));
+    } catch (error) {
+        console.log(error);
+        yield put(mediaActions.getSeasonDetailFail('Error'));
+    }
+}
 
 // #region CREDITS
 function* getMediaCreditsSaga(action) {
@@ -119,6 +136,9 @@ export default function* rootSaga() {
     yield all([yield takeLatest(mediaActions.getMediaDetail.type, getMediaDetailSaga)]);
     // yield all([yield takeLatest(movieActions.getMovieDetail.type, getMovieDetailSaga)]);
     // yield all([yield takeLatest(tvShowActions.getTVShowDetail.type, getTVShowDetailSaga)]);
+
+    yield all([yield takeLatest(mediaActions.getSeasonDetail.type, getSeasonDetailSaga)]);
+
     // CREDITS
     yield all([yield takeLatest(mediaActions.getMediaCredits.type, getMediaCreditsSaga)]);
     // yield all([yield takeLatest(movieActions.getMovieCredits.type, getMovieCreditsSaga)]);
