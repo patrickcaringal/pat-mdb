@@ -63,15 +63,16 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
     }, [mediaId]);
 
     const mapData = () => {
-        // const {
-        //     cast,
-        //     collection = [],
-        //     photos,
-        //     videos,
-        //     production_companies,
-        //     keywords,
-        //     recommendations
-        // } = mediaDetail;
+        const {
+            cast,
+            episodes
+            // collection = [],
+            // photos,
+            // videos,
+            // production_companies,
+            // keywords,
+            // recommendations
+        } = seasonDetail;
         // const propsForBanner = [
         //     'banner',
         //     'genres',
@@ -94,28 +95,26 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
             seasonNumber: seasonDetail.seasonNumber,
             genres: seasonDetail.genres.join(', ')
         };
-        // // Cast
-        // const mappedCast = cast.map((person) => ({
-        //     onClick: () => {
-        //         handleCastClick(person.id);
-        //     },
-        //     poster: person.poster,
-        //     title: person.name,
-        //     subtitle: person.character,
-        //     subtitle2: !isMovie
-        //         ? `${person.episodes} Episode${person.episodes || 0 > 1 ? 's' : ''}`
-        //         : ''
-        // }));
-        // // Collection
-        // const mappedCollection = collection.map((movie) => ({
-        //     onClick: () => {
-        //         handleCollectionClick(movie.id, mediaType);
-        //     },
-        //     poster: movie.poster,
-        //     title: movie.title,
-        //     subtitle: `${new Date(movie.release_date).getFullYear()}`,
-        //     description: movie.overview
-        // }));
+        // Cast
+        const mappedCast = cast.map((person) => ({
+            onClick: () => {
+                handleCastClick(person.id);
+            },
+            poster: person.poster,
+            title: person.name,
+            subtitle: person.character,
+            subtitle2: `${person.episodes} Episode${person.episodes || 0 > 1 ? 's' : ''}`
+        }));
+        // Collection
+        const mappedCollection = episodes.map((episode) => ({
+            onClick: () => {
+                // handleCollectionClick(movie.id, mediaType);
+            },
+            poster: episode.poster,
+            title: episode.title,
+            subtitle: `Episode ${episode.number}`,
+            description: episode.overview
+        }));
         // // Photos
         // const mappedPhotos = photos.map((photo) => ({
         //     onClick: () => {},
@@ -137,9 +136,9 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
         //     subtitle: movie.genres.join(', ')
         // }));
         return {
-            bannerProps
-            // cast: mappedCast,
-            // collection: mappedCollection,
+            bannerProps,
+            cast: mappedCast,
+            collection: mappedCollection
             // photos: mappedPhotos,
             // videos: mappedVideos,
             // production_companies,
@@ -150,9 +149,9 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
     // Banner props
 
     const {
-        bannerProps
-        // cast,
-        // collection,
+        bannerProps,
+        cast,
+        collection
         // photos,
         // videos,
         // production_companies,
@@ -160,13 +159,14 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
         // recommendations
     } = mapData();
 
-    // const handleViewCreditsClick = () => {
-    //     history.push(`/${mediaType}/${mediaId}/credits`);
-    // };
+    const handleViewCreditsClick = () => {
+        // history.push(`/${mediaType}/${mediaId}/credits`);
+        // TODO: handle credit
+    };
 
-    // const handleCastClick = (id: string) => {
-    //     history.push(`/person/${id}`);
-    // };
+    const handleCastClick = (id: string) => {
+        history.push(`/person/${id}`);
+    };
 
     // const handleCollectionClick = (id: string, media: i.media_type) => {
     //     // TODO: diff page for tv show season click
@@ -180,28 +180,28 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
     return (
         <>
             <Banner {...bannerProps} loading={seasonDetailLoading} />
-            {/* <Box style={{ background: '#F3F8F3' }}>
+            <Box style={{ background: '#F3F8F3' }}>
                 <Container className={classes.content} disableGutters maxWidth="lg">
                     <Box className={classes.left}>
                         <LeftContainer
-                            loading={mediaDetailLoading}
+                            loading={seasonDetailLoading}
                             cast={cast}
                             collection={collection}
-                            photos={photos}
-                            videos={videos}
+                            // photos={photos}
+                            // videos={videos}
                             onViewCredits={handleViewCreditsClick}
                         />
                     </Box>
-                    <Box className={classes.right}>
+                    {/* <Box className={classes.right}>
                         <RightContainer
                             loading={mediaDetailLoading}
                             productionCompanies={production_companies}
                             keywords={keywords}
                             recommendations={recommendations}
                         />
-                    </Box>
+                    </Box> */}
                 </Container>
-            </Box> */}
+            </Box>
         </>
     );
 };

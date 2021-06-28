@@ -117,7 +117,11 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
         // Collection
         const mappedCollection = collection.map((movie) => ({
             onClick: () => {
-                handleCollectionClick(movie.id, mediaType);
+                if (movie.media === i.media_type.MOVIE) {
+                    handleCollectionClick(movie.id, mediaType);
+                } else {
+                    handleCollectionClick(mediaId, mediaType, movie.seasonNumber);
+                }
             },
             poster: movie.poster,
             title: movie.title,
@@ -180,9 +184,12 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
         history.push(`/person/${id}`);
     };
 
-    const handleCollectionClick = (id: string, media: i.media_type) => {
-        // TODO: diff page for tv show season click
-        history.push(`/${media}/${id}`);
+    const handleCollectionClick = (id: string, media: i.media_type, seasonNumber?: number) => {
+        if (media === i.media_type.MOVIE) {
+            history.push(`/${media}/${id}`);
+        } else {
+            history.push(`/${media}/${id}/season/${seasonNumber}`);
+        }
     };
 
     const handleRecommendationClick = (id: string, media: i.media_type) => {

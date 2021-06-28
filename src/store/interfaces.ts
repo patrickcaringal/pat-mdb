@@ -13,7 +13,9 @@ export interface IMedia {
     release_date: string;
     // media?: media_type;
     media: media_type;
-    episode_count?: number;
+    // tv props
+    // episode_count?: number; check if need optional
+    seasonNumber?: number;
 }
 
 export interface IEpisode {

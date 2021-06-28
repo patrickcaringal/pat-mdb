@@ -33,7 +33,13 @@ const useStyles = makeStyles((theme) => ({
 
             paddingRight: theme.spacing(4),
             '& .MuiCard-root ': {
-                minHeight: 175
+                minHeight: 175,
+                '& .media': {
+                    width: 300
+                }
+                // '& .card-content': {
+                //     height: 127
+                // }
             },
             '& .MuiCard-root:last-child': {
                 marginBottom: 1
@@ -102,8 +108,8 @@ interface IOwnProps
     }> {
     cast: ICardComponentProps[];
     collection?: ICardComponentProps[];
-    photos: ICardComponentProps[];
-    videos: ICardComponentProps[];
+    // photos: ICardComponentProps[];
+    // videos: ICardComponentProps[];
     loading: boolean;
     onViewCredits: () => void;
 }
@@ -111,8 +117,8 @@ interface IOwnProps
 const LeftSection: React.FC<IOwnProps> = ({
     cast,
     collection = [],
-    photos,
-    videos,
+    // photos,
+    // videos,
     loading,
     onViewCredits,
     match
@@ -167,7 +173,7 @@ const LeftSection: React.FC<IOwnProps> = ({
                     <Divider className={classes.divider} />
                 </>
             )}
-
+            {/*
             <Box className={classes.mediaContainer}>
                 <Tabs
                     value={selectedTab}
@@ -199,7 +205,7 @@ const LeftSection: React.FC<IOwnProps> = ({
                         ))}
                     </TabPanel>
                 </Box>
-            </Box>
+            </Box> */}
         </>
     );
 };
