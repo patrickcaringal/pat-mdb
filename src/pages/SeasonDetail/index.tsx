@@ -65,13 +65,13 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
     const mapData = () => {
         const {
             cast,
-            episodes
+            episodes,
             // collection = [],
             // photos,
             // videos,
-            // production_companies,
-            // keywords,
-            // recommendations
+            production_companies,
+            keywords,
+            recommendations
         } = seasonDetail;
         // const propsForBanner = [
         //     'banner',
@@ -126,24 +126,26 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
         //     poster: video.thumbnail,
         //     subtitle: video.description
         // }));
-        // // Recommendations
-        // const mappedRecommendations = recommendations.map((movie) => ({
-        //     onClick: () => {
-        //         handleRecommendationClick(movie.id, movie.media);
-        //     },
-        //     poster: movie.poster,
-        //     title: movie.title,
-        //     subtitle: movie.genres.join(', ')
-        // }));
+
+        // Recommendations
+        const mappedRecommendations = recommendations.map((movie) => ({
+            onClick: () => {
+                handleRecommendationClick(movie.id, movie.media);
+            },
+            poster: movie.poster,
+            title: movie.title,
+            subtitle: movie.genres.join(', ')
+        }));
+
         return {
             bannerProps,
             cast: mappedCast,
-            collection: mappedCollection
+            collection: mappedCollection,
             // photos: mappedPhotos,
             // videos: mappedVideos,
-            // production_companies,
-            // keywords,
-            // recommendations: mappedRecommendations
+            production_companies,
+            keywords,
+            recommendations: mappedRecommendations
         };
     };
     // Banner props
@@ -151,12 +153,12 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
     const {
         bannerProps,
         cast,
-        collection
+        collection,
         // photos,
         // videos,
-        // production_companies,
-        // keywords,
-        // recommendations
+        production_companies,
+        keywords,
+        recommendations
     } = mapData();
 
     const handleViewCreditsClick = () => {
@@ -173,9 +175,9 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
     //     history.push(`/${media}/${id}`);
     // };
 
-    // const handleRecommendationClick = (id: string, media: i.media_type) => {
-    //     history.push(`/${media}/${id}`);
-    // };
+    const handleRecommendationClick = (id: string, media: i.media_type) => {
+        history.push(`/${media}/${id}`);
+    };
 
     return (
         <>
@@ -192,14 +194,14 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ history, match }) => {
                             onViewCredits={handleViewCreditsClick}
                         />
                     </Box>
-                    {/* <Box className={classes.right}>
+                    <Box className={classes.right}>
                         <RightContainer
-                            loading={mediaDetailLoading}
+                            loading={seasonDetailLoading}
                             productionCompanies={production_companies}
                             keywords={keywords}
                             recommendations={recommendations}
                         />
-                    </Box> */}
+                    </Box>
                 </Container>
             </Box>
         </>

@@ -117,7 +117,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
         // Collection
         const mappedCollection = collection.map((movie) => ({
             onClick: () => {
-                if (movie.media === i.media_type.MOVIE) {
+                if (isMovie) {
                     handleCollectionClick(movie.id, mediaType);
                 } else {
                     handleCollectionClick(mediaId, mediaType, movie.seasonNumber);
@@ -185,7 +185,7 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
     };
 
     const handleCollectionClick = (id: string, media: i.media_type, seasonNumber?: number) => {
-        if (media === i.media_type.MOVIE) {
+        if (isMovie) {
             history.push(`/${media}/${id}`);
         } else {
             history.push(`/${media}/${id}/season/${seasonNumber}`);
