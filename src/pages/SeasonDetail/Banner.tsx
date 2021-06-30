@@ -94,10 +94,14 @@ const Banner: React.FC<ISeasonDetailComponentProps> = ({
                                 <span>{genres}</span>
                             </Typography>
 
-                            <Typography variant="h6" className="bold-text">
-                                Overview
-                            </Typography>
-                            <Typography>{overview}</Typography>
+                            {overview && (
+                                <>
+                                    <Typography variant="h6" className="bold-text">
+                                        Overview
+                                    </Typography>
+                                    <Typography>{overview}</Typography>
+                                </>
+                            )}
 
                             <Box className="flex-row" mt={4}>
                                 <Box>

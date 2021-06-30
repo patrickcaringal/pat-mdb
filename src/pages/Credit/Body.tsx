@@ -35,46 +35,40 @@ const CreditBody: React.FC<ICreditBodyComponentProps> = ({ cast, crew, loading }
     if (loading) return <CreditBodySkeleton />;
 
     return (
-        <Container disableGutters maxWidth="lg">
-            <Box className={classes.mediaContainer}>
-                <Tabs
-                    value={selectedTab}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    onChange={(event, newValue) => setSelectedTab(newValue)}
-                >
-                    <Tab label="Cast" disableRipple />
-                    <Tab label="Crew" disableRipple />
-                </Tabs>
-                <Divider />
+        <Box className={classes.mediaContainer}>
+            <Tabs
+                value={selectedTab}
+                indicatorColor="primary"
+                textColor="primary"
+                onChange={(event, newValue) => setSelectedTab(newValue)}
+            >
+                <Tab label="Cast" disableRipple />
+                <Tab label="Crew" disableRipple />
+            </Tabs>
+            <Divider />
 
-                <Box className="media-items-container">
-                    <TabPanel className="tab-item overflow-overlay" value={selectedTab} index={0}>
-                        {cast.map((props) => (
-                            <Card variant="horizontal" {...props} />
-                        ))}
-                    </TabPanel>
-                    <TabPanel
-                        className="crew-tab-item overflow-overlay"
-                        value={selectedTab}
-                        index={1}
-                    >
-                        {crew.map(({ department, crew: departmentCrew }) => (
-                            <>
-                                <Typography variant="h6" gutterBottom className="semibold-text">
-                                    {department}
-                                </Typography>
-                                <Box className="card-items">
-                                    {departmentCrew.map((props) => (
-                                        <Card variant="horizontal" {...props} />
-                                    ))}
-                                </Box>
-                            </>
-                        ))}
-                    </TabPanel>
-                </Box>
+            <Box className="media-items-container">
+                <TabPanel className="tab-item overflow-overlay" value={selectedTab} index={0}>
+                    {cast.map((props) => (
+                        <Card variant="horizontal" {...props} />
+                    ))}
+                </TabPanel>
+                <TabPanel className="crew-tab-item overflow-overlay" value={selectedTab} index={1}>
+                    {crew.map(({ department, crew: departmentCrew }) => (
+                        <>
+                            <Typography variant="h6" gutterBottom className="semibold-text">
+                                {department}
+                            </Typography>
+                            <Box className="card-items">
+                                {departmentCrew.map((props) => (
+                                    <Card variant="horizontal" {...props} />
+                                ))}
+                            </Box>
+                        </>
+                    ))}
+                </TabPanel>
             </Box>
-        </Container>
+        </Box>
     );
 };
 
@@ -84,21 +78,19 @@ const CreditBodySkeleton: React.FC = () => {
     const classes = useStyles();
 
     return (
-        <Container disableGutters maxWidth="lg">
-            <Box className={classes.mediaContainer}>
-                <Typography variant="h4" gutterBottom>
-                    <Skeleton variant="text" width={260} />
-                </Typography>
-                <Divider />
+        <Box className={classes.mediaContainer}>
+            <Typography variant="h4" gutterBottom>
+                <Skeleton variant="text" width={260} />
+            </Typography>
+            <Divider />
 
-                <Box className="media-items-container">
-                    <TabPanel className="tab-item overflow-overlay" value={0} index={0}>
-                        {_.range(12).map(() => (
-                            <CardSkeleton variant="horizontal" />
-                        ))}
-                    </TabPanel>
-                </Box>
+            <Box className="media-items-container">
+                <TabPanel className="tab-item overflow-overlay" value={0} index={0}>
+                    {_.range(12).map(() => (
+                        <CardSkeleton variant="horizontal" />
+                    ))}
+                </TabPanel>
             </Box>
-        </Container>
+        </Box>
     );
 };

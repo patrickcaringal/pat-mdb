@@ -26,21 +26,19 @@ const Banner: React.FC<IBannerComponentProps> = ({
 
     return (
         <Box className={classes.bannerContainer} style={{ backgroundSize: 'cover' }}>
-            <Container disableGutters maxWidth="lg">
-                <Box className="flex-row" p={4}>
-                    <img src={poster} alt="poster" className="poster-image" />
+            <Box className="flex-row" p={4}>
+                <img src={poster} alt="poster" className="poster-image" />
 
-                    <Box className="flex-column" pl={5}>
-                        <Typography variant="h3" className="semibold-text">
-                            {title}
-                        </Typography>
-                        <Typography className="subtitle">
-                            <span>{subtitle1}</span>
-                            <span>{subtitle2}</span>
-                        </Typography>
-                    </Box>
+                <Box className="flex-column" pl={5}>
+                    <Typography variant="h3" className="semibold-text">
+                        {title}
+                    </Typography>
+                    <Typography className="subtitle">
+                        <span>{subtitle1}</span>
+                        <span>{subtitle2}</span>
+                    </Typography>
                 </Box>
-            </Container>
+            </Box>
         </Box>
     );
 };
@@ -57,20 +55,18 @@ const BannerSkeleton: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <Box className={classes.bannerContainer} style={{ backgroundSize: 'cover' }}>
-                <Container disableGutters maxWidth="lg">
-                    <Box className="flex-row" p={4}>
-                        <Skeleton variant="rect" className="poster-image" />
+                <Box className="flex-row" p={4}>
+                    <Skeleton variant="rect" className="poster-image" />
 
-                        <Box className="flex-column" pl={5}>
-                            <Typography variant="h3">
-                                <Skeleton variant="text" width="50%" />
-                            </Typography>
-                            <Typography className="subtitle">
-                                <Skeleton variant="text" width="40%" />
-                            </Typography>
-                        </Box>
+                    <Box className="flex-column" pl={5} width="600px">
+                        <Typography variant="h3">
+                            <Skeleton variant="text" width="50%" />
+                        </Typography>
+                        <Typography className="subtitle">
+                            <Skeleton variant="text" width="40%" />
+                        </Typography>
                     </Box>
-                </Container>
+                </Box>
             </Box>
         </ThemeProvider>
     );

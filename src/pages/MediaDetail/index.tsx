@@ -91,8 +91,10 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
             others: isMovie
                 ? {
                       Director: mediaDetail.director.join(', '),
-                      Budget: `$${formatNumWithComma(mediaDetail.budget)}`,
-                      Revenue: `$${formatNumWithComma(mediaDetail.revenue)}`
+                      Budget: mediaDetail.budget ? `$${formatNumWithComma(mediaDetail.budget)}` : 0,
+                      Revenue: mediaDetail.revenue
+                          ? `$${formatNumWithComma(mediaDetail.revenue)}`
+                          : 0
                   }
                 : {
                       Director: mediaDetail.director.join(', '),
@@ -200,9 +202,10 @@ const MoivieDetail: React.FC<MovieDetailProps> = ({ mediaType, history, match })
         <>
             <Banner {...bannerProps} loading={mediaDetailLoading} />
             <Box style={{ background: '#F3F8F3' }}>
-                <Container className={classes.content} disableGutters maxWidth="lg">
+                <Container className={classes.content}>
                     <Box className={classes.left}>
                         <LeftContainer
+                            mediaType={mediaType}
                             loading={mediaDetailLoading}
                             cast={cast}
                             collection={collection}

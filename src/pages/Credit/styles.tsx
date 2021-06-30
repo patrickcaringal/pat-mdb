@@ -41,7 +41,7 @@ export default makeStyles((theme) => ({
     },
     mediaContainer: {
         padding: theme.spacing(4),
-        paddingTop: theme.spacing(2),
+        paddingTop: theme.spacing(1),
         '& .MuiTabs-flexContainer': {
             alignItems: 'center',
             '& .tab-title': {
@@ -58,7 +58,7 @@ export default makeStyles((theme) => ({
 
         '& .media-items-container': {
             '& .tab-item': {
-                maxHeight: 500,
+                maxHeight: 'calc(100vh - 380px)',
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
@@ -66,7 +66,7 @@ export default makeStyles((theme) => ({
                 marginLeft: theme.spacing(-3)
             },
             '& .crew-tab-item': {
-                maxHeight: 500,
+                maxHeight: 'calc(100vh - 380px)',
                 display: 'flex',
                 flexDirection: 'column',
                 '& .card-items': {

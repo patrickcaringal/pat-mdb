@@ -103,18 +103,21 @@ const RightContainer: React.FC<IOwnProps> = ({
                 </Box>
             </Box>
 
-            <Divider className={classes.divider} />
-
-            <Box className={classes.recommendationsContainer}>
-                <Typography className={classes.title} variant="h5">
-                    You may also like
-                </Typography>
-                <Box className="items-container">
-                    {recommendations.map((props) => (
-                        <Card {...props} />
-                    ))}
-                </Box>
-            </Box>
+            {recommendations.length !== 0 && (
+                <>
+                    <Divider className={classes.divider} />
+                    <Box className={classes.recommendationsContainer}>
+                        <Typography className={classes.title} variant="h5">
+                            You may also like
+                        </Typography>
+                        <Box className="items-container">
+                            {recommendations.map((props) => (
+                                <Card {...props} />
+                            ))}
+                        </Box>
+                    </Box>
+                </>
+            )}
         </>
     );
 };

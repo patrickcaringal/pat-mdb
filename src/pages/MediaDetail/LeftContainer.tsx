@@ -5,6 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Divider, Tab, Tabs, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
 
+import * as i from '../../store/interfaces';
+
 import Card, { CardSkeleton, ICardComponentProps } from '../../components/CardList/Card';
 
 const useStyles = makeStyles((theme) => ({
@@ -96,15 +98,13 @@ const TabPanel = ({ children, value, index, ...other }) => (
     </div>
 );
 
-interface IOwnProps
-    extends RouteComponentProps<{
-        id: string;
-    }> {
+interface IOwnProps {
     cast: ICardComponentProps[];
     collection?: ICardComponentProps[];
     photos: ICardComponentProps[];
     videos: ICardComponentProps[];
     loading: boolean;
+    mediaType: i.media_type;
     onViewCredits: () => void;
 }
 
@@ -114,13 +114,13 @@ const LeftSection: React.FC<IOwnProps> = ({
     photos,
     videos,
     loading,
-    onViewCredits,
-    match
+    mediaType,
+    onViewCredits
 }) => {
     const classes = useStyles();
 
     const [selectedTab, setSelectedTab] = useState(1);
-    const mediaId = match.params.id;
+    const isMovie = mediaType === i.media_type.MOVIE;
 
     if (loading) return <LeftSectionSkeleton />;
 
@@ -204,7 +204,7 @@ const LeftSection: React.FC<IOwnProps> = ({
     );
 };
 
-export default withRouter(LeftSection);
+export default LeftSection;
 
 const LeftSectionSkeleton: React.FC = () => {
     const classes = useStyles();

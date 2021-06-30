@@ -125,24 +125,30 @@ const Banner: React.FC<IMediaDetailComponentProps> = ({
                             <Typography>{overview}</Typography>
 
                             <Box className="flex-row" mt={4}>
-                                <Box flex="1">
-                                    <Typography className="bold-text">
-                                        {Object.keys(others)[0]}
-                                    </Typography>
-                                    <Typography>{Object.values(others)[0]}</Typography>
-                                </Box>
-                                <Box flex="1">
-                                    <Typography className="bold-text">
-                                        {Object.keys(others)[1]}
-                                    </Typography>
-                                    <Typography>{Object.values(others)[1]}</Typography>
-                                </Box>
-                                <Box flex="2">
-                                    <Typography className="bold-text">
-                                        {Object.keys(others)[2]}
-                                    </Typography>
-                                    <Typography>{Object.values(others)[2]}</Typography>
-                                </Box>
+                                {!!Object.values(others)[0] && (
+                                    <Box style={{ width: 219 }}>
+                                        <Typography className="bold-text">
+                                            {Object.keys(others)[0]}
+                                        </Typography>
+                                        <Typography>{Object.values(others)[0]}</Typography>
+                                    </Box>
+                                )}
+                                {!!Object.values(others)[1] && (
+                                    <Box style={{ width: 219 }}>
+                                        <Typography className="bold-text">
+                                            {Object.keys(others)[1]}
+                                        </Typography>
+                                        <Typography>{Object.values(others)[1]}</Typography>
+                                    </Box>
+                                )}
+                                {!!Object.values(others)[2] && (
+                                    <Box style={{ width: 219 }}>
+                                        <Typography className="bold-text">
+                                            {Object.keys(others)[2]}
+                                        </Typography>
+                                        <Typography>{Object.values(others)[2]}</Typography>
+                                    </Box>
+                                )}
                             </Box>
                         </Box>
                     </Box>
