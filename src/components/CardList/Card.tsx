@@ -124,7 +124,7 @@ const CardComponent: React.FC<ICardComponentProps> = ({
                                 </Typography>
                             )}
                         </div>
-                        <Typography className="line-clamp" variant="body2">
+                        <Typography className="line-clamp-2" variant="body2">
                             {description}
                         </Typography>
                     </CardContent>

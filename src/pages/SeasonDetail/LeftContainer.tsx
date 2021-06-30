@@ -33,13 +33,14 @@ const useStyles = makeStyles((theme) => ({
 
             paddingRight: theme.spacing(4),
             '& .MuiCard-root ': {
-                minHeight: 175,
+                minHeight: 127,
                 '& .media': {
-                    width: 300
+                    width: 227,
+                    height: 127
+                },
+                '& .card-content': {
+                    height: 127
                 }
-                // '& .card-content': {
-                //     height: 127
-                // }
             },
             '& .MuiCard-root:last-child': {
                 marginBottom: 1

@@ -13,21 +13,10 @@ const theme = createMuiTheme({
     overrides: {
         MuiCssBaseline: {
             '@global': {
-                body: {
-                    overflow: 'overlay',
-                    backgroundColor: '#F3F8F3'
-                },
-                '*::-webkit-scrollbar': {
-                    width: '12px',
-                    height: '12px'
-                },
-                '*::-webkit-scrollbar-thumb': {
-                    backgroundColor: '#49A078',
-                    borderRadius: '10px'
-                },
-                '*::-webkit-scrollbar-thumb:hover': {
-                    backgroundColor: '#B1B1B1'
-                }
+                // body: {
+                //     overflow: 'overlay',
+                //     backgroundColor: '#F3F8F3'
+                // }
             }
         }
     }
