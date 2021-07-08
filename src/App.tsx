@@ -20,6 +20,8 @@ import SeasonDetail from './pages/SeasonDetail';
 import PersonDetail from './pages/PersonDetail';
 // import TvPage from './pages/Tv';
 // import PeoplePage from './pages/People';
+import SearchPage from './pages/Search';
+import SearchPage2 from './pages/oldSearch';
 import Test from './pages/Test/Carousel';
 
 interface AppProps {}
@@ -66,6 +68,8 @@ const App: React.FC<AppProps> = (props) => {
                         component={() => <MediaDetail mediaType={media_type.MOVIE} />}
                     />
                     <Route path="/person/:id" exact component={() => <PersonDetail />} />
+                    <Route path="/search" component={() => <SearchPage />} />
+                    <Route path="/search2" component={() => <SearchPage2 />} />
                     <Route path="/test" component={() => <Test />} />
                     <Route path="/not-found" component={() => <h1>NotFound</h1>} />
 
