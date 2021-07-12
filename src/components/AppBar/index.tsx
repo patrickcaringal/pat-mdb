@@ -4,13 +4,11 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import Toolbar from '@material-ui/core/Toolbar';
 
 import Menu from './Menu';
+import SearchInput from './SearchInput';
 import Logo from '../../asset/img/logo.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,27 +25,6 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: fade(theme.palette.common.white, 0.25)
         }
-    },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    inputRoot: {
-        color: 'inherit'
-    },
-    inputInput: {
-        padding: theme.spacing(1, 0, 1, 2),
-        // vertical padding + font size from searchIcon
-        paddingRight: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%'
     }
 }));
 
@@ -102,19 +79,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                                 ]}
                             />
                         </div>
-                        <div className={classes.search}>
-                            <InputBase
-                                placeholder="Search…"
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput
-                                }}
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                            <div className={classes.searchIcon}>
-                                <SearchIcon />
-                            </div>
-                        </div>
+
+                        <SearchInput />
                     </Toolbar>
                 </Container>
             </AppBar>
