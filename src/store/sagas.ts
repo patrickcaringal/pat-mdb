@@ -1,10 +1,24 @@
 import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
 import { actions as mediaActions } from './media.slice';
-import { actions as movieActions } from './movie.slice';
-import { actions as tvShowActions } from './tvShow.slice';
 import { actions as personActions } from './person.slice';
 import * as i from './interfaces';
 import http, { getQueryString } from '../utils/http';
+
+function* getSearchCountSaga(action) {
+    const { query, onSuccess } = action.payload;
+
+    try {
+        const { data }: { data: i.ISearchCount } = yield call(
+            http.get,
+            `search/count?query=${query}`
+        );
+        yield delay(500);
+        yield put(mediaActions.getSearchCountSuccess(data));
+    } catch (error) {
+        console.log(error);
+        yield put(mediaActions.getSearchCountFail('Error'));
+    }
+}
 
 function* getPopularMediasSaga() {
     // const { media, onSuccess } = action.payload;
@@ -131,6 +145,9 @@ function* getPresonDetailSaga(action) {
 }
 
 export default function* rootSaga() {
+    // SEARCH
+    yield all([yield takeLatest(mediaActions.getSearchCount.type, getSearchCountSaga)]);
+    // POPULAR
     yield all([yield takeLatest(mediaActions.getPopularMediaList.type, getPopularMediasSaga)]);
     // DETAIL
     yield all([yield takeLatest(mediaActions.getMediaDetail.type, getMediaDetailSaga)]);

@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { parse as QSParse } from 'query-string';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Chip, Container, Typography } from '@material-ui/core';
+
+import { actions, selectors } from '../../store/media.slice';
+import * as i from '../../store/interfaces';
 
 import Card, { CardSkeleton, ICardComponentProps } from '../../components/CardList/Card';
 
@@ -45,21 +49,49 @@ const useStyles = makeStyles((theme) => ({
 interface SearchProps extends RouteComponentProps {}
 
 const SearchPage: React.FC<SearchProps> = ({ location }) => {
+    const dispatch = useDispatch();
     const classes = useStyles();
 
-    const { query } = QSParse(location.search);
+    const { query: currentQuery } = QSParse(location.search);
+
+    useLayoutEffect(() => {
+        window.scrollTo(0, 0);
+
+        if (currentQuery) {
+            dispatch(actions.getSearchCount({ query: currentQuery }));
+        }
+    }, [currentQuery]);
+
+    const {
+        data: { movies, tvShow, person },
+        fetching: searchCountLoading
+    } = useSelector<i.TState, i.IStateEntity<i.ISearchCount>>(selectors.searchCountSelector);
+
+    if (searchCountLoading) {
+        return <Typography>Loading ...</Typography>;
+    }
 
     return (
         <Container className={classes.content}>
-            {query ? (
+            {currentQuery ? (
                 <>
                     <Box className="search-header">
-                        <Typography>Results for "{query}"</Typography>
+                        {!movies.total_results && !tvShow.total_results && !person.total_results ? (
+                            <Typography>No result found for "{currentQuery}"</Typography>
+                        ) : (
+                            <Typography>Results for "{currentQuery}"</Typography>
+                        )}
 
                         <Box className="category-chip-container">
-                            <Chip size="small" label="22 Movies" />
-                            <Chip size="small" label="15 TV Shows" />
-                            <Chip size="small" label="1,000 People" />
+                            {!!movies.total_results && (
+                                <Chip size="small" label={`${movies.total_results} Movies`} />
+                            )}
+                            {!!tvShow.total_results && (
+                                <Chip size="small" label={`${tvShow.total_results} TV Shows`} />
+                            )}
+                            {!!person.total_results && (
+                                <Chip size="small" label={`${person.total_results} People`} />
+                            )}
                         </Box>
                     </Box>
 

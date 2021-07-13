@@ -12,6 +12,25 @@ import * as i from './interfaces';
 
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 
+const initialSearchCount = {
+    query: '',
+    movies: {
+        label: '',
+        total_pages: 0,
+        total_results: 0
+    },
+    tvShow: {
+        label: '',
+        total_pages: 0,
+        total_results: 0
+    },
+    person: {
+        label: '',
+        total_pages: 0,
+        total_results: 0
+    }
+} as i.ISearchCount;
+
 const initialMediaDetail = {
     id: '',
     title: '',
@@ -57,7 +76,11 @@ const slice = createSlice({
         seasonDetail: { ...initialEntityState, data: initialSeasonDetail } as i.IStateEntity<
             i.ISeasonDetail
         >,
-        credits: { ...initialEntityState, data: initialCredits } as i.IStateEntity<i.ICastCrew>
+        credits: { ...initialEntityState, data: initialCredits } as i.IStateEntity<i.ICastCrew>,
+        searchCount: {
+            ...initialEntityState,
+            data: initialSearchCount
+        } as i.IStateEntity<i.ISearchCount>
     },
     reducers: {
         getPopularMediaList: (state) => {
@@ -122,6 +145,22 @@ const slice = createSlice({
             state.credits.data = initialCredits;
             state.credits.fetching = false;
             state.credits.fetchFailed = true;
+        },
+        // SEARCH
+        getSearchCount: (state, action) => {
+            state.searchCount.data = initialSearchCount;
+            state.searchCount.fetching = true;
+            state.searchCount.fetchFailed = false;
+        },
+        getSearchCountSuccess: (state, action) => {
+            state.searchCount.data = action.payload;
+            state.searchCount.fetching = false;
+            state.searchCount.fetchFailed = false;
+        },
+        getSearchCountFail: (state, action) => {
+            state.searchCount.data = initialSearchCount;
+            state.searchCount.fetching = false;
+            state.searchCount.fetchFailed = true;
         }
     }
 });
@@ -129,12 +168,13 @@ const slice = createSlice({
 const mediaSelector = (state: i.TState) => state.media;
 
 // selector
-export const popularMediaListSelector = createSelector(
-    mediaSelector,
-    (state) => state.popularMediaList
-);
+// export const popularMediaListSelector = createSelector(
+//     mediaSelector,
+//     (state) => state.popularMediaList
+// );
 
 export const selectors = {
+    searchCountSelector: createSelector(mediaSelector, (state) => state.searchCount),
     popularMediaListSelector: createSelector(mediaSelector, (state) => state.popularMediaList),
     mediaDetailSelector: createSelector(mediaSelector, (state) => state.detail),
     seasonDetailSelector: createSelector(mediaSelector, (state) => state.seasonDetail),

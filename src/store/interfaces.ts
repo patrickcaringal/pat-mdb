@@ -131,6 +131,20 @@ export interface IPeopleCatalog {
     results: IPerson[];
 }
 
+// SEARCH
+export interface ISearchCountDetail {
+    label: string;
+    total_pages: number;
+    total_results: number;
+}
+
+export interface ISearchCount {
+    query: string;
+    movies: ISearchCountDetail;
+    tvShow: ISearchCountDetail;
+    person: ISearchCountDetail;
+}
+
 // Action
 // export interface IGetPopularMedias {
 //     type: typeof constants.GET_POPULAR_MOVIES;
@@ -255,6 +269,7 @@ export interface IStateEntity<T> {
 
 export type TState = {
     media: {
+        searchCount: IStateEntity<ISearchCount>;
         popularMediaList: IStateEntity<IMedia[]>;
         detail: IStateEntity<IMediaDetail>;
         seasonDetail: IStateEntity<ISeasonDetail>;
