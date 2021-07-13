@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { parse as QSParse } from 'query-string';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Chip, Container, Typography } from '@material-ui/core';
@@ -43,36 +44,44 @@ const useStyles = makeStyles((theme) => ({
 
 interface SearchProps extends RouteComponentProps {}
 
-const SearchPage: React.FC<SearchProps> = (props) => {
+const SearchPage: React.FC<SearchProps> = ({ location }) => {
     const classes = useStyles();
+
+    const { query } = QSParse(location.search);
 
     return (
         <Container className={classes.content}>
-            <Box className="search-header">
-                <Typography>Results for "avenger"</Typography>
+            {query ? (
+                <>
+                    <Box className="search-header">
+                        <Typography>Results for "{query}"</Typography>
 
-                <Box className="category-chip-container">
-                    <Chip size="small" label="22 Movies" />
-                    <Chip size="small" label="15 TV Shows" />
-                    <Chip size="small" label="1,000 People" />
-                </Box>
-            </Box>
+                        <Box className="category-chip-container">
+                            <Chip size="small" label="22 Movies" />
+                            <Chip size="small" label="15 TV Shows" />
+                            <Chip size="small" label="1,000 People" />
+                        </Box>
+                    </Box>
 
-            <Box className="search-body">
-                {_.range(2).map(() => (
-                    <Card
-                        variant="horizontal"
-                        {...{
-                            onClick: () => {},
-                            poster: 'https://via.placeholder.com/94x141/767c77/fabea7',
-                            title: 'title',
-                            subtitle: 'subtitle',
-                            description:
-                                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatum quam temporibus rerum?'
-                        }}
-                    />
-                ))}
-            </Box>
+                    <Box className="search-body">
+                        {_.range(2).map(() => (
+                            <Card
+                                variant="horizontal"
+                                {...{
+                                    onClick: () => {},
+                                    poster: 'https://via.placeholder.com/94x141/767c77/fabea7',
+                                    title: 'title',
+                                    subtitle: 'subtitle',
+                                    description:
+                                        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatum quam temporibus rerum?'
+                                }}
+                            />
+                        ))}
+                    </Box>
+                </>
+            ) : (
+                <Typography>No query</Typography>
+            )}
         </Container>
     );
 };

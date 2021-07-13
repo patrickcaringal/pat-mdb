@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { parse as QSParse } from 'query-string';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { InputBase, ButtonBase } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
@@ -39,14 +41,22 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface NavBarProps {}
+interface SearchInputProps extends RouteComponentProps {}
 
-const NavBar: React.FC<NavBarProps> = (props) => {
+const SearchInput: React.FC<SearchInputProps> = ({ history, location }) => {
     const classes = useStyles();
-    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const { query: currentQuery } = QSParse(location.search);
+
+    const [searchQuery, setSearchQuery] = useState<string>((currentQuery as string) || '');
 
     const handleSearch = () => {
-        console.log(searchQuery);
+        if (location.pathname === '/search' && currentQuery === searchQuery) {
+            return;
+        }
+
+        const query = searchQuery.trim() ? `?query=${searchQuery}` : '';
+        history.push(`/search${query}`);
     };
 
     return (
@@ -76,4 +86,4 @@ const NavBar: React.FC<NavBarProps> = (props) => {
     );
 };
 
-export default NavBar;
+export default withRouter(SearchInput);
