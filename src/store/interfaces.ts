@@ -1,6 +1,7 @@
 export enum media_type {
     'MOVIE' = 'movie',
-    'TV' = 'tv'
+    'TV' = 'tv',
+    'PERSON' = 'person'
 }
 
 // State

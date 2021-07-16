@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { parse as QSParse } from 'query-string';
@@ -10,6 +10,7 @@ import { actions, selectors } from '../../store/media.slice';
 import * as i from '../../store/interfaces';
 
 import Card, { CardSkeleton, ICardComponentProps } from '../../components/CardList/Card';
+import SearchHeader from './Header';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -53,47 +54,56 @@ const SearchPage: React.FC<SearchProps> = ({ location }) => {
     const classes = useStyles();
 
     const { query: currentQuery } = QSParse(location.search);
-
-    useLayoutEffect(() => {
-        window.scrollTo(0, 0);
-
-        if (currentQuery) {
-            dispatch(actions.getSearchCount({ query: currentQuery }));
-        }
-    }, [currentQuery]);
+    const [selectedCategory, setSelectedCategory] = useState<i.media_type | null>(null);
 
     const {
         data: { movies, tvShow, person },
         fetching: searchCountLoading
     } = useSelector<i.TState, i.IStateEntity<i.ISearchCount>>(selectors.searchCountSelector);
 
+    // search query change
+    useLayoutEffect(() => {
+        window.scrollTo(0, 0);
+        if (currentQuery) {
+            dispatch(actions.getSearchCount({ query: currentQuery }));
+        }
+    }, [currentQuery]);
+
+    // initial selected result
+    useEffect(() => {
+        const initialSelectedResult = !!movies.total_results
+            ? i.media_type.MOVIE
+            : !!tvShow.total_results
+            ? i.media_type.TV
+            : !!person.total_results
+            ? i.media_type.PERSON
+            : null;
+
+        setSelectedCategory(initialSelectedResult);
+    }, [movies, tvShow, person]);
+
+    const handleCategoryClick = (category: typeof selectedCategory) => {
+        setSelectedCategory(category);
+    };
+
     if (searchCountLoading) {
         return <Typography>Loading ...</Typography>;
     }
+
+    const mapData = () => {};
 
     return (
         <Container className={classes.content}>
             {currentQuery ? (
                 <>
-                    <Box className="search-header">
-                        {!movies.total_results && !tvShow.total_results && !person.total_results ? (
-                            <Typography>No result found for "{currentQuery}"</Typography>
-                        ) : (
-                            <Typography>Results for "{currentQuery}"</Typography>
-                        )}
-
-                        <Box className="category-chip-container">
-                            {!!movies.total_results && (
-                                <Chip size="small" label={`${movies.total_results} Movies`} />
-                            )}
-                            {!!tvShow.total_results && (
-                                <Chip size="small" label={`${tvShow.total_results} TV Shows`} />
-                            )}
-                            {!!person.total_results && (
-                                <Chip size="small" label={`${person.total_results} People`} />
-                            )}
-                        </Box>
-                    </Box>
+                    <SearchHeader
+                        query={currentQuery as string}
+                        selected={selectedCategory}
+                        movieResult={movies.total_results}
+                        tvShowResult={tvShow.total_results}
+                        personResult={person.total_results}
+                        onChipClick={handleCategoryClick}
+                    />
 
                     <Box className="search-body">
                         {_.range(2).map(() => (
