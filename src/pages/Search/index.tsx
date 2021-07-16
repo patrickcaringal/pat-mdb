@@ -4,13 +4,14 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { parse as QSParse } from 'query-string';
 import _ from 'lodash';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Chip, Container, Typography } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
 
 import { actions, selectors } from '../../store/media.slice';
 import * as i from '../../store/interfaces';
 
-import Card, { CardSkeleton, ICardComponentProps } from '../../components/CardList/Card';
-import SearchHeader from './Header';
+import { ICardComponentProps } from '../../components/CardList/Card';
+import SearchHeaderComponent from './Header';
+import SearchResultListComponent from './ResultList';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -55,11 +56,19 @@ const SearchPage: React.FC<SearchProps> = ({ location }) => {
 
     const { query: currentQuery } = QSParse(location.search);
     const [selectedCategory, setSelectedCategory] = useState<i.media_type | null>(null);
+    const isPerson = selectedCategory === i.media_type.PERSON;
 
     const {
         data: { movies, tvShow, person },
         fetching: searchCountLoading
     } = useSelector<i.TState, i.IStateEntity<i.ISearchCount>>(selectors.searchCountSelector);
+
+    const {
+        data: { results: searchResultList },
+        fetching: searchResultListLoading
+    } = useSelector<i.TState, i.IStateEntity<i.ISearchResultList>>(
+        selectors.searchResultListSelector
+    );
 
     // search query change
     useLayoutEffect(() => {
@@ -82,21 +91,43 @@ const SearchPage: React.FC<SearchProps> = ({ location }) => {
         setSelectedCategory(initialSelectedResult);
     }, [movies, tvShow, person]);
 
+    useEffect(() => {
+        if (selectedCategory) {
+            dispatch(actions.getSearchResultList({ media: selectedCategory, query: currentQuery }));
+        }
+    }, [selectedCategory]);
+
     const handleCategoryClick = (category: typeof selectedCategory) => {
         setSelectedCategory(category);
     };
 
-    if (searchCountLoading) {
+    const mapData = () => {
+        const mappedSearchResultList = (searchResultList as any[]).map((i) => {
+            return {
+                poster: i.poster,
+                title: isPerson ? i.name : i.title,
+                subtitle: isPerson ? i.knownFor?.join(',') : i.release_date,
+                description: isPerson ? '' : i.overview,
+                onClick: () => {}
+            };
+        });
+
+        return {
+            searchResultListItems: mappedSearchResultList
+        };
+    };
+
+    const { searchResultListItems } = mapData();
+
+    if (searchCountLoading || searchResultListLoading) {
         return <Typography>Loading ...</Typography>;
     }
-
-    const mapData = () => {};
 
     return (
         <Container className={classes.content}>
             {currentQuery ? (
                 <>
-                    <SearchHeader
+                    <SearchHeaderComponent
                         query={currentQuery as string}
                         selected={selectedCategory}
                         movieResult={movies.total_results}
@@ -104,22 +135,9 @@ const SearchPage: React.FC<SearchProps> = ({ location }) => {
                         personResult={person.total_results}
                         onChipClick={handleCategoryClick}
                     />
-
-                    <Box className="search-body">
-                        {_.range(2).map(() => (
-                            <Card
-                                variant="horizontal"
-                                {...{
-                                    onClick: () => {},
-                                    poster: 'https://via.placeholder.com/94x141/767c77/fabea7',
-                                    title: 'title',
-                                    subtitle: 'subtitle',
-                                    description:
-                                        'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatum quam temporibus rerum?'
-                                }}
-                            />
-                        ))}
-                    </Box>
+                    <SearchResultListComponent
+                        items={searchResultListItems as ICardComponentProps[]}
+                    />
                 </>
             ) : (
                 <Typography>No query</Typography>

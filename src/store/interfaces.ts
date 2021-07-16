@@ -33,6 +33,7 @@ export interface IPerson {
     poster: string;
     episodes?: number;
     department?: string;
+    knownFor?: string[]; // alt for credit titles
 }
 
 export interface ICredit {
@@ -132,7 +133,7 @@ export interface IPeopleCatalog {
     results: IPerson[];
 }
 
-// SEARCH
+// SEARCH START
 export interface ISearchCountDetail {
     label: string;
     total_pages: number;
@@ -146,6 +147,14 @@ export interface ISearchCount {
     person: ISearchCountDetail;
 }
 
+export interface ISearchResultList {
+    page: number;
+    total_pages: number;
+    total_results: number;
+    results: IPerson[] | IMedia[];
+}
+// SEARCH END
+
 export interface IStateEntity<T> {
     data: T;
     fetching: boolean;
@@ -155,6 +164,7 @@ export interface IStateEntity<T> {
 export type TState = {
     media: {
         searchCount: IStateEntity<ISearchCount>;
+        searchResultList: IStateEntity<ISearchResultList>;
         popularMediaList: IStateEntity<IMedia[]>;
         detail: IStateEntity<IMediaDetail>;
         seasonDetail: IStateEntity<ISeasonDetail>;

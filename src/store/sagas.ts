@@ -20,6 +20,22 @@ function* getSearchCountSaga(action) {
     }
 }
 
+function* getSearchResultListSaga(action) {
+    const { media, query, onSuccess } = action.payload;
+
+    try {
+        const { data }: { data: i.ISearchCount } = yield call(
+            http.get,
+            `search/${media}?query=${query}`
+        );
+        yield delay(500);
+        yield put(mediaActions.getSearchResultListSuccess(data));
+    } catch (error) {
+        console.log(error);
+        yield put(mediaActions.getSearchResultListFail('Error'));
+    }
+}
+
 function* getPopularMediasSaga() {
     // const { media, onSuccess } = action.payload;
     try {
@@ -93,6 +109,7 @@ function* getPresonDetailSaga(action) {
 export default function* rootSaga() {
     // SEARCH
     yield all([yield takeLatest(mediaActions.getSearchCount.type, getSearchCountSaga)]);
+    yield all([yield takeLatest(mediaActions.getSearchResultList.type, getSearchResultListSaga)]);
     // POPULAR
     yield all([yield takeLatest(mediaActions.getPopularMediaList.type, getPopularMediasSaga)]);
     // DETAIL

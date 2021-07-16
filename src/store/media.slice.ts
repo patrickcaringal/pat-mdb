@@ -1,14 +1,5 @@
-import { createSlice, createSelector, createAction } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import * as i from './interfaces';
-
-// const createActionTemplate = (action) => ({
-//     request: action,
-//     success: `${action}Success`,
-//     error: `${action}Error`
-// });
-
-// const x = createActionTemplate('getPopularMediaList');
-// console.log(x);
 
 const initialEntityState = { data: [], fetching: false, fetchFailed: false };
 
@@ -30,6 +21,13 @@ const initialSearchCount = {
         total_results: 0
     }
 } as i.ISearchCount;
+
+const initialSearcResultList = {
+    page: 1,
+    total_pages: 0,
+    total_results: 0,
+    results: []
+} as i.ISearchResultList;
 
 const initialMediaDetail = {
     id: '',
@@ -69,6 +67,13 @@ const initialCredits = {
 const slice = createSlice({
     name: 'media',
     initialState: {
+        searchCount: {
+            ...initialEntityState,
+            data: initialSearchCount
+        } as i.IStateEntity<i.ISearchCount>,
+        searchResultList: { ...initialEntityState, data: initialSearcResultList } as i.IStateEntity<
+            i.ISearchResultList
+        >,
         popularMediaList: { ...initialEntityState } as i.IStateEntity<i.IMedia[]>,
         detail: { ...initialEntityState, data: initialMediaDetail } as i.IStateEntity<
             i.IMediaDetail
@@ -76,13 +81,10 @@ const slice = createSlice({
         seasonDetail: { ...initialEntityState, data: initialSeasonDetail } as i.IStateEntity<
             i.ISeasonDetail
         >,
-        credits: { ...initialEntityState, data: initialCredits } as i.IStateEntity<i.ICastCrew>,
-        searchCount: {
-            ...initialEntityState,
-            data: initialSearchCount
-        } as i.IStateEntity<i.ISearchCount>
+        credits: { ...initialEntityState, data: initialCredits } as i.IStateEntity<i.ICastCrew>
     },
     reducers: {
+        // POPULAR MEDIA
         getPopularMediaList: (state) => {
             state.popularMediaList.data = [] as i.IMedia[];
             state.popularMediaList.fetching = true;
@@ -98,6 +100,7 @@ const slice = createSlice({
             state.popularMediaList.fetching = false;
             state.popularMediaList.fetchFailed = true;
         },
+
         // MEDIA DETAIL
         getMediaDetail: (state, action) => {
             state.detail.data = initialMediaDetail;
@@ -114,6 +117,7 @@ const slice = createSlice({
             state.detail.fetching = false;
             state.detail.fetchFailed = true;
         },
+
         // SEASON DETAIL
         getSeasonDetail: (state, action) => {
             state.seasonDetail.data = initialSeasonDetail;
@@ -130,6 +134,7 @@ const slice = createSlice({
             state.seasonDetail.fetching = false;
             state.seasonDetail.fetchFailed = true;
         },
+
         // CREDITS
         getMediaCredits: (state, action) => {
             state.credits.data = initialCredits;
@@ -146,7 +151,8 @@ const slice = createSlice({
             state.credits.fetching = false;
             state.credits.fetchFailed = true;
         },
-        // SEARCH
+
+        // SEARCH COUNT
         getSearchCount: (state, action) => {
             state.searchCount.data = initialSearchCount;
             state.searchCount.fetching = true;
@@ -161,20 +167,32 @@ const slice = createSlice({
             state.searchCount.data = initialSearchCount;
             state.searchCount.fetching = false;
             state.searchCount.fetchFailed = true;
+        },
+
+        // SEARCH RESULT LIST
+        getSearchResultList: (state, action) => {
+            state.searchResultList.data = initialSearcResultList;
+            state.searchResultList.fetching = true;
+            state.searchResultList.fetchFailed = false;
+        },
+        getSearchResultListSuccess: (state, action) => {
+            state.searchResultList.data = action.payload;
+            state.searchResultList.fetching = false;
+            state.searchResultList.fetchFailed = false;
+        },
+        getSearchResultListFail: (state, action) => {
+            state.searchResultList.data = initialSearcResultList;
+            state.searchResultList.fetching = false;
+            state.searchResultList.fetchFailed = true;
         }
     }
 });
 
 const mediaSelector = (state: i.TState) => state.media;
 
-// selector
-// export const popularMediaListSelector = createSelector(
-//     mediaSelector,
-//     (state) => state.popularMediaList
-// );
-
 export const selectors = {
     searchCountSelector: createSelector(mediaSelector, (state) => state.searchCount),
+    searchResultListSelector: createSelector(mediaSelector, (state) => state.searchResultList),
     popularMediaListSelector: createSelector(mediaSelector, (state) => state.popularMediaList),
     mediaDetailSelector: createSelector(mediaSelector, (state) => state.detail),
     seasonDetailSelector: createSelector(mediaSelector, (state) => state.seasonDetail),
