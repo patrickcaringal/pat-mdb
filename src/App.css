@@ -24,6 +24,7 @@ body::-webkit-scrollbar-thumb {
 
 .overflow-overlay {
     overflow: overlay;
+    padding-right: 22px;
 }
 
 .overflow-overlay:hover::-webkit-scrollbar-thumb {

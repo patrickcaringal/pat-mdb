@@ -40,17 +40,28 @@ const useStyles = makeStyles((theme) => ({
                 }
             }
         },
-        '& .search-body': {
-            flex: 1,
-            // border: '1px solid khaki',
-            marginTop: theme.spacing(3)
+        '& .search-result-list': {
+            marginTop: theme.spacing(3),
+            maxHeight: 'calc(100vh - 210px)',
+            '&.sm': {
+                '& .MuiCard-root': {
+                    width: 600,
+                    '& .media': {
+                        height: 100,
+                        width: 100
+                    },
+                    '& .card-content': {
+                        height: 100
+                    }
+                }
+            }
         }
     }
 }));
 
 interface SearchProps extends RouteComponentProps {}
 
-const SearchPage: React.FC<SearchProps> = ({ location }) => {
+const SearchPage: React.FC<SearchProps> = ({ history, location }) => {
     const dispatch = useDispatch();
     const classes = useStyles();
 
@@ -106,9 +117,13 @@ const SearchPage: React.FC<SearchProps> = ({ location }) => {
             return {
                 poster: i.poster,
                 title: isPerson ? i.name : i.title,
-                subtitle: isPerson ? i.knownFor?.join(',') : i.release_date,
+                subtitle: isPerson
+                    ? i.knownFor?.join(', ')
+                    : `${new Date(i.release_date).getFullYear()}`,
                 description: isPerson ? '' : i.overview,
-                onClick: () => {}
+                onClick: () => {
+                    history.push(`/${selectedCategory}/${i.id}`);
+                }
             };
         });
 
@@ -119,7 +134,7 @@ const SearchPage: React.FC<SearchProps> = ({ location }) => {
 
     const { searchResultListItems } = mapData();
 
-    if (searchCountLoading || searchResultListLoading) {
+    if (searchCountLoading) {
         return <Typography>Loading ...</Typography>;
     }
 
@@ -136,7 +151,9 @@ const SearchPage: React.FC<SearchProps> = ({ location }) => {
                         onChipClick={handleCategoryClick}
                     />
                     <SearchResultListComponent
+                        loading={searchCountLoading || searchResultListLoading}
                         items={searchResultListItems as ICardComponentProps[]}
+                        cardSize={isPerson ? 'small' : 'default'}
                     />
                 </>
             ) : (
