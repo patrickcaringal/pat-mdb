@@ -30,12 +30,18 @@ const useStyles = makeStyles((theme) => ({
             // border: '1px solid khaki',
 
             '& .category-chip-container': {
+                display: 'flex',
+                flexDirection: 'row',
                 marginTop: theme.spacing(1),
                 '& .MuiChip-label': {
                     paddingLeft: 12,
                     paddingRight: 12
                 },
                 '& .MuiChip-root': {
+                    marginRight: theme.spacing(1)
+                },
+                '& .MuiSkeleton-root': {
+                    borderRadius: 16,
                     marginRight: theme.spacing(1)
                 }
             }
@@ -45,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
             maxHeight: 'calc(100vh - 210px)',
             '&.sm': {
                 '& .MuiCard-root': {
-                    width: 600,
+                    // width: 600,
                     '& .media': {
                         height: 100,
                         width: 100
@@ -90,7 +96,7 @@ const SearchPage: React.FC<SearchProps> = ({ history, location }) => {
     }, [currentQuery]);
 
     // initial selected result
-    useEffect(() => {
+    useLayoutEffect(() => {
         const initialSelectedResult = !!movies.total_results
             ? i.media_type.MOVIE
             : !!tvShow.total_results
@@ -102,7 +108,7 @@ const SearchPage: React.FC<SearchProps> = ({ history, location }) => {
         setSelectedCategory(initialSelectedResult);
     }, [movies, tvShow, person]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (selectedCategory) {
             dispatch(actions.getSearchResultList({ media: selectedCategory, query: currentQuery }));
         }
@@ -134,15 +140,12 @@ const SearchPage: React.FC<SearchProps> = ({ history, location }) => {
 
     const { searchResultListItems } = mapData();
 
-    if (searchCountLoading) {
-        return <Typography>Loading ...</Typography>;
-    }
-
     return (
         <Container className={classes.content}>
             {currentQuery ? (
                 <>
                     <SearchHeaderComponent
+                        loading={searchCountLoading}
                         query={currentQuery as string}
                         selected={selectedCategory}
                         movieResult={movies.total_results}

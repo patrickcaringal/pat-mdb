@@ -1,9 +1,11 @@
 import React from 'react';
 import { Box, Chip, Typography } from '@material-ui/core';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import * as i from '../../store/interfaces';
 
 interface SearchHeaderProps {
+    loading: boolean;
     query: string;
     selected: i.media_type | null;
     movieResult: number;
@@ -13,6 +15,7 @@ interface SearchHeaderProps {
 }
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({
+    loading,
     query,
     selected,
     movieResult,
@@ -27,6 +30,8 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 
     const isSelected = (category: typeof selected) =>
         selected === category ? 'primary' : 'default';
+
+    if (loading) return <SearchHeaderSkeleton />;
 
     return (
         <Box className="search-header">
@@ -71,3 +76,18 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 };
 
 export default SearchHeader;
+
+const SearchHeaderSkeleton: React.FC = () => (
+    <Box className="search-header">
+        <>
+            <Typography>
+                <Skeleton variant="text" width={160} />
+            </Typography>
+            <Box className="category-chip-container">
+                <Skeleton variant="rect" width={90} height={24} />
+                <Skeleton variant="rect" width={90} height={24} />
+                <Skeleton variant="rect" width={90} height={24} />
+            </Box>
+        </>
+    </Box>
+);

@@ -12,7 +12,7 @@ interface SearchResultListProps {
 
 const SearchResultList: React.FC<SearchResultListProps> = ({ loading, items, cardSize }) => {
     if (loading) {
-        return <Typography>Loading ...</Typography>;
+        return <SearchResultListSkeleton />;
     }
 
     return (
@@ -27,3 +27,11 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ loading, items, car
 };
 
 export default SearchResultList;
+
+const SearchResultListSkeleton: React.FC = () => (
+    <Box className={`search-result-list overflow-overlay`}>
+        {_.range(6).map(() => (
+            <CardSkeleton variant="horizontal" />
+        ))}
+    </Box>
+);
